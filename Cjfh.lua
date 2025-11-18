@@ -7,23 +7,19 @@ local Window = WindUI:CreateWindow({
     Folder = "kongshao_hub",
     Icon = "sfsymbols:star",
     OpenButton = { Enabled = true, Draggable = true },
-    KeySystem = { Enabled = false }
+    KeySystem = { Enabled = false } -- 强制关闭密钥验证
 })
 
-local NoticeTab = Window:Tab({
-    Title = "公告",
-    Icon = "info"
-})
+-- 公告标签页
+local NoticeTab = Window:Tab({ Title = "公告", Icon = "info" })
 NoticeTab:Section({ Title = "公告内容" })
 NoticeTab:Label({ Title = "奥你啊" })
 NoticeTab:Label({ Title = "作者qq2077812452" })
 NoticeTab:Label({ Title = "私人脚本" })
 NoticeTab:Label({ Title = "倒卖死全家" })
 
-local CommonTab = Window:Tab({
-    Title = "通用",
-    Icon = "gear"
-})
+-- 通用功能标签页
+local CommonTab = Window:Tab({ Title = "通用", Icon = "gear" })
 CommonTab:Section({ Title = "通用功能" })
 
 local Player = game.Players.LocalPlayer
@@ -59,10 +55,8 @@ CommonTab:Button({
     end
 })
 
-local RaceTab = Window:Tab({
-    Title = "race cliker有汉化",
-    Icon = "language"
-})
+-- 汉化脚本标签页
+local RaceTab = Window:Tab({ Title = "race cliker有汉化", Icon = "language" })
 RaceTab:Section({ Title = "汉化脚本" })
 RaceTab:Button({
     Title = "启动race汉化脚本",
