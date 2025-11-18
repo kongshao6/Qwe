@@ -12,13 +12,7 @@ about:Label("作者qq2077812452")
 about:Label("私人脚本")
 about:Label("倒卖死全家")
 
-local about = UITab2:section("功能",true) -- 分类内功能分类
-about:Slider --（滑轴输入类）
-end)
-
-about:Toggle --（开关类）
-end)
-
-about:Button("启动别的功能或脚本",function() --（单点类）
- loadstring(game:HttpGet("脚本链接"))()
-end)
+local about = UITab3:section("脚本",true) -- 分类内功能分类
+about:Button("race",function() --（单点类)
+ loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/3266a86b39b6e1d55b1d6caa3dae65c84661c025/Wsks.lua"))()
+ end)
