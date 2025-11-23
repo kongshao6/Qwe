@@ -1,3 +1,6 @@
+-- 汉化脚本
+-- 江砚辰破解北海
+
 local Translations = {["Nameless Hub"] = "空少汉化",
     ["Main"] = "主要",
     ["Iinfinite Jump"] = "无限跳(可能有回弹)",
