@@ -409,164 +409,60 @@ Window:SelectTab(1)
 -- 通知标签页
 -- ============================================================
 
-Tabs.NoticeTab:Paragraph({
-    Title = "📢 脚本公告",
-    Desc = "欢迎使用 ks script！",
-    Image = "bell", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0),
-})
-Tabs.NoticeTab:Paragraph({
-    Title = "📝 脚本介绍",
-    Desc = "此脚本为缝合各种脚本\n倒卖sm",
-    Image = "info", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0),
-})
-Tabs.NoticeTab:Paragraph({
-    Title = "⚠️ 警告",
-    Desc = "请勿倒卖本脚本，尊重原作者劳动成果！",
-    Image = "triangle-alert", ImageSize = 34, Color = Color3.fromRGB(255, 255, 0),
-})
-Tabs.NoticeTab:Button({
-    Title = "👤 作者QQ: 3236904498 (点击复制)",
-    Desc = "点击复制QQ号到剪贴板",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function() setclipboard("3236904498") end)
-        WindUI:Notify({ Title = "已复制", Content = "QQ号 3236904498 已复制到剪贴板！", Duration = 3 })
-    end
-})
+Tabs.NoticeTab:Paragraph({ Title = "📢 脚本公告", Desc = "欢迎使用 ks script！", Image = "bell", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
+Tabs.NoticeTab:Paragraph({ Title = "📝 脚本介绍", Desc = "此脚本为缝合各种脚本\n倒卖sm", Image = "info", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0) })
+Tabs.NoticeTab:Paragraph({ Title = "⚠️ 警告", Desc = "请勿倒卖本脚本，尊重原作者劳动成果！", Image = "triangle-alert", ImageSize = 34, Color = Color3.fromRGB(255, 255, 0) })
+Tabs.NoticeTab:Button({ Title = "👤 作者QQ: 3236904498 (点击复制)", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard("3236904498") end) WindUI:Notify({ Title = "已复制", Content = "3236904498", Duration = 3 }) end })
 
 -- ============================================================
 -- 柠檬标签页
 -- ============================================================
-
-Tabs.LemonTab:Paragraph({
-    Title = "🍋 柠檬脚本",
-    Desc = "此脚本需要解卡密\n不会的可以加原作者dc群去学哦",
-    Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0),
-})
-Tabs.LemonTab:Button({
-    Title = "加载柠檬脚本",
-    Desc = "点击执行 HoshiOnTop 脚本",
-    Icon = "play",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))()
-        WindUI:Notify({ Title = "柠檬脚本", Content = "HoshiOnTop 脚本已执行！", Duration = 3 })
-    end
-})
+Tabs.LemonTab:Paragraph({ Title = "🍋 柠檬脚本", Desc = "此脚本需要解卡密\n不会的可以加原作者dc群去学哦", Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0) })
+Tabs.LemonTab:Button({ Title = "加载柠檬脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() WindUI:Notify({ Title = "柠檬脚本", Content = "HoshiOnTop 脚本已执行！", Duration = 3 }) end })
 
 -- ============================================================
--- 多种脚本整合标签页
+-- 多种脚本整合
 -- ============================================================
-
-Tabs.ScriptsTab:Paragraph({
-    Title = "多种脚本整合",
-    Desc = "以下是各类脚本合集，点击对应按钮即可执行",
-    Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255),
-})
-
+Tabs.ScriptsTab:Paragraph({ Title = "多种脚本整合", Desc = "各类脚本合集", Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255) })
 Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 YI 脚本", Icon = "play", Callback = function()
-    getgenv().YI_HUB = "YI_HUB群979312897"
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("")
-    WindUI:Notify({ Title = "YI 脚本", Content = "YI_HUB 脚本已执行！", Duration = 3 })
-end })
-
+Tabs.ScriptsTab:Button({ Title = "加载 YI 脚本", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
 Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 PI 脚本", Icon = "play", Callback = function()
-    getgenv().XiaoPi = "皮脚本QQ群1002100032"
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
-    WindUI:Notify({ Title = "PI 脚本", Content = "皮脚本已执行！", Duration = 3 })
-end })
-
+Tabs.ScriptsTab:Button({ Title = "加载 PI 脚本", Icon = "play", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
 Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 BS 脚本", Icon = "play", Callback = function()
-    BS = "\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"
-    loadstring(game:HttpGet(BS))()
-    WindUI:Notify({ Title = "BS 脚本", Content = "BS_Script 已执行！", Duration = 3 })
-end })
-
+Tabs.ScriptsTab:Button({ Title = "加载 BS 脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
 Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 沙 脚本", Icon = "play", Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))()
-    WindUI:Notify({ Title = "沙脚本", Content = "ShaHUB 已执行！", Duration = 3 })
-end })
-
+Tabs.ScriptsTab:Button({ Title = "加载 沙 脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
 Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
-Tabs.ScriptsTab:Button({ Title = "加载 Kanl 破解版", Icon = "play", Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))()
-    WindUI:Notify({ Title = "Kanl 脚本", Content = "Kanl 破解版已执行！", Duration = 3 })
-end })
-
+Tabs.ScriptsTab:Button({ Title = "加载 Kanl 破解版", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
 Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
-Tabs.ScriptsTab:Button({ Title = "加载 For 脚本中心", Icon = "play", Callback = function()
-    getgenv().SCRIPT_KEY = ""
-    loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))()
-    WindUI:Notify({ Title = "For 脚本中心", Content = "脚本中心已执行！", Duration = 3 })
-end })
+Tabs.ScriptsTab:Button({ Title = "加载 For 脚本中心", Icon = "play", Callback = function() getgenv().SCRIPT_KEY = "" loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))() end })
 
 -- ============================================================
--- TX翻译标签页
+-- TX翻译
 -- ============================================================
-
-Tabs.TXTab:Paragraph({
-    Title = "🌐 TX 翻译脚本",
-    Desc = "全自动翻译脚本，助您畅玩全球游戏",
-    Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130),
-})
-Tabs.TXTab:Button({ Title = "加载 TX 翻译", Icon = "play", Callback = function()
-    TX = "TX Script" Script = "全自动翻译"
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))()
-    WindUI:Notify({ Title = "TX 翻译", Content = "全自动翻译脚本已执行！", Duration = 3 })
-end })
+Tabs.TXTab:Paragraph({ Title = "🌐 TX 翻译脚本", Desc = "全自动翻译脚本", Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130) })
+Tabs.TXTab:Button({ Title = "加载 TX 翻译", Icon = "play", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
 
 -- ============================================================
--- Run Race 标签页
+-- Run Race
 -- ============================================================
-
-Tabs.RunRaceTab:Paragraph({
-    Title = "🏃 Run Race 脚本",
-    Desc = "Ruby Hub Run Race 脚本加载器",
-    Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0),
-})
-Tabs.RunRaceTab:Button({ Title = "加载 Run Race 脚本", Icon = "play", Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))()
-    WindUI:Notify({ Title = "Run Race", Content = "Ruby Hub v1.0 脚本已执行！", Duration = 3 })
-end })
+Tabs.RunRaceTab:Paragraph({ Title = "🏃 Run Race 脚本", Desc = "Ruby Hub Run Race", Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
+Tabs.RunRaceTab:Button({ Title = "加载 Run Race 脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
 
 -- ============================================================
--- 自瞄一类标签页
+-- 自瞄一类
 -- ============================================================
-
-Tabs.AimbotTab:Paragraph({
-    Title = "🔍 ESP 透视脚本",
-    Desc = "Roblox ESP 透视与反机器人 V3.0 手机版",
-    Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0),
-})
-Tabs.AimbotTab:Button({ Title = "加载 ESP 透视脚本", Icon = "play", Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))()
-    WindUI:Notify({ Title = "ESP 透视", Content = "ESP 透视脚本已加载！", Duration = 3 })
-end })
+Tabs.AimbotTab:Paragraph({ Title = "🔍 ESP 透视脚本", Desc = "Roblox ESP V3.0 手机版", Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
+Tabs.AimbotTab:Button({ Title = "加载 ESP 透视脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
 
 -- ============================================================
--- 通用功能标签页
+-- 通用功能
 -- ============================================================
-
-Tabs.UniversalTab:Paragraph({
-    Title = "🛠️ 通用功能",
-    Desc = "开关控制+滑动调节参数",
-    Image = "wrench", ImageSize = 34, Color = Color3.fromRGB(0, 255, 200),
-})
+Tabs.UniversalTab:Paragraph({ Title = "🛠️ 通用功能", Desc = "开关控制+滑动调节参数", Image = "wrench", ImageSize = 34, Color = Color3.fromRGB(0, 255, 200) })
 
 -- 飞行
 Tabs.UniversalTab:Section({ Title = "✈️ 飞行" })
-Tabs.UniversalTab:Button({
-    Title = "飞行V3汉化",
-    Desc = "加载空少汉化飞行V3脚本",
-    Icon = "plane",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))()
-        WindUI:Notify({ Title = "飞行V3汉化", Content = "飞行脚本已加载！", Duration = 3 })
-    end
-})
+Tabs.UniversalTab:Button({ Title = "飞行V3汉化", Icon = "plane", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))() WindUI:Notify({ Title = "飞行V3汉化", Content = "飞行脚本已加载！", Duration = 3 }) end })
 
 -- 人物功能
 Tabs.UniversalTab:Section({ Title = "🏃 人物功能" })
@@ -606,96 +502,45 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
 end)
 
-Tabs.UniversalTab:Toggle({
-    Title = "自定义速度", Default = false,
-    Callback = function(value) walkEnabled = value updateSpeed() end
-})
-Tabs.UniversalTab:Slider({
-    Title = "速度", Default = 16, Min = 16, Max = 200, Rounding = 0,
-    Callback = function(value) walkSpeed = value updateSpeed() end
-})
+Tabs.UniversalTab:Toggle({ Title = "自定义速度", Default = false, Callback = function(value) walkEnabled = value updateSpeed() end })
+Tabs.UniversalTab:AddSlider({ Title = "速度", Default = 16, Min = 16, Max = 200, Rounding = 0, Callback = function(value) walkSpeed = value updateSpeed() end })
 
-Tabs.UniversalTab:Toggle({
-    Title = "自定义跳跃", Default = false,
-    Callback = function(value) jumpEnabled = value updateJump() end
-})
-Tabs.UniversalTab:Slider({
-    Title = "跳跃", Default = 50, Min = 50, Max = 300, Rounding = 0,
-    Callback = function(value) jumpPower = value updateJump() end
-})
+Tabs.UniversalTab:Toggle({ Title = "自定义跳跃", Default = false, Callback = function(value) jumpEnabled = value updateJump() end })
+Tabs.UniversalTab:AddSlider({ Title = "跳跃", Default = 50, Min = 50, Max = 300, Rounding = 0, Callback = function(value) jumpPower = value updateJump() end })
 
-Tabs.UniversalTab:Toggle({
-    Title = "自定义重力", Default = false,
-    Callback = function(value) gravityEnabled = value updateGravity() end
-})
-Tabs.UniversalTab:Slider({
-    Title = "重力", Default = 196.2, Min = 10, Max = 500, Rounding = 1,
-    Callback = function(value) gravityValue = value updateGravity() end
-})
+Tabs.UniversalTab:Toggle({ Title = "自定义重力", Default = false, Callback = function(value) gravityEnabled = value updateGravity() end })
+Tabs.UniversalTab:AddSlider({ Title = "重力", Default = 196.2, Min = 10, Max = 500, Rounding = 1, Callback = function(value) gravityValue = value updateGravity() end })
 
-Tabs.UniversalTab:Toggle({
-    Title = "自定义视野", Default = false,
-    Callback = function(value) fovEnabled = value updateFOV() end
-})
-Tabs.UniversalTab:Slider({
-    Title = "FOV", Default = 70, Min = 30, Max = 150, Rounding = 0,
-    Callback = function(value) fovValue = value updateFOV() end
-})
+Tabs.UniversalTab:Toggle({ Title = "自定义视野", Default = false, Callback = function(value) fovEnabled = value updateFOV() end })
+Tabs.UniversalTab:AddSlider({ Title = "FOV", Default = 70, Min = 30, Max = 150, Rounding = 0, Callback = function(value) fovValue = value updateFOV() end })
 
-Tabs.UniversalTab:Toggle({
-    Title = "穿墙模式", Default = false,
-    Callback = function(value)
-        noclipEnabled = value
-        if value then
-            noclipConn = game:GetService("RunService").Stepped:Connect(function()
-                local char = game.Players.LocalPlayer.Character
-                if char then
-                    for _, v in ipairs(char:GetDescendants()) do
-                        if v:IsA("BasePart") then v.CanCollide = false end
-                    end
-                end
-            end)
-        else
-            if noclipConn then noclipConn:Disconnect() end
-        end
+Tabs.UniversalTab:Toggle({ Title = "穿墙模式", Default = false, Callback = function(value)
+    noclipEnabled = value
+    if value then
+        noclipConn = game:GetService("RunService").Stepped:Connect(function()
+            local char = game.Players.LocalPlayer.Character
+            if char then for _, v in ipairs(char:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end end
+        end)
+    else
+        if noclipConn then noclipConn:Disconnect() end
     end
-})
+end })
 
 -- 视觉功能
 Tabs.UniversalTab:Section({ Title = "👁️ 视觉功能" })
-
-Tabs.UniversalTab:Toggle({
-    Title = "夜视模式", Default = false,
-    Callback = function(value)
-        local l = game:GetService("Lighting")
-        if value then
-            l.Brightness = 5 l.ClockTime = 14 l.FogEnd = 100000 l.GlobalShadows = false
-        else
-            l.Brightness = 1 l.FogEnd = 10000 l.GlobalShadows = true
-        end
-    end
-})
-Tabs.UniversalTab:Slider({
-    Title = "时间调节", Default = 14, Min = 0, Max = 24, Rounding = 0,
-    Callback = function(value) game:GetService("Lighting").ClockTime = value end
-})
+Tabs.UniversalTab:Toggle({ Title = "夜视模式", Default = false, Callback = function(value)
+    local l = game:GetService("Lighting")
+    if value then l.Brightness = 5 l.ClockTime = 14 l.FogEnd = 100000 l.GlobalShadows = false
+    else l.Brightness = 1 l.FogEnd = 10000 l.GlobalShadows = true end
+end })
+Tabs.UniversalTab:AddSlider({ Title = "时间调节", Default = 14, Min = 0, Max = 24, Rounding = 0, Callback = function(value) game:GetService("Lighting").ClockTime = value end })
 
 -- 服务器
 Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
-Tabs.UniversalTab:Button({
-    Title = "重新加入", Icon = "refresh-cw",
-    Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end
-})
-Tabs.UniversalTab:Button({
-    Title = "复制服务器ID", Icon = "clipboard-copy",
-    Callback = function() pcall(function() setclipboard(game.JobId) end) WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 }) end
-})
+Tabs.UniversalTab:Button({ Title = "重新加入", Icon = "refresh-cw", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
+Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 }) end })
 
 -- ============================================================
--- 彩虹主题按钮
+-- 彩虹主题
 -- ============================================================
-
-Tabs.NoticeTab:Button({
-    Title = "🌈 彩虹主题激活", Icon = "palette",
-    Callback = function() WindUI:Notify({ Title = "🌈 彩虹主题", Content = "您的UI已变成彩虹色！", Duration = 3 }) end
-})
+Tabs.NoticeTab:Button({ Title = "🌈 彩虹主题激活", Icon = "palette", Callback = function() WindUI:Notify({ Title = "🌈 彩虹主题", Content = "您的UI已变成彩虹色！", Duration = 3 }) end })
