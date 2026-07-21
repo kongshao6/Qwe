@@ -17,18 +17,27 @@ local function kickPlayer(msg)
     end
 end
 
+local function verifyUser()
+    local playerName = game:GetService("Players").LocalPlayer.Name
+    for _, name in ipairs(allowedUsers) do
+        if playerName:lower() == name:lower() then
+            return true
+        end
+    end
+    return false
+end
+
+-- 创建卡密验证界面
+local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
+
 local function showErrorPopup(msg, autoKick)
-    local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-    local TweenService = game:GetService("TweenService")
-    
     local errorGui = Instance.new("ScreenGui")
     errorGui.Name = "ErrorPopup"
     errorGui.ResetOnSpawn = false
     errorGui.Parent = playerGui
     
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 320, 0, 160)
-    frame.Position = UDim2.new(0.5, -160, 0.5, -80)
     frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     frame.BackgroundTransparency = 0.1
     frame.BorderSizePixel = 0
@@ -41,7 +50,6 @@ local function showErrorPopup(msg, autoKick)
     mainCorner.CornerRadius = UDim.new(0, 12)
     mainCorner.Parent = frame
     
-    -- 彩虹边框
     local rainbowBorder = Instance.new("Frame")
     rainbowBorder.Size = UDim2.new(1, 4, 1, 4)
     rainbowBorder.Position = UDim2.new(0, -2, 0, -2)
@@ -62,20 +70,19 @@ local function showErrorPopup(msg, autoKick)
         end
     end)
     
-    -- 图标
     local iconLabel = Instance.new("TextLabel")
-    iconLabel.Size = UDim2.new(1, 0, 0, 35)
-    iconLabel.Position = UDim2.new(0, 0, 0, 12)
+    iconLabel.Size = UDim2.new(1, 0, 0, 30)
+    iconLabel.Position = UDim2.new(0, 0, 0, 10)
     iconLabel.Text = "🚫"
-    iconLabel.TextSize = 30
+    iconLabel.TextSize = 28
     iconLabel.BackgroundTransparency = 1
     iconLabel.Parent = frame
     
     local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 25)
-    title.Position = UDim2.new(0, 0, 0, 45)
+    title.Size = UDim2.new(1, 0, 0, 22)
+    title.Position = UDim2.new(0, 0, 0, 38)
     title.Text = "ks(??)"
-    title.TextSize = 22
+    title.TextSize = 20
     title.Font = Enum.Font.SourceSansBold
     title.BackgroundTransparency = 1
     title.Parent = frame
@@ -90,22 +97,22 @@ local function showErrorPopup(msg, autoKick)
     end)
     
     local desc = Instance.new("TextLabel")
-    desc.Size = UDim2.new(1, -30, 0, 40)
-    desc.Position = UDim2.new(0, 15, 0, 72)
+    desc.Size = UDim2.new(1, -20, 0, 35)
+    desc.Position = UDim2.new(0, 10, 0, 62)
     desc.Text = msg
     desc.TextColor3 = Color3.fromRGB(60, 60, 60)
-    desc.TextSize = 14
+    desc.TextSize = 13
     desc.Font = Enum.Font.SourceSans
     desc.BackgroundTransparency = 1
     desc.TextWrapped = true
     desc.Parent = frame
     
     local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 260, 0, 35)
-    closeBtn.Position = UDim2.new(0.5, -130, 0, 115)
+    closeBtn.Size = UDim2.new(0, 240, 0, 32)
+    closeBtn.Position = UDim2.new(0.5, -120, 0, 100)
     closeBtn.Text = "确定"
     closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeBtn.TextSize = 16
+    closeBtn.TextSize = 15
     closeBtn.Font = Enum.Font.SourceSansBold
     closeBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     closeBtn.Parent = frame
@@ -129,16 +136,12 @@ local function showErrorPopup(msg, autoKick)
         end
     end)
     
-    -- 入场动画
-    local tweenIn = TweenService:Create(frame, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 320, 0, 160)})
+    local tweenIn = TweenService:Create(frame, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 300, 0, 140)})
     tweenIn:Play()
     
     closeBtn.MouseButton1Click:Connect(function()
         errorGui:Destroy()
         if autoKick then
-            pcall(function()
-                setclipboard("3236904498")
-            end)
             kickPlayer(msg)
         end
     end)
@@ -149,24 +152,14 @@ local function verifyKey(input)
         return true
     else
         attempts = attempts + 1
-        showErrorPopup("卡密错误！还剩 " .. (maxAttempts - attempts) .. " 次机会", attempts >= maxAttempts)
+        if attempts >= maxAttempts then
+            showErrorPopup("卡密错误次数过多！即将踢出...", true)
+        else
+            showErrorPopup("卡密错误！还剩 " .. (maxAttempts - attempts) .. " 次机会", false)
+        end
         return false
     end
 end
-
-local function verifyUser()
-    local playerName = game:GetService("Players").LocalPlayer.Name
-    for _, name in ipairs(allowedUsers) do
-        if playerName:lower() == name:lower() then
-            return true
-        end
-    end
-    return false
-end
-
--- 创建卡密验证界面
-local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-local TweenService = game:GetService("TweenService")
 
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
@@ -208,10 +201,12 @@ end)
 -- 主框架
 local keyFrame = Instance.new("Frame")
 keyFrame.Size = UDim2.new(0, 380, 0, 230)
-keyFrame.Position = UDim2.new(0.5, -190, 0.5, -115)
 keyFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 keyFrame.BackgroundTransparency = 0.15
 keyFrame.BorderSizePixel = 0
+keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+keyFrame.Size = UDim2.new(0, 0, 0, 0)
 keyFrame.Parent = keyGui
 
 local mainCorner = Instance.new("UICorner")
@@ -366,9 +361,6 @@ task.spawn(function()
 end)
 
 -- 入场动画
-keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-keyFrame.Size = UDim2.new(0, 0, 0, 0)
 local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 380, 0, 230)})
 tweenIn:Play()
 
@@ -398,9 +390,104 @@ if not verifyUser() then
     pcall(function()
         setclipboard("3236904498")
     end)
-    showErrorPopup("⚠️ 用户名未授权！\n\n你的用户名不在白名单中\n作者QQ已复制到剪贴板：3236904498\n\n请联系作者将你的用户名加入白名单", true)
-    task.wait(3)
-    kickPlayer("用户名未授权，请联系作者QQ:3236904498")
+    
+    local whitelistGui = Instance.new("ScreenGui")
+    whitelistGui.Name = "WhitelistPopup"
+    whitelistGui.ResetOnSpawn = false
+    whitelistGui.Parent = playerGui
+    
+    local wFrame = Instance.new("Frame")
+    wFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    wFrame.BackgroundTransparency = 0.1
+    wFrame.BorderSizePixel = 0
+    wFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    wFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    wFrame.Size = UDim2.new(0, 0, 0, 0)
+    wFrame.Parent = whitelistGui
+    
+    local wCorner = Instance.new("UICorner")
+    wCorner.CornerRadius = UDim.new(0, 12)
+    wCorner.Parent = wFrame
+    
+    local wBorder = Instance.new("Frame")
+    wBorder.Size = UDim2.new(1, 4, 1, 4)
+    wBorder.Position = UDim2.new(0, -2, 0, -2)
+    wBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    wBorder.BorderSizePixel = 0
+    wBorder.Parent = wFrame
+    
+    local wBorderCorner = Instance.new("UICorner")
+    wBorderCorner.CornerRadius = UDim.new(0, 14)
+    wBorderCorner.Parent = wBorder
+    
+    task.spawn(function()
+        local hue = 0
+        while whitelistGui and whitelistGui.Parent do
+            wBorder.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
+            hue = (hue + 0.008) % 1
+            task.wait()
+        end
+    end)
+    
+    local wIcon = Instance.new("TextLabel")
+    wIcon.Size = UDim2.new(1, 0, 0, 30)
+    wIcon.Position = UDim2.new(0, 0, 0, 12)
+    wIcon.Text = "🚫"
+    wIcon.TextSize = 28
+    wIcon.BackgroundTransparency = 1
+    wIcon.Parent = wFrame
+    
+    local wTitle = Instance.new("TextLabel")
+    wTitle.Size = UDim2.new(1, 0, 0, 22)
+    wTitle.Position = UDim2.new(0, 0, 0, 40)
+    wTitle.Text = "用户名未授权"
+    wTitle.TextSize = 20
+    wTitle.Font = Enum.Font.SourceSansBold
+    wTitle.BackgroundTransparency = 1
+    wTitle.Parent = wFrame
+    
+    task.spawn(function()
+        local hue = 0
+        while whitelistGui and whitelistGui.Parent and wTitle and wTitle.Parent do
+            wTitle.TextColor3 = Color3.fromHSV(hue, 1, 1)
+            hue = (hue + 0.01) % 1
+            task.wait()
+        end
+    end)
+    
+    local wDesc = Instance.new("TextLabel")
+    wDesc.Size = UDim2.new(1, -20, 0, 50)
+    wDesc.Position = UDim2.new(0, 10, 0, 65)
+    wDesc.Text = "你的用户名: " .. game:GetService("Players").LocalPlayer.Name .. "\n\n作者QQ已复制: 3236904498\n请联系作者加入白名单\n\n3秒后自动踢出..."
+    wDesc.TextColor3 = Color3.fromRGB(60, 60, 60)
+    wDesc.TextSize = 13
+    wDesc.Font = Enum.Font.SourceSans
+    wDesc.BackgroundTransparency = 1
+    wDesc.TextWrapped = true
+    wDesc.Parent = wFrame
+    
+    local wCount = Instance.new("TextLabel")
+    wCount.Size = UDim2.new(1, 0, 0, 20)
+    wCount.Position = UDim2.new(0, 0, 0, 140)
+    wCount.Text = "3"
+    wCount.TextColor3 = Color3.fromRGB(255, 0, 0)
+    wCount.TextSize = 18
+    wCount.Font = Enum.Font.SourceSansBold
+    wCount.BackgroundTransparency = 1
+    wCount.Parent = wFrame
+    
+    local tweenIn2 = TweenService:Create(wFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 320, 0, 170)})
+    tweenIn2:Play()
+    
+    task.spawn(function()
+        for i = 3, 1, -1 do
+            wCount.Text = tostring(i)
+            task.wait(1)
+        end
+        kickPlayer("用户名未授权，请联系作者QQ:3236904498")
+    end)
+    
+    repeat task.wait() until not whitelistGui.Parent
 end
 
 -- 加载 WindUI 库
