@@ -364,7 +364,7 @@ local Window = WindUI:CreateWindow({
     Icon = "door-open",
     Author = "ks script",
     Folder = "ks script",
-    Size = UDim2.fromOffset(580, 460),
+    Size = UDim2.fromOffset(580, 520),
     Transparent = true,
     Theme = "Light",
     SideBarWidth = 200,
@@ -392,6 +392,7 @@ Window:EditOpenButton({
 local Tabs = {
     NoticeTab    = Window:Tab({ Title = "通知",         Icon = "bell",            Desc = "脚本说明与公告" }),
     UniversalTab = Window:Tab({ Title = "通用功能",      Icon = "wrench",          Desc = "实用功能合集" }),
+    MineTab      = Window:Tab({ Title = "矿山",         Icon = "pickaxe",         Desc = "矿山脚本加载器" }),  -- 新增矿山标签页
     LemonTab     = Window:Tab({ Title = "柠檬",         Icon = "citrus",          Desc = "HoshiOnTop 脚本加载器" }),
     TXTab        = Window:Tab({ Title = "TX翻译",       Icon = "languages",       Desc = "全自动翻译脚本" }),
     RunRaceTab   = Window:Tab({ Title = "Run Race",     Icon = "flag",            Desc = "Run Race 脚本加载器" }),
@@ -675,6 +676,24 @@ end })
 Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
 Tabs.UniversalTab:Button({ Title = "重新加入", Icon = "refresh-cw", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
 Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) end })
+
+-- ===== 矿山标签页 =====
+Tabs.MineTab:Paragraph({ Title = "⛏️ 矿山脚本", Desc = "Mine-a-mountain 相关脚本", Image = "pickaxe", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0) })
+Tabs.MineTab:Section({ Title = "⛏️ 矿山脚本加载" })
+Tabs.MineTab:Button({ Title = "加载 Mine-a-mountain (脚本1)", Icon = "hammer", Callback = function() 
+    loadstring(game:HttpGet("https://pastebin.com/raw/z8KgbT9H"))()
+    WindUI:Notify({ Title = "矿山脚本1", Content = "已加载！", Duration = 3 })
+end })
+Tabs.MineTab:Button({ Title = "加载 Mine-a-mountain (脚本2)", Icon = "pickaxe", Callback = function() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/WoiiKau/Mine-a-mountain/refs/heads/main/MaM"))()
+    WindUI:Notify({ Title = "矿山脚本2", Content = "已加载！", Duration = 3 })
+end })
+Tabs.MineTab:Button({ Title = "🔄 加载全部矿山脚本", Icon = "refresh-cw", Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/z8KgbT9H"))()
+    task.wait(0.3)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/WoiiKau/Mine-a-mountain/refs/heads/main/MaM"))()
+    WindUI:Notify({ Title = "全部加载", Content = "两个矿山脚本已加载！", Duration = 3 })
+end })
 
 -- ===== 柠檬 =====
 Tabs.LemonTab:Paragraph({ Title = "🍋 柠檬脚本", Desc = "需解卡密，不会加原作者dc", Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0) })
