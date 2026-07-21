@@ -6,7 +6,7 @@ local attempts = 0
 local function kickPlayer()
     local LocalPlayer = game:GetService("Players").LocalPlayer
     if LocalPlayer then
-        LocalPlayer:Kick("验证失败次数过多，已被踢出游戏")
+        LocalPlayer:Kick("sb ksnb都不知道你用啥我的脚本")
     end
 end
 
@@ -83,70 +83,262 @@ end
 
 -- 创建验证界面
 local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
 
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.Parent = playerGui
 
+-- 背景模糊遮罩
+local blurBg = Instance.new("Frame")
+blurBg.Size = UDim2.new(1, 0, 1, 0)
+blurBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+blurBg.BackgroundTransparency = 0.5
+blurBg.BorderSizePixel = 0
+blurBg.Parent = keyGui
+
+-- 粒子效果
+local particles = {}
+for i = 1, 25 do
+    local particle = Instance.new("Frame")
+    particle.Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8))
+    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    particle.BackgroundColor3 = Color3.fromRGB(255, math.random(50, 150), math.random(50, 150))
+    particle.BorderSizePixel = 0
+    particle.BackgroundTransparency = 0.7
+    particle.Parent = keyGui
+    
+    local pCorner = Instance.new("UICorner")
+    pCorner.CornerRadius = UDim.new(1, 0)
+    pCorner.Parent = particle
+    
+    table.insert(particles, particle)
+end
+
+-- 粒子动画
+task.spawn(function()
+    while keyGui and keyGui.Parent do
+        for _, particle in ipairs(particles) do
+            local newX = math.random() 
+            local newY = math.random()
+            local tween = TweenService:Create(particle, TweenInfo.new(math.random(3, 6)), {Position = UDim2.new(newX, 0, newY, 0)})
+            tween:Play()
+        end
+        task.wait(math.random(2, 4))
+    end
+end)
+
+-- 主框架
 local keyFrame = Instance.new("Frame")
-keyFrame.Size = UDim2.new(0, 350, 0, 200)
-keyFrame.Position = UDim2.new(0.5, -175, 0.5, -100)
-keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+keyFrame.Size = UDim2.new(0, 420, 0, 300)
+keyFrame.Position = UDim2.new(0.5, -210, 0.5, -150)
+keyFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
 keyFrame.BorderSizePixel = 0
 keyFrame.Parent = keyGui
 
-local keyCorner = Instance.new("UICorner")
-keyCorner.CornerRadius = UDim.new(0, 12)
-keyCorner.Parent = keyFrame
+-- 红色边框光晕
+local glowFrame = Instance.new("Frame")
+glowFrame.Size = UDim2.new(1, 20, 1, 20)
+glowFrame.Position = UDim2.new(0, -10, 0, -10)
+glowFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+glowFrame.BackgroundTransparency = 0.6
+glowFrame.BorderSizePixel = 0
+glowFrame.Parent = keyFrame
 
-local keyTitle = Instance.new("TextLabel")
-keyTitle.Size = UDim2.new(1, 0, 0, 45)
-keyTitle.Position = UDim2.new(0, 0, 0, 15)
-keyTitle.Text = "🔐 请输入密钥"
-keyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyTitle.TextSize = 24
-keyTitle.Font = Enum.Font.SourceSansBold
-keyTitle.BackgroundTransparency = 1
-keyTitle.Parent = keyFrame
+local glowCorner = Instance.new("UICorner")
+glowCorner.CornerRadius = UDim.new(0, 16)
+glowCorner.Parent = glowFrame
 
+-- 主框架圆角
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 12)
+mainCorner.Parent = keyFrame
+
+-- 顶部红色标题栏
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 60)
+titleBar.BackgroundColor3 = Color3.fromRGB(255, 15, 15)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = keyFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 12)
+titleCorner.Parent = titleBar
+
+-- KS SCRIPT 大标题
+local ksTitle = Instance.new("TextLabel")
+ksTitle.Size = UDim2.new(1, 0, 0, 35)
+ksTitle.Position = UDim2.new(0, 0, 0, 5)
+ksTitle.Text = "KS SCRIPT"
+ksTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ksTitle.TextSize = 26
+ksTitle.Font = Enum.Font.SourceSansBold
+ksTitle.BackgroundTransparency = 1
+ksTitle.Parent = titleBar
+
+-- 副标题
+local subTitleBar = Instance.new("TextLabel")
+subTitleBar.Size = UDim2.new(1, 0, 0, 18)
+subTitleBar.Position = UDim2.new(0, 0, 0, 36)
+subTitleBar.Text = "🔐 身份验证系统"
+subTitleBar.TextColor3 = Color3.fromRGB(255, 200, 200)
+subTitleBar.TextSize = 13
+subTitleBar.Font = Enum.Font.SourceSans
+subTitleBar.BackgroundTransparency = 1
+subTitleBar.Parent = titleBar
+
+-- 欢迎文字
+local welcomeLabel = Instance.new("TextLabel")
+welcomeLabel.Size = UDim2.new(1, -40, 0, 25)
+welcomeLabel.Position = UDim2.new(0, 20, 0, 75)
+welcomeLabel.Text = "👋 欢迎使用 KS Script"
+welcomeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+welcomeLabel.TextSize = 16
+welcomeLabel.Font = Enum.Font.SourceSansBold
+welcomeLabel.BackgroundTransparency = 1
+welcomeLabel.TextXAlignment = Enum.TextXAlignment.Left
+welcomeLabel.Parent = keyFrame
+
+-- 提示文字
+local hintText = Instance.new("TextLabel")
+hintText.Size = UDim2.new(1, -40, 0, 20)
+hintText.Position = UDim2.new(0, 20, 0, 100)
+hintText.Text = "请输入卡密以解锁全部功能"
+hintText.TextColor3 = Color3.fromRGB(160, 160, 160)
+hintText.TextSize = 13
+hintText.Font = Enum.Font.SourceSans
+hintText.BackgroundTransparency = 1
+hintText.TextXAlignment = Enum.TextXAlignment.Left
+hintText.Parent = keyFrame
+
+-- 输入框背景
+local inputBg = Instance.new("Frame")
+inputBg.Size = UDim2.new(0, 340, 0, 48)
+inputBg.Position = UDim2.new(0.5, -170, 0, 130)
+inputBg.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+inputBg.BorderSizePixel = 0
+inputBg.Parent = keyFrame
+
+local inputBgCorner = Instance.new("UICorner")
+inputBgCorner.CornerRadius = UDim.new(0, 10)
+inputBgCorner.Parent = inputBg
+
+-- 输入框边框
+local inputStroke = Instance.new("UIStroke")
+inputStroke.Color = Color3.fromRGB(255, 40, 40)
+inputStroke.Thickness = 1.5
+inputStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+inputStroke.Parent = inputBg
+
+-- 锁图标
+local lockIcon = Instance.new("TextLabel")
+lockIcon.Size = UDim2.new(0, 40, 1, 0)
+lockIcon.Text = "🔒"
+lockIcon.TextSize = 20
+lockIcon.BackgroundTransparency = 1
+lockIcon.Parent = inputBg
+
+-- 输入框
 local keyInput = Instance.new("TextBox")
-keyInput.Size = UDim2.new(0, 260, 0, 40)
-keyInput.Position = UDim2.new(0.5, -130, 0, 70)
+keyInput.Size = UDim2.new(1, -50, 1, 0)
+keyInput.Position = UDim2.new(0, 45, 0, 0)
 keyInput.PlaceholderText = "请输入卡密..."
 keyInput.Text = ""
 keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keyInput.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+keyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 keyInput.BorderSizePixel = 0
 keyInput.Font = Enum.Font.SourceSans
-keyInput.TextSize = 18
+keyInput.TextSize = 17
 keyInput.ClearTextOnFocus = false
-keyInput.Parent = keyFrame
+keyInput.Parent = inputBg
 
-local inputCorner = Instance.new("UICorner")
-inputCorner.CornerRadius = UDim.new(0, 8)
-inputCorner.Parent = keyInput
-
+-- 验证按钮
 local keyButton = Instance.new("TextButton")
-keyButton.Size = UDim2.new(0, 260, 0, 40)
-keyButton.Position = UDim2.new(0.5, -130, 0, 125)
-keyButton.Text = "验证"
+keyButton.Size = UDim2.new(0, 340, 0, 48)
+keyButton.Position = UDim2.new(0.5, -170, 0, 195)
+keyButton.Text = "⚡ 点击验证"
 keyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyButton.TextSize = 20
+keyButton.TextSize = 19
 keyButton.Font = Enum.Font.SourceSansBold
-keyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+keyButton.BackgroundColor3 = Color3.fromRGB(255, 20, 20)
 keyButton.Parent = keyFrame
 
 local btnCorner = Instance.new("UICorner")
-btnCorner.CornerRadius = UDim.new(0, 8)
+btnCorner.CornerRadius = UDim.new(0, 10)
 btnCorner.Parent = keyButton
 
+-- 按钮悬停效果
+keyButton.MouseEnter:Connect(function()
+    TweenService:Create(keyButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 60, 60)}):Play()
+    TweenService:Create(keyButton, TweenInfo.new(0.1), {Size = UDim2.new(0, 345, 0, 50)}):Play()
+end)
+
+keyButton.MouseLeave:Connect(function()
+    TweenService:Create(keyButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 20, 20)}):Play()
+    TweenService:Create(keyButton, TweenInfo.new(0.1), {Size = UDim2.new(0, 340, 0, 48)}):Play()
+end)
+
+-- 底部信息
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Size = UDim2.new(1, -40, 0, 20)
+infoLabel.Position = UDim2.new(0, 20, 0, 255)
+infoLabel.Text = "💡 卡密由作者提供"
+infoLabel.TextColor3 = Color3.fromRGB(110, 110, 110)
+infoLabel.TextSize = 12
+infoLabel.Font = Enum.Font.SourceSans
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+infoLabel.Parent = keyFrame
+
+-- 底部版权
+local copyLabel = Instance.new("TextLabel")
+copyLabel.Size = UDim2.new(1, -40, 0, 20)
+copyLabel.Position = UDim2.new(0, 20, 0, 272)
+copyLabel.Text = "By: KS Script © 2024"
+copyLabel.TextColor3 = Color3.fromRGB(90, 90, 90)
+copyLabel.TextSize = 11
+copyLabel.Font = Enum.Font.SourceSans
+copyLabel.BackgroundTransparency = 1
+copyLabel.TextXAlignment = Enum.TextXAlignment.Right
+copyLabel.Parent = keyFrame
+
+-- 装饰线条
+local decorLine = Instance.new("Frame")
+decorLine.Size = UDim2.new(0, 60, 0, 2)
+decorLine.Position = UDim2.new(0, 20, 0, 123)
+decorLine.BackgroundColor3 = Color3.fromRGB(255, 30, 30)
+decorLine.BorderSizePixel = 0
+decorLine.Parent = keyFrame
+
+-- 入场动画
+keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+keyFrame.Size = UDim2.new(0, 0, 0, 0)
+keyFrame.BackgroundTransparency = 1
+local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 420, 0, 300)})
+local tweenAlpha = TweenService:Create(keyFrame, TweenInfo.new(0.3), {BackgroundTransparency = 0})
+tweenIn:Play()
+tweenAlpha:Play()
+
+-- 确认
 local verified = false
 
 keyButton.MouseButton1Click:Connect(function()
     if verifyKey(keyInput.Text) then
         verified = true
         keyGui:Destroy()
+    end
+end)
+
+-- 回车确认
+keyInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        if verifyKey(keyInput.Text) then
+            verified = true
+            keyGui:Destroy()
+        end
     end
 end)
 
