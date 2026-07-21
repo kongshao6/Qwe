@@ -90,23 +90,15 @@ keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.Parent = playerGui
 
--- 背景
-local bgFrame = Instance.new("Frame")
-bgFrame.Size = UDim2.new(1, 0, 1, 0)
-bgFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-bgFrame.BackgroundTransparency = 0.5
-bgFrame.BorderSizePixel = 0
-bgFrame.Parent = keyGui
-
--- 彩虹粒子
+-- 粒子
 local particles = {}
 for i = 1, 40 do
     local particle = Instance.new("Frame")
-    particle.Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8))
+    particle.Size = UDim2.new(0, math.random(4, 10), 0, math.random(4, 10))
     particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
     particle.BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1)
     particle.BorderSizePixel = 0
-    particle.BackgroundTransparency = 0.6
+    particle.BackgroundTransparency = 0.4
     particle.Parent = keyGui
     
     local pCorner = Instance.new("UICorner")
@@ -119,12 +111,10 @@ end
 task.spawn(function()
     while keyGui and keyGui.Parent do
         for _, particle in ipairs(particles) do
-            local newX = math.random()
-            local newY = math.random()
-            local newColor = Color3.fromHSV(math.random(), 1, 1)
             local tween = TweenService:Create(particle, TweenInfo.new(math.random(3, 6)), {
-                Position = UDim2.new(newX, 0, newY, 0),
-                BackgroundColor3 = newColor,
+                Position = UDim2.new(math.random(), 0, math.random(), 0),
+                BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1),
+                BackgroundTransparency = math.random(3, 7) / 10,
             })
             tween:Play()
         end
@@ -136,12 +126,13 @@ end)
 local keyFrame = Instance.new("Frame")
 keyFrame.Size = UDim2.new(0, 380, 0, 230)
 keyFrame.Position = UDim2.new(0.5, -190, 0.5, -115)
-keyFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+keyFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+keyFrame.BackgroundTransparency = 0.15
 keyFrame.BorderSizePixel = 0
 keyFrame.Parent = keyGui
 
 local mainCorner = Instance.new("UICorner")
-mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.CornerRadius = UDim.new(0, 14)
 mainCorner.Parent = keyFrame
 
 -- 彩虹渐变边框
@@ -153,10 +144,9 @@ rainbowBorder.BorderSizePixel = 0
 rainbowBorder.Parent = keyFrame
 
 local borderCorner = Instance.new("UICorner")
-borderCorner.CornerRadius = UDim.new(0, 12)
+borderCorner.CornerRadius = UDim.new(0, 16)
 borderCorner.Parent = rainbowBorder
 
--- 边框颜色循环
 task.spawn(function()
     local hue = 0
     while keyGui and keyGui.Parent and rainbowBorder and rainbowBorder.Parent do
@@ -189,7 +179,7 @@ local subLabel = Instance.new("TextLabel")
 subLabel.Size = UDim2.new(1, 0, 0, 18)
 subLabel.Position = UDim2.new(0, 0, 0, 55)
 subLabel.Text = "🔐 请输入卡密以继续"
-subLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+subLabel.TextColor3 = Color3.fromRGB(80, 80, 80)
 subLabel.TextSize = 13
 subLabel.Font = Enum.Font.SourceSans
 subLabel.BackgroundTransparency = 1
@@ -199,17 +189,16 @@ subLabel.Parent = keyFrame
 local inputBg = Instance.new("Frame")
 inputBg.Size = UDim2.new(0, 300, 0, 45)
 inputBg.Position = UDim2.new(0.5, -150, 0, 85)
-inputBg.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+inputBg.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
 inputBg.BorderSizePixel = 0
 inputBg.Parent = keyFrame
 
 local inputCorner = Instance.new("UICorner")
-inputCorner.CornerRadius = UDim.new(0, 8)
+inputCorner.CornerRadius = UDim.new(0, 10)
 inputCorner.Parent = inputBg
 
--- 输入框彩虹边框
 local inputRainbowStroke = Instance.new("UIStroke")
-inputRainbowStroke.Thickness = 1.5
+inputRainbowStroke.Thickness = 2
 inputRainbowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 inputRainbowStroke.Parent = inputBg
 
@@ -227,9 +216,9 @@ keyInput.Size = UDim2.new(1, -16, 1, 0)
 keyInput.Position = UDim2.new(0, 8, 0, 0)
 keyInput.PlaceholderText = "请输入卡密..."
 keyInput.Text = ""
-keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyInput.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
-keyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+keyInput.TextColor3 = Color3.fromRGB(40, 40, 40)
+keyInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+keyInput.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
 keyInput.BorderSizePixel = 0
 keyInput.Font = Enum.Font.SourceSans
 keyInput.TextSize = 16
@@ -244,14 +233,13 @@ keyButton.Text = "⚡ 验 证"
 keyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 keyButton.TextSize = 18
 keyButton.Font = Enum.Font.SourceSansBold
-keyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+keyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 keyButton.Parent = keyFrame
 
 local btnCorner = Instance.new("UICorner")
-btnCorner.CornerRadius = UDim.new(0, 8)
+btnCorner.CornerRadius = UDim.new(0, 10)
 btnCorner.Parent = keyButton
 
--- 按钮彩虹光晕边框
 local btnGlowStroke = Instance.new("UIStroke")
 btnGlowStroke.Thickness = 2
 btnGlowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
@@ -261,17 +249,18 @@ task.spawn(function()
     local hue = 0
     while keyGui and keyGui.Parent and btnGlowStroke and btnGlowStroke.Parent do
         btnGlowStroke.Color = Color3.fromHSV(hue, 1, 1)
-        hue = (hue + 0.015) % 1
+        keyButton.BackgroundColor3 = Color3.fromHSV(hue, 0.8, 0.6)
+        hue = (hue + 0.01) % 1
         task.wait()
     end
 end)
 
 keyButton.MouseEnter:Connect(function()
-    TweenService:Create(keyButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(80, 80, 80)}):Play()
+    TweenService:Create(btnGlowStroke, TweenInfo.new(0.2), {Thickness = 4}):Play()
 end)
 
 keyButton.MouseLeave:Connect(function()
-    TweenService:Create(keyButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 50)}):Play()
+    TweenService:Create(btnGlowStroke, TweenInfo.new(0.2), {Thickness = 2}):Play()
 end)
 
 -- 底部版权
