@@ -14,8 +14,8 @@ local Window = WindUI:CreateWindow({
     HasOutline = true,
     AccentColor = Color3.fromRGB(255, 0, 0),
     KeySystem = {
-        Key = { "我喜欢章子禾还有张煊" },
-        Note = "请输入密钥",
+        Key = { "wxhzzhhyzx" },
+        Note = "你的母狗是哪两位??",
         SaveKey = false,
     },
 })
