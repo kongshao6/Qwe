@@ -338,9 +338,9 @@ end)
 repeat task.wait() until verified
 
 -- ============================================================
--- 加载新版 WindUI（支持背景图片）
+-- 加载 WindUI
 -- ============================================================
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/source.lua"))()
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
     Title = "KS SCRIPT",
@@ -353,8 +353,6 @@ local Window = WindUI:CreateWindow({
     SideBarWidth = 200,
     HasOutline = true,
     AccentColor = Color3.fromRGB(255, 0, 0),
-    BackgroundImage = "rbxassetid://1784478161892",
-    BackgroundBlur = 10,
 })
 
 Window:EditOpenButton({
@@ -385,6 +383,29 @@ local Tabs = {
 }
 
 Window:SelectTab(1)
+
+-- 给UI加背景图（蓝色科技风）
+task.spawn(function()
+    task.wait(0.5)
+    local gui = game:GetService("CoreGui"):FindFirstChild("WindUI") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("WindUI")
+    if gui then
+        local container = gui:FindFirstChild("Container") or gui:FindFirstChild("Frame") or gui
+        local bg = Instance.new("ImageLabel")
+        bg.Size = UDim2.new(1, 0, 1, 0)
+        bg.Image = "rbxassetid://7033118005"
+        bg.ScaleType = Enum.ScaleType.Crop
+        bg.ZIndex = 0
+        bg.Parent = container
+        
+        local blur = Instance.new("Frame")
+        blur.Size = UDim2.new(1, 0, 1, 0)
+        blur.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        blur.BackgroundTransparency = 0.5
+        blur.BorderSizePixel = 0
+        blur.ZIndex = 1
+        blur.Parent = container
+    end
+end)
 
 -- 变量
 local walkEnabled = false
