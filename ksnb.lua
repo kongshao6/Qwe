@@ -149,7 +149,6 @@ keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.Parent = playerGui
 
--- 粒子
 local particles = {}
 for i = 1, 40 do
     local particle = Instance.new("Frame")
@@ -181,7 +180,6 @@ task.spawn(function()
     end
 end)
 
--- 主框架
 local keyFrame = Instance.new("Frame")
 keyFrame.Size = UDim2.new(0, 380, 0, 230)
 keyFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -196,7 +194,6 @@ local mainCorner = Instance.new("UICorner")
 mainCorner.CornerRadius = UDim.new(0, 14)
 mainCorner.Parent = keyFrame
 
--- 彩虹边框
 local rainbowBorder = Instance.new("Frame")
 rainbowBorder.Size = UDim2.new(1, 4, 1, 4)
 rainbowBorder.Position = UDim2.new(0, -2, 0, -2)
@@ -217,7 +214,6 @@ task.spawn(function()
     end
 end)
 
--- 标题
 local ksTitle = Instance.new("TextLabel")
 ksTitle.Size = UDim2.new(1, 0, 0, 40)
 ksTitle.Position = UDim2.new(0, 0, 0, 18)
@@ -246,7 +242,6 @@ subLabel.Font = Enum.Font.SourceSans
 subLabel.BackgroundTransparency = 1
 subLabel.Parent = keyFrame
 
--- 输入框
 local inputBg = Instance.new("Frame")
 inputBg.Size = UDim2.new(0, 300, 0, 45)
 inputBg.Position = UDim2.new(0.5, -150, 0, 85)
@@ -286,7 +281,6 @@ keyInput.TextSize = 16
 keyInput.ClearTextOnFocus = false
 keyInput.Parent = inputBg
 
--- 验证按钮
 local keyButton = Instance.new("TextButton")
 keyButton.Size = UDim2.new(0, 300, 0, 45)
 keyButton.Position = UDim2.new(0.5, -150, 0, 145)
@@ -324,7 +318,6 @@ keyButton.MouseLeave:Connect(function()
     TweenService:Create(btnGlowStroke, TweenInfo.new(0.2), {Thickness = 2}):Play()
 end)
 
--- 底部版权
 local footerLabel = Instance.new("TextLabel")
 footerLabel.Size = UDim2.new(1, 0, 0, 18)
 footerLabel.Position = UDim2.new(0, 0, 0, 200)
@@ -343,11 +336,9 @@ task.spawn(function()
     end
 end)
 
--- 入场动画
 local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 380, 0, 230)})
 tweenIn:Play()
 
--- 确认
 local verified = false
 
 keyButton.MouseButton1Click:Connect(function()
@@ -421,41 +412,25 @@ Window:SelectTab(1)
 Tabs.NoticeTab:Paragraph({
     Title = "📢 脚本公告",
     Desc = "欢迎使用 ks script！",
-    Image = "bell",
-    ImageSize = 34,
-    Color = Color3.fromRGB(255, 0, 0),
+    Image = "bell", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0),
 })
-
 Tabs.NoticeTab:Paragraph({
     Title = "📝 脚本介绍",
     Desc = "此脚本为缝合各种脚本\n倒卖sm",
-    Image = "info",
-    ImageSize = 34,
-    Color = Color3.fromRGB(255, 165, 0),
+    Image = "info", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0),
 })
-
 Tabs.NoticeTab:Paragraph({
     Title = "⚠️ 警告",
     Desc = "请勿倒卖本脚本，尊重原作者劳动成果！",
-    Image = "triangle-alert",
-    ImageSize = 34,
-    Color = Color3.fromRGB(255, 255, 0),
+    Image = "triangle-alert", ImageSize = 34, Color = Color3.fromRGB(255, 255, 0),
 })
-
 Tabs.NoticeTab:Button({
     Title = "👤 作者QQ: 3236904498 (点击复制)",
     Desc = "点击复制QQ号到剪贴板",
     Icon = "clipboard-copy",
     Callback = function()
-        pcall(function()
-            setclipboard("3236904498")
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "QQ号 3236904498 已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
+        pcall(function() setclipboard("3236904498") end)
+        WindUI:Notify({ Title = "已复制", Content = "QQ号 3236904498 已复制到剪贴板！", Duration = 3 })
     end
 })
 
@@ -466,23 +441,15 @@ Tabs.NoticeTab:Button({
 Tabs.LemonTab:Paragraph({
     Title = "🍋 柠檬脚本",
     Desc = "此脚本需要解卡密\n不会的可以加原作者dc群去学哦",
-    Image = "citrus",
-    ImageSize = 34,
-    Color = Color3.fromRGB(0, 255, 0),
+    Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0),
 })
-
 Tabs.LemonTab:Button({
     Title = "加载柠檬脚本",
     Desc = "点击执行 HoshiOnTop 脚本",
     Icon = "play",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))()
-        WindUI:Notify({
-            Title = "柠檬脚本",
-            Content = "HoshiOnTop 脚本已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
+        WindUI:Notify({ Title = "柠檬脚本", Content = "HoshiOnTop 脚本已执行！", Duration = 3 })
     end
 })
 
@@ -493,110 +460,48 @@ Tabs.LemonTab:Button({
 Tabs.ScriptsTab:Paragraph({
     Title = "多种脚本整合",
     Desc = "以下是各类脚本合集，点击对应按钮即可执行",
-    Image = "folder-code",
-    ImageSize = 34,
-    Color = Color3.fromRGB(0, 0, 255),
+    Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255),
 })
 
 Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
-Tabs.ScriptsTab:Button({
-    Title = "加载 YI 脚本",
-    Desc = "YI_HUB 脚本加载器",
-    Icon = "play",
-    Callback = function()
-        getgenv().YI_HUB = "YI_HUB群979312897"
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("")
-        WindUI:Notify({
-            Title = "YI 脚本",
-            Content = "YI_HUB 脚本已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.ScriptsTab:Button({ Title = "加载 YI 脚本", Icon = "play", Callback = function()
+    getgenv().YI_HUB = "YI_HUB群979312897"
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("")
+    WindUI:Notify({ Title = "YI 脚本", Content = "YI_HUB 脚本已执行！", Duration = 3 })
+end })
 
 Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
-Tabs.ScriptsTab:Button({
-    Title = "加载 PI 脚本",
-    Desc = "皮脚本 - QQ群1002100032",
-    Icon = "play",
-    Callback = function()
-        getgenv().XiaoPi = "皮脚本QQ群1002100032"
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
-        WindUI:Notify({
-            Title = "PI 脚本",
-            Content = "皮脚本已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.ScriptsTab:Button({ Title = "加载 PI 脚本", Icon = "play", Callback = function()
+    getgenv().XiaoPi = "皮脚本QQ群1002100032"
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
+    WindUI:Notify({ Title = "PI 脚本", Content = "皮脚本已执行！", Duration = 3 })
+end })
 
 Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
-Tabs.ScriptsTab:Button({
-    Title = "加载 BS 脚本",
-    Desc = "BS_Script 加载器",
-    Icon = "play",
-    Callback = function()
-        BS = "\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"
-        loadstring(game:HttpGet(BS))()
-        WindUI:Notify({
-            Title = "BS 脚本",
-            Content = "BS_Script 已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.ScriptsTab:Button({ Title = "加载 BS 脚本", Icon = "play", Callback = function()
+    BS = "\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"
+    loadstring(game:HttpGet(BS))()
+    WindUI:Notify({ Title = "BS 脚本", Content = "BS_Script 已执行！", Duration = 3 })
+end })
 
 Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
-Tabs.ScriptsTab:Button({
-    Title = "加载 沙 脚本",
-    Desc = "ShaHUB 加载器",
-    Icon = "play",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))()
-        WindUI:Notify({
-            Title = "沙脚本",
-            Content = "ShaHUB 已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.ScriptsTab:Button({ Title = "加载 沙 脚本", Icon = "play", Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))()
+    WindUI:Notify({ Title = "沙脚本", Content = "ShaHUB 已执行！", Duration = 3 })
+end })
 
 Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
-Tabs.ScriptsTab:Button({
-    Title = "加载 Kanl 破解版",
-    Desc = "Kanl 破解版加载器",
-    Icon = "play",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))()
-        WindUI:Notify({
-            Title = "Kanl 脚本",
-            Content = "Kanl 破解版已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.ScriptsTab:Button({ Title = "加载 Kanl 破解版", Icon = "play", Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))()
+    WindUI:Notify({ Title = "Kanl 脚本", Content = "Kanl 破解版已执行！", Duration = 3 })
+end })
 
 Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
-Tabs.ScriptsTab:Button({
-    Title = "加载 For 脚本中心",
-    Desc = "脚本中心加载器",
-    Icon = "play",
-    Callback = function()
-        getgenv().SCRIPT_KEY = ""
-        loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))()
-        WindUI:Notify({
-            Title = "For 脚本中心",
-            Content = "脚本中心已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.ScriptsTab:Button({ Title = "加载 For 脚本中心", Icon = "play", Callback = function()
+    getgenv().SCRIPT_KEY = ""
+    loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))()
+    WindUI:Notify({ Title = "For 脚本中心", Content = "脚本中心已执行！", Duration = 3 })
+end })
 
 -- ============================================================
 -- TX翻译标签页
@@ -605,27 +510,13 @@ Tabs.ScriptsTab:Button({
 Tabs.TXTab:Paragraph({
     Title = "🌐 TX 翻译脚本",
     Desc = "全自动翻译脚本，助您畅玩全球游戏",
-    Image = "languages",
-    ImageSize = 34,
-    Color = Color3.fromRGB(75, 0, 130),
+    Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130),
 })
-
-Tabs.TXTab:Button({
-    Title = "加载 TX 翻译",
-    Desc = "点击执行全自动翻译脚本",
-    Icon = "play",
-    Callback = function()
-        TX = "TX Script"
-        Script = "全自动翻译"
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))()
-        WindUI:Notify({
-            Title = "TX 翻译",
-            Content = "全自动翻译脚本已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.TXTab:Button({ Title = "加载 TX 翻译", Icon = "play", Callback = function()
+    TX = "TX Script" Script = "全自动翻译"
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))()
+    WindUI:Notify({ Title = "TX 翻译", Content = "全自动翻译脚本已执行！", Duration = 3 })
+end })
 
 -- ============================================================
 -- Run Race 标签页
@@ -634,25 +525,12 @@ Tabs.TXTab:Button({
 Tabs.RunRaceTab:Paragraph({
     Title = "🏃 Run Race 脚本",
     Desc = "Ruby Hub Run Race 脚本加载器",
-    Image = "flag",
-    ImageSize = 34,
-    Color = Color3.fromRGB(255, 0, 0),
+    Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0),
 })
-
-Tabs.RunRaceTab:Button({
-    Title = "加载 Run Race 脚本",
-    Desc = "点击执行 Ruby Hub v1.0",
-    Icon = "play",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))()
-        WindUI:Notify({
-            Title = "Run Race",
-            Content = "Ruby Hub v1.0 脚本已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.RunRaceTab:Button({ Title = "加载 Run Race 脚本", Icon = "play", Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))()
+    WindUI:Notify({ Title = "Run Race", Content = "Ruby Hub v1.0 脚本已执行！", Duration = 3 })
+end })
 
 -- ============================================================
 -- 自瞄一类标签页
@@ -661,36 +539,21 @@ Tabs.RunRaceTab:Button({
 Tabs.AimbotTab:Paragraph({
     Title = "🔍 ESP 透视脚本",
     Desc = "Roblox ESP 透视与反机器人 V3.0 手机版",
-    Image = "eye",
-    ImageSize = 34,
-    Color = Color3.fromRGB(255, 0, 0),
+    Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0),
 })
-
-Tabs.AimbotTab:Button({
-    Title = "加载 ESP 透视脚本",
-    Desc = "点击加载完整 ESP 透视系统",
-    Icon = "play",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))()
-        WindUI:Notify({
-            Title = "ESP 透视",
-            Content = "ESP 透视脚本已加载！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
+Tabs.AimbotTab:Button({ Title = "加载 ESP 透视脚本", Icon = "play", Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))()
+    WindUI:Notify({ Title = "ESP 透视", Content = "ESP 透视脚本已加载！", Duration = 3 })
+end })
 
 -- ============================================================
--- 通用功能标签页（参考wo.lua）
+-- 通用功能标签页
 -- ============================================================
 
 Tabs.UniversalTab:Paragraph({
     Title = "🛠️ 通用功能",
-    Desc = "实用功能合集",
-    Image = "wrench",
-    ImageSize = 34,
-    Color = Color3.fromRGB(0, 255, 200),
+    Desc = "开关控制+滑动调节参数",
+    Image = "wrench", ImageSize = 34, Color = Color3.fromRGB(0, 255, 200),
 })
 
 -- 飞行
@@ -708,41 +571,82 @@ Tabs.UniversalTab:Button({
 -- 人物功能
 Tabs.UniversalTab:Section({ Title = "🏃 人物功能" })
 
-local speedEnabled = false
-Tabs.UniversalTab:Button({
-    Title = "超级速度",
-    Desc = "切换走路速度 16/50",
-    Icon = "zap",
-    Callback = function()
-        speedEnabled = not speedEnabled
-        local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if hum then hum.WalkSpeed = speedEnabled and 50 or 16 end
-        WindUI:Notify({ Title = speedEnabled and "超级速度 开启" or "超级速度 关闭", Content = "速度: " .. (speedEnabled and "50" or "16"), Duration = 2 })
-    end
-})
-
+local walkEnabled = false
+local walkSpeed = 16
 local jumpEnabled = false
-Tabs.UniversalTab:Button({
-    Title = "超级跳跃",
-    Desc = "切换跳跃高度 50/100",
-    Icon = "arrow-up",
-    Callback = function()
-        jumpEnabled = not jumpEnabled
-        local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if hum then hum.JumpPower = jumpEnabled and 100 or 50 end
-        WindUI:Notify({ Title = jumpEnabled and "超级跳跃 开启" or "超级跳跃 关闭", Content = "跳跃: " .. (jumpEnabled and "100" or "50"), Duration = 2 })
-    end
-})
-
+local jumpPower = 50
+local gravityEnabled = false
+local gravityValue = 196.2
+local fovEnabled = false
+local fovValue = 70
 local noclipEnabled = false
 local noclipConn
-Tabs.UniversalTab:Button({
-    Title = "穿墙模式",
-    Desc = "切换穿墙/无碰撞",
-    Icon = "door-open",
-    Callback = function()
-        noclipEnabled = not noclipEnabled
-        if noclipEnabled then
+
+local function updateSpeed()
+    local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if hum then hum.WalkSpeed = walkEnabled and walkSpeed or 16 end
+end
+local function updateJump()
+    local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if hum then hum.JumpPower = jumpEnabled and jumpPower or 50 end
+end
+local function updateGravity()
+    local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if hum then hum.Gravity = gravityEnabled and gravityValue or 196.2 end
+end
+local function updateFOV()
+    workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
+end
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+    local hum = char:WaitForChild("Humanoid")
+    hum.WalkSpeed = walkEnabled and walkSpeed or 16
+    hum.JumpPower = jumpEnabled and jumpPower or 50
+    hum.Gravity = gravityEnabled and gravityValue or 196.2
+    workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
+end)
+
+Tabs.UniversalTab:Toggle({
+    Title = "自定义速度", Default = false,
+    Callback = function(value) walkEnabled = value updateSpeed() end
+})
+Tabs.UniversalTab:Slider({
+    Title = "速度", Default = 16, Min = 16, Max = 200, Rounding = 0,
+    Callback = function(value) walkSpeed = value updateSpeed() end
+})
+
+Tabs.UniversalTab:Toggle({
+    Title = "自定义跳跃", Default = false,
+    Callback = function(value) jumpEnabled = value updateJump() end
+})
+Tabs.UniversalTab:Slider({
+    Title = "跳跃", Default = 50, Min = 50, Max = 300, Rounding = 0,
+    Callback = function(value) jumpPower = value updateJump() end
+})
+
+Tabs.UniversalTab:Toggle({
+    Title = "自定义重力", Default = false,
+    Callback = function(value) gravityEnabled = value updateGravity() end
+})
+Tabs.UniversalTab:Slider({
+    Title = "重力", Default = 196.2, Min = 10, Max = 500, Rounding = 1,
+    Callback = function(value) gravityValue = value updateGravity() end
+})
+
+Tabs.UniversalTab:Toggle({
+    Title = "自定义视野", Default = false,
+    Callback = function(value) fovEnabled = value updateFOV() end
+})
+Tabs.UniversalTab:Slider({
+    Title = "FOV", Default = 70, Min = 30, Max = 150, Rounding = 0,
+    Callback = function(value) fovValue = value updateFOV() end
+})
+
+Tabs.UniversalTab:Toggle({
+    Title = "穿墙模式", Default = false,
+    Callback = function(value)
+        noclipEnabled = value
+        if value then
             noclipConn = game:GetService("RunService").Stepped:Connect(function()
                 local char = game.Players.LocalPlayer.Character
                 if char then
@@ -754,146 +658,37 @@ Tabs.UniversalTab:Button({
         else
             if noclipConn then noclipConn:Disconnect() end
         end
-        WindUI:Notify({ Title = noclipEnabled and "穿墙 开启" or "穿墙 关闭", Duration = 2 })
-    end
-})
-
-local flyEnabled = false
-local flyConn
-local flyBodyGyro, flyBodyVel
-Tabs.UniversalTab:Button({
-    Title = "内置飞行",
-    Desc = "WASD控制，空格上升，Shift下降",
-    Icon = "plane-takeoff",
-    Callback = function()
-        flyEnabled = not flyEnabled
-        local player = game.Players.LocalPlayer
-        local char = player.Character
-        if not char then
-            WindUI:Notify({ Title = "错误", Content = "角色不存在", Duration = 2 })
-            return
-        end
-        local hrp = char:FindFirstChild("HumanoidRootPart")
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if not hrp or not hum then return end
-        
-        if flyEnabled then
-            flyBodyGyro = Instance.new("BodyGyro")
-            flyBodyGyro.P = 9e4
-            flyBodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-            flyBodyGyro.CFrame = hrp.CFrame
-            flyBodyGyro.Parent = hrp
-            
-            flyBodyVel = Instance.new("BodyVelocity")
-            flyBodyVel.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-            flyBodyVel.Velocity = Vector3.new(0, 0, 0)
-            flyBodyVel.Parent = hrp
-            
-            hum.PlatformStand = true
-            
-            local keys = {}
-            local UIS = game:GetService("UserInputService")
-            
-            flyConn = game:GetService("RunService").RenderStepped:Connect(function()
-                if not flyEnabled then return end
-                local camera = workspace.CurrentCamera
-                local speed = 50
-                local moveDir = Vector3.new(0, 0, 0)
-                
-                if keys[Enum.KeyCode.W] then moveDir = moveDir + camera.CFrame.LookVector end
-                if keys[Enum.KeyCode.S] then moveDir = moveDir - camera.CFrame.LookVector end
-                if keys[Enum.KeyCode.A] then moveDir = moveDir - camera.CFrame.RightVector end
-                if keys[Enum.KeyCode.D] then moveDir = moveDir + camera.CFrame.RightVector end
-                if keys[Enum.KeyCode.Space] then moveDir = moveDir + Vector3.new(0, 1, 0) end
-                if keys[Enum.KeyCode.LeftShift] then moveDir = moveDir - Vector3.new(0, 1, 0) end
-                
-                if moveDir.Magnitude > 0 then
-                    flyBodyVel.Velocity = moveDir.Unit * speed
-                else
-                    flyBodyVel.Velocity = Vector3.new(0, 0, 0)
-                end
-                flyBodyGyro.CFrame = camera.CFrame
-            end)
-            
-            local inputBegan
-            inputBegan = UIS.InputBegan:Connect(function(input, gp)
-                if gp then return end
-                keys[input.KeyCode] = true
-            end)
-            local inputEnded
-            inputEnded = UIS.InputEnded:Connect(function(input)
-                keys[input.KeyCode] = false
-            end)
-            
-            getgenv().FlyInputBegan = inputBegan
-            getgenv().FlyInputEnded = inputEnded
-            WindUI:Notify({ Title = "飞行 开启", Content = "WASD移动 | 空格上升 | Shift下降", Duration = 3 })
-        else
-            if flyConn then flyConn:Disconnect() end
-            if flyBodyGyro then flyBodyGyro:Destroy() end
-            if flyBodyVel then flyBodyVel:Destroy() end
-            if getgenv().FlyInputBegan then getgenv().FlyInputBegan:Disconnect() end
-            if getgenv().FlyInputEnded then getgenv().FlyInputEnded:Disconnect() end
-            hum.PlatformStand = false
-            WindUI:Notify({ Title = "飞行 关闭", Duration = 2 })
-        end
     end
 })
 
 -- 视觉功能
 Tabs.UniversalTab:Section({ Title = "👁️ 视觉功能" })
 
-Tabs.UniversalTab:Button({
-    Title = "夜视模式",
-    Desc = "切换全亮/正常",
-    Icon = "moon",
-    Callback = function()
+Tabs.UniversalTab:Toggle({
+    Title = "夜视模式", Default = false,
+    Callback = function(value)
         local l = game:GetService("Lighting")
-        if l.Brightness == 5 then
-            l.Brightness = 1
-            l.FogEnd = 10000
-            l.GlobalShadows = true
+        if value then
+            l.Brightness = 5 l.ClockTime = 14 l.FogEnd = 100000 l.GlobalShadows = false
         else
-            l.Brightness = 5
-            l.ClockTime = 14
-            l.FogEnd = 100000
-            l.GlobalShadows = false
+            l.Brightness = 1 l.FogEnd = 10000 l.GlobalShadows = true
         end
-        WindUI:Notify({ Title = l.Brightness == 5 and "夜视 开启" or "夜视 关闭", Duration = 2 })
     end
 })
-
-Tabs.UniversalTab:Button({
-    Title = "无限视野",
-    Desc = "切换FOV 70/120",
-    Icon = "binoculars",
-    Callback = function()
-        local cam = workspace.CurrentCamera
-        cam.FieldOfView = cam.FieldOfView == 120 and 70 or 120
-        WindUI:Notify({ Title = "FOV: " .. cam.FieldOfView, Duration = 2 })
-    end
+Tabs.UniversalTab:Slider({
+    Title = "时间调节", Default = 14, Min = 0, Max = 24, Rounding = 0,
+    Callback = function(value) game:GetService("Lighting").ClockTime = value end
 })
 
--- 服务器功能
+-- 服务器
 Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
-
 Tabs.UniversalTab:Button({
-    Title = "重新加入服务器",
-    Desc = "重新连接当前游戏",
-    Icon = "refresh-cw",
-    Callback = function()
-        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
-    end
+    Title = "重新加入", Icon = "refresh-cw",
+    Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end
 })
-
 Tabs.UniversalTab:Button({
-    Title = "复制服务器ID",
-    Desc = "复制当前JobId到剪贴板",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function() setclipboard(game.JobId) end)
-        WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 })
-    end
+    Title = "复制服务器ID", Icon = "clipboard-copy",
+    Callback = function() pcall(function() setclipboard(game.JobId) end) WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 }) end
 })
 
 -- ============================================================
@@ -901,15 +696,6 @@ Tabs.UniversalTab:Button({
 -- ============================================================
 
 Tabs.NoticeTab:Button({
-    Title = "🌈 彩虹主题激活",
-    Desc = "点击查看彩虹效果",
-    Icon = "palette",
-    Callback = function()
-        WindUI:Notify({
-            Title = "🌈 彩虹主题",
-            Content = "您的UI已变成彩虹色！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
+    Title = "🌈 彩虹主题激活", Icon = "palette",
+    Callback = function() WindUI:Notify({ Title = "🌈 彩虹主题", Content = "您的UI已变成彩虹色！", Duration = 3 }) end
 })
