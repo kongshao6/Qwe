@@ -338,36 +338,12 @@ end)
 repeat task.wait() until verified
 
 -- ============================================================
--- 背景图片
+-- 加载新版 WindUI（支持背景图片）
 -- ============================================================
-local bgGui = Instance.new("ScreenGui")
-bgGui.Name = "BackgroundImage"
-bgGui.ResetOnSpawn = false
-bgGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-bgGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-local bgImage = Instance.new("ImageLabel")
-bgImage.Size = UDim2.new(1, 0, 1, 0)
-bgImage.Position = UDim2.new(0, 0, 0, 0)
-bgImage.Image = "rbxassetid://1784478161892" -- 替换成你的图片ID
-bgImage.ScaleType = Enum.ScaleType.Crop
-bgImage.Parent = bgGui
-
--- 半透明遮罩让UI更清晰
-local bgOverlay = Instance.new("Frame")
-bgOverlay.Size = UDim2.new(1, 0, 1, 0)
-bgOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-bgOverlay.BackgroundTransparency = 0.4
-bgOverlay.BorderSizePixel = 0
-bgOverlay.Parent = bgGui
-
--- ============================================================
--- 加载 WindUI
--- ============================================================
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/source.lua"))()
 
 local Window = WindUI:CreateWindow({
-    Title = "ks script",
+    Title = "KS SCRIPT",
     Icon = "door-open",
     Author = "ks script",
     Folder = "ks script",
@@ -377,6 +353,8 @@ local Window = WindUI:CreateWindow({
     SideBarWidth = 200,
     HasOutline = true,
     AccentColor = Color3.fromRGB(255, 0, 0),
+    BackgroundImage = "rbxassetid://1784478161892",
+    BackgroundBlur = 10,
 })
 
 Window:EditOpenButton({
@@ -408,6 +386,29 @@ local Tabs = {
 
 Window:SelectTab(1)
 
+-- 变量
+local walkEnabled = false
+local walkSpeed = 50
+local jumpEnabled = false
+local jumpPower = 100
+local gravityEnabled = false
+local gravityValue = 50
+local fovEnabled = false
+local fovValue = 120
+local noclipEnabled = false
+local noclipConn
+
+local function applyAll()
+    local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if hum then
+        hum.WalkSpeed = walkEnabled and walkSpeed or 16
+        hum.JumpPower = jumpEnabled and jumpPower or 50
+        hum.Gravity = gravityEnabled and gravityValue or 196.2
+    end
+    workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
+end
+game.Players.LocalPlayer.CharacterAdded:Connect(function(char) task.wait(0.1) applyAll() end)
+
 -- 通知
 Tabs.NoticeTab:Paragraph({ Title = "📢 脚本公告", Desc = "欢迎使用 ks script！", Image = "bell", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
 Tabs.NoticeTab:Paragraph({ Title = "📝 脚本介绍", Desc = "此脚本为缝合各种脚本\n倒卖sm", Image = "info", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0) })
@@ -421,13 +422,13 @@ Tabs.LemonTab:Button({ Title = "加载柠檬", Icon = "play", Callback = functio
 -- 脚本整合
 Tabs.ScriptsTab:Paragraph({ Title = "多种脚本整合", Desc = "各类脚本合集", Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255) })
 Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 YI 脚本", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
+Tabs.ScriptsTab:Button({ Title = "加载 YI", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
 Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 PI 脚本", Icon = "play", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
+Tabs.ScriptsTab:Button({ Title = "加载 PI", Icon = "play", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
 Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 BS 脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
+Tabs.ScriptsTab:Button({ Title = "加载 BS", Icon = "play", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
 Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 沙 脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
+Tabs.ScriptsTab:Button({ Title = "加载 沙", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
 Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
 Tabs.ScriptsTab:Button({ Title = "加载 Kanl", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
 Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
@@ -452,41 +453,14 @@ Tabs.UniversalTab:Section({ Title = "✈️ 飞行" })
 Tabs.UniversalTab:Button({ Title = "飞行V3汉化", Icon = "plane", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))() WindUI:Notify({ Title = "飞行V3", Content = "已加载！", Duration = 3 }) end })
 
 Tabs.UniversalTab:Section({ Title = "🏃 人物功能" })
-
-local walkEnabled = false
-local walkSpeed = 50
-local jumpEnabled = false
-local jumpPower = 100
-local gravityEnabled = false
-local gravityValue = 50
-local fovEnabled = false
-local fovValue = 120
-local noclipEnabled = false
-local noclipConn
-
-local function applyAll()
-    local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-    if hum then
-        hum.WalkSpeed = walkEnabled and walkSpeed or 16
-        hum.JumpPower = jumpEnabled and jumpPower or 50
-        hum.Gravity = gravityEnabled and gravityValue or 196.2
-    end
-    workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
-end
-game.Players.LocalPlayer.CharacterAdded:Connect(function(char) task.wait(0.1) applyAll() end)
-
 Tabs.UniversalTab:Toggle({ Title = "自定义速度", Default = false, Callback = function(v) walkEnabled = v applyAll() end })
 Tabs.UniversalTab:Slider({ Title = "速度值", Default = 50, Min = 16, Max = 200, Rounding = 0, Callback = function(v) walkSpeed = v applyAll() end })
-
 Tabs.UniversalTab:Toggle({ Title = "自定义跳跃", Default = false, Callback = function(v) jumpEnabled = v applyAll() end })
 Tabs.UniversalTab:Slider({ Title = "跳跃值", Default = 100, Min = 50, Max = 300, Rounding = 0, Callback = function(v) jumpPower = v applyAll() end })
-
 Tabs.UniversalTab:Toggle({ Title = "自定义重力", Default = false, Callback = function(v) gravityEnabled = v applyAll() end })
 Tabs.UniversalTab:Slider({ Title = "重力值", Default = 50, Min = 10, Max = 500, Rounding = 1, Callback = function(v) gravityValue = v applyAll() end })
-
 Tabs.UniversalTab:Toggle({ Title = "自定义视野", Default = false, Callback = function(v) fovEnabled = v applyAll() end })
 Tabs.UniversalTab:Slider({ Title = "FOV值", Default = 120, Min = 30, Max = 150, Rounding = 0, Callback = function(v) fovValue = v applyAll() end })
-
 Tabs.UniversalTab:Toggle({ Title = "穿墙模式", Default = false, Callback = function(v)
     noclipEnabled = v
     if v then
@@ -509,5 +483,4 @@ Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
 Tabs.UniversalTab:Button({ Title = "重新加入", Icon = "refresh-cw", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
 Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 }) end })
 
--- 彩虹主题
 Tabs.NoticeTab:Button({ Title = "🌈 彩虹主题", Icon = "palette", Callback = function() WindUI:Notify({ Title = "🌈 彩虹", Content = "UI已变彩虹色！", Duration = 3 }) end })
