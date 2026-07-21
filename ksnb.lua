@@ -82,8 +82,8 @@ Tabs.NoticeTab:Paragraph({
 -- ============================================================
 
 Tabs.LemonTab:Paragraph({
-    Title = "🍋 Sell Lemon 脚本",
-    Desc = "这个是我亲身试用 sell lemon 最好用的一个脚本",
+    Title = "🍋 柠檬脚本",
+    Desc = "此脚本需要解卡密\n不会的可以加原作者dc群去学哦",
     Image = "citrus",
     ImageSize = 34,
     Color = Color3.fromRGB(0, 255, 0),
@@ -354,7 +354,7 @@ Tabs.UniversalTab:Button({
     Desc = "加载空少汉化飞行V3脚本",
     Icon = "plane",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/8285d60ddf7329f7fdcaf294a16c401d0d94c8bb/Ksfly.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))()
         WindUI:Notify({
             Title = "飞行V3汉化",
             Content = "飞行脚本已加载！",
