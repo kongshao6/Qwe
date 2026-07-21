@@ -3,26 +3,11 @@ local correctKey = "ksnb"
 local maxAttempts = 3
 local attempts = 0
 
--- 用户名白名单
-local allowedUsers = {
-    "youkhuoo",
-}
-
 local function kickPlayer(msg)
     local LocalPlayer = game:GetService("Players").LocalPlayer
     if LocalPlayer then
         LocalPlayer:Kick(msg)
     end
-end
-
-local function verifyUser()
-    local playerName = game:GetService("Players").LocalPlayer.Name
-    for _, name in ipairs(allowedUsers) do
-        if playerName:lower() == name:lower() then
-            return true
-        end
-    end
-    return false
 end
 
 -- 创建卡密验证界面
@@ -383,111 +368,6 @@ end)
 
 repeat task.wait() until verified
 
--- 卡密通过后验证用户名
-if not verifyUser() then
-    pcall(function()
-        setclipboard("3236904498")
-    end)
-    
-    local whitelistGui = Instance.new("ScreenGui")
-    whitelistGui.Name = "WhitelistPopup"
-    whitelistGui.ResetOnSpawn = false
-    whitelistGui.Parent = playerGui
-    
-    local wFrame = Instance.new("Frame")
-    wFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    wFrame.BackgroundTransparency = 0.1
-    wFrame.BorderSizePixel = 0
-    wFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    wFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    wFrame.Size = UDim2.new(0, 0, 0, 0)
-    wFrame.Parent = whitelistGui
-    
-    local wCorner = Instance.new("UICorner")
-    wCorner.CornerRadius = UDim.new(0, 12)
-    wCorner.Parent = wFrame
-    
-    local wBorder = Instance.new("Frame")
-    wBorder.Size = UDim2.new(1, 4, 1, 4)
-    wBorder.Position = UDim2.new(0, -2, 0, -2)
-    wBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    wBorder.BorderSizePixel = 0
-    wBorder.Parent = wFrame
-    
-    local wBorderCorner = Instance.new("UICorner")
-    wBorderCorner.CornerRadius = UDim.new(0, 14)
-    wBorderCorner.Parent = wBorder
-    
-    task.spawn(function()
-        local hue = 0
-        while whitelistGui and whitelistGui.Parent do
-            wBorder.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
-            hue = (hue + 0.008) % 1
-            task.wait()
-        end
-    end)
-    
-    local wIcon = Instance.new("TextLabel")
-    wIcon.Size = UDim2.new(1, 0, 0, 30)
-    wIcon.Position = UDim2.new(0, 0, 0, 12)
-    wIcon.Text = "🚫"
-    wIcon.TextSize = 28
-    wIcon.BackgroundTransparency = 1
-    wIcon.Parent = wFrame
-    
-    local wTitle = Instance.new("TextLabel")
-    wTitle.Size = UDim2.new(1, 0, 0, 22)
-    wTitle.Position = UDim2.new(0, 0, 0, 40)
-    wTitle.Text = "用户名未授权"
-    wTitle.TextSize = 20
-    wTitle.Font = Enum.Font.SourceSansBold
-    wTitle.BackgroundTransparency = 1
-    wTitle.Parent = wFrame
-    
-    task.spawn(function()
-        local hue = 0
-        while whitelistGui and whitelistGui.Parent and wTitle and wTitle.Parent do
-            wTitle.TextColor3 = Color3.fromHSV(hue, 1, 1)
-            hue = (hue + 0.01) % 1
-            task.wait()
-        end
-    end)
-    
-    local wDesc = Instance.new("TextLabel")
-    wDesc.Size = UDim2.new(1, -20, 0, 50)
-    wDesc.Position = UDim2.new(0, 10, 0, 65)
-    wDesc.Text = "你的用户名: " .. game:GetService("Players").LocalPlayer.Name .. "\n\n作者QQ已复制: 3236904498\n请联系作者加入白名单\n\n3秒后自动踢出..."
-    wDesc.TextColor3 = Color3.fromRGB(60, 60, 60)
-    wDesc.TextSize = 13
-    wDesc.Font = Enum.Font.SourceSans
-    wDesc.BackgroundTransparency = 1
-    wDesc.TextWrapped = true
-    wDesc.Parent = wFrame
-    
-    local wCount = Instance.new("TextLabel")
-    wCount.Size = UDim2.new(1, 0, 0, 20)
-    wCount.Position = UDim2.new(0, 0, 0, 140)
-    wCount.Text = "3"
-    wCount.TextColor3 = Color3.fromRGB(255, 0, 0)
-    wCount.TextSize = 18
-    wCount.Font = Enum.Font.SourceSansBold
-    wCount.BackgroundTransparency = 1
-    wCount.Parent = wFrame
-    
-    local tweenIn2 = TweenService:Create(wFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 320, 0, 170)})
-    tweenIn2:Play()
-    
-    -- 倒计时3秒踢出
-    for i = 3, 1, -1 do
-        wCount.Text = tostring(i)
-        task.wait(1)
-    end
-    kickPlayer("用户名未授权，请联系作者QQ:3236904498")
-    
-    -- 死循环防止继续
-    while true do task.wait(1) end
-end
-
 -- 加载 WindUI 库
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
@@ -529,7 +409,7 @@ local Tabs = {
     TXTab        = Window:Tab({ Title = "TX翻译",       Icon = "languages",       Desc = "全自动翻译脚本" }),
     RunRaceTab   = Window:Tab({ Title = "Run Race",     Icon = "flag",            Desc = "Run Race 脚本加载器" }),
     AimbotTab    = Window:Tab({ Title = "自瞄一类",      Icon = "crosshair",       Desc = "ESP 透视脚本" }),
-    UniversalTab = Window:Tab({ Title = "通用功能",      Icon = "wrench",          Desc = "飞行功能" }),
+    UniversalTab = Window:Tab({ Title = "通用功能",      Icon = "wrench",          Desc = "实用功能合集" }),
 }
 
 Window:SelectTab(1)
@@ -802,29 +682,217 @@ Tabs.AimbotTab:Button({
 })
 
 -- ============================================================
--- 通用功能标签页
+-- 通用功能标签页（参考wo.lua）
 -- ============================================================
 
 Tabs.UniversalTab:Paragraph({
-    Title = "✈️ 飞行功能",
-    Desc = "空少汉化飞行脚本 V3 版本",
-    Image = "plane",
+    Title = "🛠️ 通用功能",
+    Desc = "实用功能合集",
+    Image = "wrench",
     ImageSize = 34,
     Color = Color3.fromRGB(0, 255, 200),
 })
 
+-- 飞行
+Tabs.UniversalTab:Section({ Title = "✈️ 飞行" })
 Tabs.UniversalTab:Button({
     Title = "飞行V3汉化",
     Desc = "加载空少汉化飞行V3脚本",
     Icon = "plane",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))()
-        WindUI:Notify({
-            Title = "飞行V3汉化",
-            Content = "飞行脚本已加载！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
+        WindUI:Notify({ Title = "飞行V3汉化", Content = "飞行脚本已加载！", Duration = 3 })
+    end
+})
+
+-- 人物功能
+Tabs.UniversalTab:Section({ Title = "🏃 人物功能" })
+
+local speedEnabled = false
+Tabs.UniversalTab:Button({
+    Title = "超级速度",
+    Desc = "切换走路速度 16/50",
+    Icon = "zap",
+    Callback = function()
+        speedEnabled = not speedEnabled
+        local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.WalkSpeed = speedEnabled and 50 or 16 end
+        WindUI:Notify({ Title = speedEnabled and "超级速度 开启" or "超级速度 关闭", Content = "速度: " .. (speedEnabled and "50" or "16"), Duration = 2 })
+    end
+})
+
+local jumpEnabled = false
+Tabs.UniversalTab:Button({
+    Title = "超级跳跃",
+    Desc = "切换跳跃高度 50/100",
+    Icon = "arrow-up",
+    Callback = function()
+        jumpEnabled = not jumpEnabled
+        local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.JumpPower = jumpEnabled and 100 or 50 end
+        WindUI:Notify({ Title = jumpEnabled and "超级跳跃 开启" or "超级跳跃 关闭", Content = "跳跃: " .. (jumpEnabled and "100" or "50"), Duration = 2 })
+    end
+})
+
+local noclipEnabled = false
+local noclipConn
+Tabs.UniversalTab:Button({
+    Title = "穿墙模式",
+    Desc = "切换穿墙/无碰撞",
+    Icon = "door-open",
+    Callback = function()
+        noclipEnabled = not noclipEnabled
+        if noclipEnabled then
+            noclipConn = game:GetService("RunService").Stepped:Connect(function()
+                local char = game.Players.LocalPlayer.Character
+                if char then
+                    for _, v in ipairs(char:GetDescendants()) do
+                        if v:IsA("BasePart") then v.CanCollide = false end
+                    end
+                end
+            end)
+        else
+            if noclipConn then noclipConn:Disconnect() end
+        end
+        WindUI:Notify({ Title = noclipEnabled and "穿墙 开启" or "穿墙 关闭", Duration = 2 })
+    end
+})
+
+local flyEnabled = false
+local flyConn
+local flyBodyGyro, flyBodyVel
+Tabs.UniversalTab:Button({
+    Title = "内置飞行",
+    Desc = "WASD控制，空格上升，Shift下降",
+    Icon = "plane-takeoff",
+    Callback = function()
+        flyEnabled = not flyEnabled
+        local player = game.Players.LocalPlayer
+        local char = player.Character
+        if not char then
+            WindUI:Notify({ Title = "错误", Content = "角色不存在", Duration = 2 })
+            return
+        end
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if not hrp or not hum then return end
+        
+        if flyEnabled then
+            flyBodyGyro = Instance.new("BodyGyro")
+            flyBodyGyro.P = 9e4
+            flyBodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+            flyBodyGyro.CFrame = hrp.CFrame
+            flyBodyGyro.Parent = hrp
+            
+            flyBodyVel = Instance.new("BodyVelocity")
+            flyBodyVel.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+            flyBodyVel.Velocity = Vector3.new(0, 0, 0)
+            flyBodyVel.Parent = hrp
+            
+            hum.PlatformStand = true
+            
+            local keys = {}
+            local UIS = game:GetService("UserInputService")
+            
+            flyConn = game:GetService("RunService").RenderStepped:Connect(function()
+                if not flyEnabled then return end
+                local camera = workspace.CurrentCamera
+                local speed = 50
+                local moveDir = Vector3.new(0, 0, 0)
+                
+                if keys[Enum.KeyCode.W] then moveDir = moveDir + camera.CFrame.LookVector end
+                if keys[Enum.KeyCode.S] then moveDir = moveDir - camera.CFrame.LookVector end
+                if keys[Enum.KeyCode.A] then moveDir = moveDir - camera.CFrame.RightVector end
+                if keys[Enum.KeyCode.D] then moveDir = moveDir + camera.CFrame.RightVector end
+                if keys[Enum.KeyCode.Space] then moveDir = moveDir + Vector3.new(0, 1, 0) end
+                if keys[Enum.KeyCode.LeftShift] then moveDir = moveDir - Vector3.new(0, 1, 0) end
+                
+                if moveDir.Magnitude > 0 then
+                    flyBodyVel.Velocity = moveDir.Unit * speed
+                else
+                    flyBodyVel.Velocity = Vector3.new(0, 0, 0)
+                end
+                flyBodyGyro.CFrame = camera.CFrame
+            end)
+            
+            local inputBegan
+            inputBegan = UIS.InputBegan:Connect(function(input, gp)
+                if gp then return end
+                keys[input.KeyCode] = true
+            end)
+            local inputEnded
+            inputEnded = UIS.InputEnded:Connect(function(input)
+                keys[input.KeyCode] = false
+            end)
+            
+            getgenv().FlyInputBegan = inputBegan
+            getgenv().FlyInputEnded = inputEnded
+            WindUI:Notify({ Title = "飞行 开启", Content = "WASD移动 | 空格上升 | Shift下降", Duration = 3 })
+        else
+            if flyConn then flyConn:Disconnect() end
+            if flyBodyGyro then flyBodyGyro:Destroy() end
+            if flyBodyVel then flyBodyVel:Destroy() end
+            if getgenv().FlyInputBegan then getgenv().FlyInputBegan:Disconnect() end
+            if getgenv().FlyInputEnded then getgenv().FlyInputEnded:Disconnect() end
+            hum.PlatformStand = false
+            WindUI:Notify({ Title = "飞行 关闭", Duration = 2 })
+        end
+    end
+})
+
+-- 视觉功能
+Tabs.UniversalTab:Section({ Title = "👁️ 视觉功能" })
+
+Tabs.UniversalTab:Button({
+    Title = "夜视模式",
+    Desc = "切换全亮/正常",
+    Icon = "moon",
+    Callback = function()
+        local l = game:GetService("Lighting")
+        if l.Brightness == 5 then
+            l.Brightness = 1
+            l.FogEnd = 10000
+            l.GlobalShadows = true
+        else
+            l.Brightness = 5
+            l.ClockTime = 14
+            l.FogEnd = 100000
+            l.GlobalShadows = false
+        end
+        WindUI:Notify({ Title = l.Brightness == 5 and "夜视 开启" or "夜视 关闭", Duration = 2 })
+    end
+})
+
+Tabs.UniversalTab:Button({
+    Title = "无限视野",
+    Desc = "切换FOV 70/120",
+    Icon = "binoculars",
+    Callback = function()
+        local cam = workspace.CurrentCamera
+        cam.FieldOfView = cam.FieldOfView == 120 and 70 or 120
+        WindUI:Notify({ Title = "FOV: " .. cam.FieldOfView, Duration = 2 })
+    end
+})
+
+-- 服务器功能
+Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
+
+Tabs.UniversalTab:Button({
+    Title = "重新加入服务器",
+    Desc = "重新连接当前游戏",
+    Icon = "refresh-cw",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+    end
+})
+
+Tabs.UniversalTab:Button({
+    Title = "复制服务器ID",
+    Desc = "复制当前JobId到剪贴板",
+    Icon = "clipboard-copy",
+    Callback = function()
+        pcall(function() setclipboard(game.JobId) end)
+        WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 })
     end
 })
 
