@@ -5,9 +5,7 @@ local attempts = 0
 
 -- 用户名白名单
 local allowedUsers = {
-    "Roblox用户名1",
-    "Roblox用户名2",
-    "你的用户名",
+    "youkhuoo",
 }
 
 local function kickPlayer(msg)
@@ -479,15 +477,15 @@ if not verifyUser() then
     local tweenIn2 = TweenService:Create(wFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 320, 0, 170)})
     tweenIn2:Play()
     
-    task.spawn(function()
-        for i = 3, 1, -1 do
-            wCount.Text = tostring(i)
-            task.wait(1)
-        end
-        kickPlayer("用户名未授权，请联系作者QQ:3236904498")
-    end)
+    -- 倒计时3秒踢出
+    for i = 3, 1, -1 do
+        wCount.Text = tostring(i)
+        task.wait(1)
+    end
+    kickPlayer("用户名未授权，请联系作者QQ:3236904498")
     
-    repeat task.wait() until not whitelistGui.Parent
+    -- 死循环防止继续
+    while true do task.wait(1) end
 end
 
 -- 加载 WindUI 库
