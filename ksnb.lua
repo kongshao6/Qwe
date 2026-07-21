@@ -1,58 +1,56 @@
--- 加载 WindUI 库（从 GitHub 最新版本下载并执行）
+-- 加载 WindUI 库
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
--- 创建主窗口（彩虹色主题）
+-- 创建主窗口
 local Window = WindUI:CreateWindow({
-    Title = "ks script",                  -- 窗口标题
-    Icon = "door-open",                   -- 窗口图标
-    Author = "ks script",                 -- 作者名称
-    Folder = "ks script",                 -- 本地存储的文件夹名
-    Size = UDim2.fromOffset(580, 460),    -- 窗口尺寸（宽580，高460）
-    Transparent = true,                   -- 是否启用透明背景
-    Theme = "Dark",                       -- 主题：Dark（深色）
-    SideBarWidth = 200,                   -- 左侧标签栏宽度
-    HasOutline = true,                    -- 是否显示窗口外边框
-    AccentColor = Color3.fromRGB(255, 0, 0), -- 基础强调色（红色，会被彩虹覆盖）
-    -- 密钥系统配置
+    Title = "ks script",
+    Icon = "door-open",
+    Author = "ks script",
+    Folder = "ks script",
+    Size = UDim2.fromOffset(580, 460),
+    Transparent = true,
+    Theme = "Dark",
+    SideBarWidth = 200,
+    HasOutline = true,
+    AccentColor = Color3.fromRGB(255, 0, 0),
     KeySystem = {
-        Key = { "ksnb" },                 -- 有效密钥
-        Note = "请输入密钥",               -- 提示说明
-        SaveKey = false,                  -- 不保存密钥，每次都需要重新输入
+        Key = { "ksnb" },
+        Note = "请输入密钥",
+        SaveKey = false,
     },
 })
 
--- 自定义"打开界面"按钮的样式（彩虹色）
 Window:EditOpenButton({
     Title = "打开 ks script",
     Icon = "monitor",
-    CornerRadius = UDim.new(0, 16),      -- 圆角半径
-    StrokeThickness = 3,                 -- 边框厚度
-    Color = ColorSequence.new({          -- 彩虹渐变
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),     -- 红
-        ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 165, 0)), -- 橙
-        ColorSequenceKeypoint.new(0.33, Color3.fromRGB(255, 255, 0)), -- 黄
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 0)),    -- 绿
-        ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),   -- 蓝
-        ColorSequenceKeypoint.new(0.83, Color3.fromRGB(75, 0, 130)),  -- 靛
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(148, 0, 211)),    -- 紫
+    CornerRadius = UDim.new(0, 16),
+    StrokeThickness = 3,
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+        ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 165, 0)),
+        ColorSequenceKeypoint.new(0.33, Color3.fromRGB(255, 255, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 0)),
+        ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
+        ColorSequenceKeypoint.new(0.83, Color3.fromRGB(75, 0, 130)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(148, 0, 211)),
     }),
-    Draggable = true,                    -- 是否可拖动
+    Draggable = true,
 })
 
--- 创建标签页（每个标签页使用不同颜色）
 local Tabs = {
-    NoticeTab   = Window:Tab({ Title = "通知",         Icon = "bell",            Desc = "脚本说明与公告" }),
-    LemonTab    = Window:Tab({ Title = "柠檬",         Icon = "citrus",          Desc = "HoshiOnTop 脚本加载器" }),
-    ScriptsTab  = Window:Tab({ Title = "多种脚本整合",  Icon = "folder-code",     Desc = "各类脚本合集" }),
-    TXTab       = Window:Tab({ Title = "TX翻译",       Icon = "languages",       Desc = "全自动翻译脚本" }),
-    RunRaceTab  = Window:Tab({ Title = "Run Race",     Icon = "flag",            Desc = "Run Race 脚本加载器" }),
+    NoticeTab    = Window:Tab({ Title = "通知",         Icon = "bell",            Desc = "脚本说明与公告" }),
+    LemonTab     = Window:Tab({ Title = "柠檬",         Icon = "citrus",          Desc = "HoshiOnTop 脚本加载器" }),
+    ScriptsTab   = Window:Tab({ Title = "多种脚本整合",  Icon = "folder-code",     Desc = "各类脚本合集" }),
+    TXTab        = Window:Tab({ Title = "TX翻译",       Icon = "languages",       Desc = "全自动翻译脚本" }),
+    RunRaceTab   = Window:Tab({ Title = "Run Race",     Icon = "flag",            Desc = "Run Race 脚本加载器" }),
+    AimbotTab    = Window:Tab({ Title = "自瞄一类",      Icon = "crosshair",       Desc = "ESP 透视脚本" }),
+    UniversalTab = Window:Tab({ Title = "通用功能",      Icon = "wrench",          Desc = "飞行功能" }),
 }
 
--- 默认选中通知标签页（第一个）
 Window:SelectTab(1)
 
 -- ============================================================
--- 通知标签页（彩虹色段落）
+-- 通知标签页
 -- ============================================================
 
 Tabs.NoticeTab:Paragraph({
@@ -60,7 +58,7 @@ Tabs.NoticeTab:Paragraph({
     Desc = "欢迎使用 ks script！",
     Image = "bell",
     ImageSize = 34,
-    Color = Color3.fromRGB(255, 0, 0), -- 红色
+    Color = Color3.fromRGB(255, 0, 0),
 })
 
 Tabs.NoticeTab:Paragraph({
@@ -68,7 +66,7 @@ Tabs.NoticeTab:Paragraph({
     Desc = "此脚本为缝合各种脚本\n倒卖sm",
     Image = "info",
     ImageSize = 34,
-    Color = Color3.fromRGB(255, 165, 0), -- 橙色
+    Color = Color3.fromRGB(255, 165, 0),
 })
 
 Tabs.NoticeTab:Paragraph({
@@ -76,20 +74,19 @@ Tabs.NoticeTab:Paragraph({
     Desc = "请勿倒卖本脚本，尊重原作者劳动成果！",
     Image = "triangle-alert",
     ImageSize = 34,
-    Color = Color3.fromRGB(255, 255, 0), -- 黄色
+    Color = Color3.fromRGB(255, 255, 0),
 })
 
 -- ============================================================
--- 柠檬标签页（已更新介绍）
+-- 柠檬标签页
 -- ============================================================
 
--- 新的介绍段落
 Tabs.LemonTab:Paragraph({
     Title = "🍋 Sell Lemon 脚本",
     Desc = "这个是我亲身试用 sell lemon 最好用的一个脚本",
     Image = "citrus",
     ImageSize = 34,
-    Color = Color3.fromRGB(0, 255, 0), -- 绿色
+    Color = Color3.fromRGB(0, 255, 0),
 })
 
 Tabs.LemonTab:Button({
@@ -116,12 +113,10 @@ Tabs.ScriptsTab:Paragraph({
     Desc = "以下是各类脚本合集，点击对应按钮即可执行",
     Image = "folder-code",
     ImageSize = 34,
-    Color = Color3.fromRGB(0, 0, 255), -- 蓝色
+    Color = Color3.fromRGB(0, 0, 255),
 })
 
--- YI脚本
 Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
-
 Tabs.ScriptsTab:Button({
     Title = "加载 YI 脚本",
     Desc = "YI_HUB 脚本加载器",
@@ -138,9 +133,7 @@ Tabs.ScriptsTab:Button({
     end
 })
 
--- PI脚本
 Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
-
 Tabs.ScriptsTab:Button({
     Title = "加载 PI 脚本",
     Desc = "皮脚本 - QQ群1002100032",
@@ -157,9 +150,7 @@ Tabs.ScriptsTab:Button({
     end
 })
 
--- BS脚本
 Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
-
 Tabs.ScriptsTab:Button({
     Title = "加载 BS 脚本",
     Desc = "BS_Script 加载器",
@@ -176,9 +167,7 @@ Tabs.ScriptsTab:Button({
     end
 })
 
--- 沙脚本
 Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
-
 Tabs.ScriptsTab:Button({
     Title = "加载 沙 脚本",
     Desc = "ShaHUB 加载器",
@@ -194,9 +183,7 @@ Tabs.ScriptsTab:Button({
     end
 })
 
--- Kanl破解版
 Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
-
 Tabs.ScriptsTab:Button({
     Title = "加载 Kanl 破解版",
     Desc = "Kanl 破解版加载器",
@@ -212,9 +199,7 @@ Tabs.ScriptsTab:Button({
     end
 })
 
--- For脚本中心
 Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
-
 Tabs.ScriptsTab:Button({
     Title = "加载 For 脚本中心",
     Desc = "脚本中心加载器",
@@ -232,7 +217,7 @@ Tabs.ScriptsTab:Button({
 })
 
 -- ============================================================
--- TX翻译标签页（彩虹色）
+-- TX翻译标签页
 -- ============================================================
 
 Tabs.TXTab:Paragraph({
@@ -240,7 +225,7 @@ Tabs.TXTab:Paragraph({
     Desc = "全自动翻译脚本，助您畅玩全球游戏",
     Image = "languages",
     ImageSize = 34,
-    Color = Color3.fromRGB(75, 0, 130), -- 靛色
+    Color = Color3.fromRGB(75, 0, 130),
 })
 
 Tabs.TXTab:Paragraph({
@@ -248,7 +233,7 @@ Tabs.TXTab:Paragraph({
     Desc = "TX Script - 全自动翻译\n点击下方按钮即可加载",
     Image = "info",
     ImageSize = 34,
-    Color = Color3.fromRGB(148, 0, 211), -- 紫色
+    Color = Color3.fromRGB(148, 0, 211),
 })
 
 Tabs.TXTab:Button({
@@ -291,7 +276,7 @@ Tabs.RunRaceTab:Paragraph({
     Desc = "Ruby Hub Run Race 脚本加载器",
     Image = "flag",
     ImageSize = 34,
-    Color = Color3.fromRGB(255, 0, 0), -- 红色
+    Color = Color3.fromRGB(255, 0, 0),
 })
 
 Tabs.RunRaceTab:Paragraph({
@@ -299,7 +284,7 @@ Tabs.RunRaceTab:Paragraph({
     Desc = "Run Race 游戏专用脚本\n点击下方按钮即可加载",
     Image = "info",
     ImageSize = 34,
-    Color = Color3.fromRGB(255, 165, 0), -- 橙色
+    Color = Color3.fromRGB(255, 165, 0),
 })
 
 Tabs.RunRaceTab:Button({
@@ -318,7 +303,69 @@ Tabs.RunRaceTab:Button({
 })
 
 -- ============================================================
--- 额外的彩虹色美化
+-- 自瞄一类标签页
+-- ============================================================
+
+Tabs.AimbotTab:Paragraph({
+    Title = "🔍 ESP 透视脚本",
+    Desc = "Roblox ESP 透视与反机器人 V3.0 手机版",
+    Image = "eye",
+    ImageSize = 34,
+    Color = Color3.fromRGB(255, 0, 0),
+})
+
+Tabs.AimbotTab:Paragraph({
+    Title = "📖 脚本说明",
+    Desc = "点击下方按钮加载 ESP 透视脚本\n包含玩家透视、NPC透视、反机器人等功能",
+    Image = "info",
+    ImageSize = 34,
+    Color = Color3.fromRGB(255, 165, 0),
+})
+
+Tabs.AimbotTab:Button({
+    Title = "加载 ESP 透视脚本",
+    Desc = "点击加载完整 ESP 透视系统",
+    Icon = "play",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))()
+        WindUI:Notify({
+            Title = "ESP 透视",
+            Content = "ESP 透视脚本已加载！",
+            Icon = "check-circle",
+            Duration = 3,
+        })
+    end
+})
+
+-- ============================================================
+-- 通用功能标签页
+-- ============================================================
+
+Tabs.UniversalTab:Paragraph({
+    Title = "✈️ 飞行功能",
+    Desc = "空少汉化飞行脚本 V3 版本",
+    Image = "plane",
+    ImageSize = 34,
+    Color = Color3.fromRGB(0, 255, 200),
+})
+
+Tabs.UniversalTab:Button({
+    Title = "飞行V3汉化",
+    Desc = "加载空少汉化飞行V3脚本",
+    Icon = "plane",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/8285d60ddf7329f7fdcaf294a16c401d0d94c8bb/Ksfly.lua"))()
+        WindUI:Notify({
+            Title = "飞行V3汉化",
+            Content = "飞行脚本已加载！",
+            Icon = "check-circle",
+            Duration = 3,
+        })
+    end
+})
+
+-- ============================================================
+-- 彩虹主题按钮
 -- ============================================================
 
 Tabs.NoticeTab:Button({
