@@ -401,7 +401,7 @@ local Tabs = {
 
 Window:SelectTab(1)
 
--- 变量
+-- ===== 变量 =====
 local walkEnabled = false; local walkSpeed = 50
 local jumpEnabled = false; local jumpPower = 100
 local gravityEnabled = false; local gravityValue = 50
@@ -422,13 +422,13 @@ local function applyAll()
 end
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char) task.wait(0.1) applyAll() end)
 
--- 通知
+-- ===== 通知标签页 =====
 Tabs.NoticeTab:Paragraph({ Title = "📢 脚本公告", Desc = "欢迎使用 ks script！", Image = "bell", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
 Tabs.NoticeTab:Paragraph({ Title = "📝 脚本介绍", Desc = "此脚本为缝合各种脚本\n倒卖sm", Image = "info", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0) })
 Tabs.NoticeTab:Paragraph({ Title = "⚠️ 警告", Desc = "请勿倒卖本脚本！", Image = "triangle-alert", ImageSize = 34, Color = Color3.fromRGB(255, 255, 0) })
 Tabs.NoticeTab:Button({ Title = "👤 作者QQ: 3236904498", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard("3236904498") end) WindUI:Notify({ Title = "已复制", Content = "3236904498", Duration = 3 }) end })
 
--- 通用功能
+-- ===== 通用功能 =====
 Tabs.UniversalTab:Paragraph({ Title = "🛠️ 通用功能", Desc = "开关控制+滑动调节", Image = "wrench", ImageSize = 34, Color = Color3.fromRGB(0, 255, 200) })
 
 Tabs.UniversalTab:Section({ Title = "✈️ 飞行" })
@@ -472,6 +472,19 @@ Tabs.UniversalTab:Toggle({ Title = "无敌模式", Default = false, Callback = f
     end
 end) end })
 
+Tabs.UniversalTab:Section({ Title = "🦘 跳跃增强" })
+Tabs.UniversalTab:Toggle({ Title = "无限跳", Default = false, Callback = function(v)
+    getgenv().InfiniteJump = v
+    if v then
+        getgenv().JumpConn = game:GetService("UserInputService").JumpRequest:Connect(function()
+            local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if hum then hum.Jump = true end
+        end)
+    else
+        if getgenv().JumpConn then getgenv().JumpConn:Disconnect() end
+    end
+end })
+
 Tabs.UniversalTab:Section({ Title = "👁️ 视觉功能" })
 Tabs.UniversalTab:Toggle({ Title = "夜视模式", Default = false, Callback = function(v) task.spawn(function()
     local l = game:GetService("Lighting")
@@ -479,6 +492,57 @@ Tabs.UniversalTab:Toggle({ Title = "夜视模式", Default = false, Callback = f
     else l.Brightness = 1 l.FogEnd = 10000 l.GlobalShadows = true end
 end) end })
 Tabs.UniversalTab:Slider({ Title = "时间调节", Default = 14, Min = 0, Max = 24, Rounding = 0, Callback = function(v) game:GetService("Lighting").ClockTime = v end })
+Tabs.UniversalTab:Toggle({ Title = "全亮模式", Default = false, Callback = function(v)
+    local lighting = game:GetService("Lighting")
+    if v then
+        lighting.Brightness = 10
+        lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    else
+        lighting.Brightness = 1
+        lighting.Ambient = Color3.fromRGB(0, 0, 0)
+    end
+end })
+Tabs.UniversalTab:Toggle({ Title = "ESP透视", Default = false, Callback = function(v)
+    getgenv().ESP = v
+    if v then
+        local espGui = Instance.new("ScreenGui")
+        espGui.Name = "ESP"
+        espGui.ResetOnSpawn = false
+        espGui.Parent = game.Players.LocalPlayer.PlayerGui
+        
+        getgenv().ESPConn = game:GetService("RunService").Heartbeat:Connect(function()
+            for _, child in ipairs(espGui:GetChildren()) do child:Destroy() end
+            local cam = workspace.CurrentCamera
+            local char = game.Players.LocalPlayer.Character
+            if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+            local root = char.HumanoidRootPart
+            
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetRoot = player.Character.HumanoidRootPart
+                    local screenPos, onScreen = cam:WorldToScreenPoint(targetRoot.Position + Vector3.new(0, 3, 0))
+                    if onScreen then
+                        local label = Instance.new("TextLabel")
+                        label.Size = UDim2.new(0, 150, 0, 20)
+                        label.Position = UDim2.new(0, screenPos.X - 75, 0, screenPos.Y - 30)
+                        label.Text = player.Name .. " | " .. math.floor((targetRoot.Position - root.Position).Magnitude) .. "m"
+                        label.TextColor3 = Color3.fromRGB(255, 0, 0)
+                        label.TextSize = 14
+                        label.Font = Enum.Font.SourceSansBold
+                        label.BackgroundTransparency = 1
+                        label.TextStrokeTransparency = 0.3
+                        label.Parent = espGui
+                    end
+                end
+            end
+        end)
+    else
+        if getgenv().ESPConn then getgenv().ESPConn:Disconnect() end
+        if game.Players.LocalPlayer.PlayerGui:FindFirstChild("ESP") then
+            game.Players.LocalPlayer.PlayerGui.ESP:Destroy()
+        end
+    end
+end })
 
 Tabs.UniversalTab:Section({ Title = "🎯 传送" })
 Tabs.UniversalTab:Button({ Title = "💾 保存位置", Icon = "save", Callback = function()
@@ -533,51 +597,54 @@ Tabs.UniversalTab:Toggle({ Title = "自动拾取", Default = false, Callback = f
         end)
     else if autoPickConn then autoPickConn:Disconnect() end end
 end) end })
-Tabs.UniversalTab:Button({ Title = "🖱️ 点击传送", Icon = "mouse-pointer", Callback = function()
-    local mouse = game.Players.LocalPlayer:GetMouse()
-    local char = game.Players.LocalPlayer.Character
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        mouse.Button1Down:Connect(function()
-            if mouse.Hit then
-                char.HumanoidRootPart.CFrame = CFrame.new(mouse.Hit.Position + Vector3.new(0, 5, 0))
-            end
+Tabs.UniversalTab:Toggle({ Title = "自动攻击", Default = false, Callback = function(v)
+    getgenv().AutoClick = v
+    if v then
+        getgenv().ClickConn = game:GetService("RunService").Heartbeat:Connect(function()
+            local mouse = game.Players.LocalPlayer:GetMouse()
+            mouse.Button1Down:Fire()
+            task.wait(0.05)
+            mouse.Button1Up:Fire()
         end)
+    else
+        if getgenv().ClickConn then getgenv().ClickConn:Disconnect() end
     end
 end })
-
-Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
-Tabs.UniversalTab:Button({ Title = "重新加入", Icon = "refresh-cw", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
-Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) end })
-
--- 柠檬
-Tabs.LemonTab:Paragraph({ Title = "🍋 柠檬脚本", Desc = "需解卡密，不会加原作者dc", Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0) })
-Tabs.LemonTab:Button({ Title = "加载柠檬", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() end })
-
--- TX翻译
-Tabs.TXTab:Paragraph({ Title = "🌐 TX 翻译", Desc = "全自动翻译脚本", Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130) })
-Tabs.TXTab:Button({ Title = "加载翻译", Icon = "play", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
-
--- Run Race
-Tabs.RunRaceTab:Paragraph({ Title = "🏃 Run Race", Desc = "Ruby Hub", Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
-Tabs.RunRaceTab:Button({ Title = "加载脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
-
--- 自瞄
-Tabs.AimbotTab:Paragraph({ Title = "🔍 ESP 透视", Desc = "V3.0 手机版", Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
-Tabs.AimbotTab:Button({ Title = "加载 ESP", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
-
--- 脚本整合（最后）
-Tabs.ScriptsTab:Paragraph({ Title = "多种脚本整合", Desc = "各类脚本合集", Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255) })
-Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 YI", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
-Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 PI", Icon = "play", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
-Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 BS", Icon = "play", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
-Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 沙", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
-Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
-Tabs.ScriptsTab:Button({ Title = "加载 Kanl", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
-Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
-Tabs.ScriptsTab:Button({ Title = "加载 For", Icon = "play", Callback = function() getgenv().SCRIPT_KEY = "" loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))() end })
-
-Tabs.NoticeTab:Button({ Title = "🌈 彩虹主题", Icon = "palette", Callback = function() WindUI:Notify({ Title = "🌈 彩虹", Content = "UI已变彩虹色！", Duration = 3 }) end })
+Tabs.UniversalTab:Toggle({ Title = "自瞄", Default = false, Callback = function(v)
+    getgenv().Aimbot = v
+    if v then
+        getgenv().AimbotConn = game:GetService("RunService").Heartbeat:Connect(function()
+            local char = game.Players.LocalPlayer.Character
+            if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+            local root = char.HumanoidRootPart
+            local target = nil
+            local closest = math.huge
+            
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetRoot = player.Character.HumanoidRootPart
+                    local dist = (targetRoot.Position - root.Position).Magnitude
+                    if dist < closest and dist < 100 then
+                        closest = dist
+                        target = targetRoot
+                    end
+                end
+            end
+            
+            if target then
+                local cam = workspace.CurrentCamera
+                local screenPos, onScreen = cam:WorldToScreenPoint(target.Position + Vector3.new(0, 3, 0))
+                if onScreen then
+                    local mouse = game.Players.LocalPlayer:GetMouse()
+                    mousemoverel((screenPos.X - mouse.X) * 0.4, (screenPos.Y - mouse.Y) * 0.4)
+                end
+            end
+        end)
+    else
+        if getgenv().AimbotConn then getgenv().AimbotConn:Disconnect() end
+    end
+end })
+Tabs.UniversalTab:Toggle({ Title = "防摔落", Default = false, Callback = function(v)
+    getgenv().AntiFall = v
+    if v then
+        getgenv().FallConn = game:GetService
