@@ -1,5 +1,5 @@
 -- 自定义卡密验证系统
-local correctKey = string.char(107, 115, 110, 98)
+local correctKey = "ksnb"
 local maxAttempts = 3
 local attempts = 0
 
@@ -24,6 +24,8 @@ local function showErrorPopup(msg, autoKick)
     frame.AnchorPoint = Vector2.new(0.5, 0.5)
     frame.Position = UDim2.new(0.5, 0, 0.5, 0)
     frame.Size = UDim2.new(0, 0, 0, 0)
+    frame.Active = true
+    frame.Draggable = true
     frame.Parent = errorGui
     
     local mainCorner = Instance.new("UICorner")
@@ -36,7 +38,6 @@ local function showErrorPopup(msg, autoKick)
     rainbowBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
     rainbowBorder.BorderSizePixel = 0
     rainbowBorder.Parent = frame
-    
     local borderCorner = Instance.new("UICorner")
     borderCorner.CornerRadius = UDim.new(0, 14)
     borderCorner.Parent = rainbowBorder
@@ -96,7 +97,6 @@ local function showErrorPopup(msg, autoKick)
     closeBtn.Font = Enum.Font.SourceSansBold
     closeBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     closeBtn.Parent = frame
-    
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 8)
     btnCorner.Parent = closeBtn
@@ -121,7 +121,7 @@ local function showErrorPopup(msg, autoKick)
     
     closeBtn.MouseButton1Click:Connect(function()
         errorGui:Destroy()
-        if autoKick then kickPlayer(msg) end
+        if autoKick then kickPlayer("这都不会你别用了") end
     end)
 end
 
@@ -129,7 +129,7 @@ local function verifyKey(input)
     if input == correctKey then return true
     else
         attempts = attempts + 1
-        if attempts >= maxAttempts then showErrorPopup("卡密错误次数过多！即将踢出...", true)
+        if attempts >= maxAttempts then showErrorPopup("这都不会你别用了", true)
         else showErrorPopup("卡密错误！还剩 " .. (maxAttempts - attempts) .. " 次机会", false) end
         return false
     end
@@ -169,6 +169,7 @@ task.spawn(function()
     end
 end)
 
+-- 主框架（可拖动+可关闭）
 local keyFrame = Instance.new("Frame")
 keyFrame.Size = UDim2.new(0, 380, 0, 230)
 keyFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -177,19 +178,43 @@ keyFrame.BorderSizePixel = 0
 keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 keyFrame.Size = UDim2.new(0, 0, 0, 0)
+keyFrame.Active = true
+keyFrame.Draggable = true
 keyFrame.Parent = keyGui
 
 local mainCorner = Instance.new("UICorner")
 mainCorner.CornerRadius = UDim.new(0, 14)
 mainCorner.Parent = keyFrame
 
+-- 关闭按钮
+local closeKeyBtn = Instance.new("TextButton")
+closeKeyBtn.Size = UDim2.new(0, 30, 0, 30)
+closeKeyBtn.Position = UDim2.new(1, -35, 0, 5)
+closeKeyBtn.Text = "✕"
+closeKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeKeyBtn.TextSize = 18
+closeKeyBtn.Font = Enum.Font.SourceSansBold
+closeKeyBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+closeKeyBtn.BackgroundTransparency = 0.3
+closeKeyBtn.BorderSizePixel = 0
+closeKeyBtn.Parent = keyFrame
+
+local closeBtnCorner = Instance.new("UICorner")
+closeBtnCorner.CornerRadius = UDim.new(1, 0)
+closeBtnCorner.Parent = closeKeyBtn
+
+closeKeyBtn.MouseButton1Click:Connect(function()
+    keyGui:Destroy()
+    kickPlayer("验证窗口已关闭")
+end)
+
+-- 彩虹边框
 local rainbowBorder = Instance.new("Frame")
 rainbowBorder.Size = UDim2.new(1, 4, 1, 4)
 rainbowBorder.Position = UDim2.new(0, -2, 0, -2)
 rainbowBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 rainbowBorder.BorderSizePixel = 0
 rainbowBorder.Parent = keyFrame
-
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(0, 16)
 borderCorner.Parent = rainbowBorder
@@ -237,7 +262,6 @@ inputBg.Position = UDim2.new(0.5, -150, 0, 85)
 inputBg.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
 inputBg.BorderSizePixel = 0
 inputBg.Parent = keyFrame
-
 local inputCorner = Instance.new("UICorner")
 inputCorner.CornerRadius = UDim.new(0, 10)
 inputCorner.Parent = inputBg
@@ -279,7 +303,6 @@ keyButton.TextSize = 18
 keyButton.Font = Enum.Font.SourceSansBold
 keyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 keyButton.Parent = keyFrame
-
 local btnCorner = Instance.new("UICorner")
 btnCorner.CornerRadius = UDim.new(0, 10)
 btnCorner.Parent = keyButton
@@ -302,7 +325,6 @@ end)
 keyButton.MouseEnter:Connect(function()
     TweenService:Create(btnGlowStroke, TweenInfo.new(0.2), {Thickness = 4}):Play()
 end)
-
 keyButton.MouseLeave:Connect(function()
     TweenService:Create(btnGlowStroke, TweenInfo.new(0.2), {Thickness = 2}):Play()
 end)
@@ -338,18 +360,18 @@ end)
 repeat task.wait() until verified
 
 -- ============================================================
--- 加载 WindUI（锁定 1.6.66 版本）
+-- 加载 WindUI（白色主题）
 -- ============================================================
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/1.6.66/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
-    Title = "KS SCRIPT",
+    Title = "ks script",
     Icon = "door-open",
     Author = "ks script",
     Folder = "ks script",
     Size = UDim2.fromOffset(580, 460),
     Transparent = true,
-    Theme = "Dark",
+    Theme = "Light",
     SideBarWidth = 200,
     HasOutline = true,
     AccentColor = Color3.fromRGB(255, 0, 0),
@@ -383,68 +405,6 @@ local Tabs = {
 }
 
 Window:SelectTab(1)
-
--- ============================================================
--- 给 WindUI 窗口加背景图片（修复版，保证能显示）
--- ============================================================
-task.spawn(function()
-    task.wait(0.5)
-    
-    local gui = game:GetService("CoreGui"):FindFirstChild("WindUI")
-    if not gui then
-        gui = game.Players.LocalPlayer.PlayerGui:FindFirstChild("WindUI")
-    end
-    
-    if not gui then
-        warn("找不到 WindUI")
-        return
-    end
-    
-    local mainFrame = nil
-    local function findMainFrame(parent)
-        for _, child in ipairs(parent:GetChildren()) do
-            if child:IsA("Frame") and child.Size.X.Offset > 300 and child.Size.Y.Offset > 200 then
-                mainFrame = child
-                return
-            end
-            if #child:GetChildren() > 0 then
-                findMainFrame(child)
-            end
-        end
-    end
-    findMainFrame(gui)
-    
-    if not mainFrame then
-        warn("找不到主框架")
-        return
-    end
-    
-    -- 背景图
-    local bg = Instance.new("ImageLabel")
-    bg.Name = "CustomBackground"
-    bg.Size = UDim2.new(1, 0, 1, 0)
-    bg.Position = UDim2.new(0, 0, 0, 0)
-    bg.Image = "rbxassetid://7033118005"  -- 蓝色科技风背景（保证能用）
-    bg.ScaleType = Enum.ScaleType.Crop
-    bg.BackgroundTransparency = 1
-    bg.ZIndex = 0
-    bg.Parent = mainFrame
-    
-    bg:MoveToBefore(mainFrame:FindFirstChild("MainCorner") or mainFrame:GetChildren()[1])
-    
-    -- 半透明遮罩
-    local overlay = Instance.new("Frame")
-    overlay.Name = "CustomOverlay"
-    overlay.Size = UDim2.new(1, 0, 1, 0)
-    overlay.Position = UDim2.new(0, 0, 0, 0)
-    overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    overlay.BackgroundTransparency = 0.35
-    overlay.BorderSizePixel = 0
-    overlay.ZIndex = 1
-    overlay.Parent = mainFrame
-    
-    print("✅ 背景图已添加成功！")
-end)
 
 -- 变量
 local walkEnabled = false
