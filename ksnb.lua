@@ -121,23 +121,6 @@ Tabs.LemonTab:Button({
     end
 })
 
-Tabs.LemonTab:Button({
-    Title = "📋 复制柠檬脚本源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "柠檬脚本源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
-
 -- ============================================================
 -- 多种脚本整合标签页
 -- ============================================================
@@ -150,7 +133,6 @@ Tabs.ScriptsTab:Paragraph({
     Color = Color3.fromRGB(0, 0, 255),
 })
 
--- YI 脚本
 Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
 Tabs.ScriptsTab:Button({
     Title = "加载 YI 脚本",
@@ -167,24 +149,7 @@ Tabs.ScriptsTab:Button({
         })
     end
 })
-Tabs.ScriptsTab:Button({
-    Title = "📋 复制 YI 脚本源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('getgenv().YI_HUB = "YI_HUB群979312897"\nloadstring(game:HttpGet(\'https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB\'))("")')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "YI 脚本源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
--- PI 脚本
 Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
 Tabs.ScriptsTab:Button({
     Title = "加载 PI 脚本",
@@ -201,24 +166,7 @@ Tabs.ScriptsTab:Button({
         })
     end
 })
-Tabs.ScriptsTab:Button({
-    Title = "📋 复制 PI 脚本源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('getgenv().XiaoPi = "皮脚本QQ群1002100032"\nloadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "PI 脚本源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
--- BS 脚本
 Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
 Tabs.ScriptsTab:Button({
     Title = "加载 BS 脚本",
@@ -235,24 +183,7 @@ Tabs.ScriptsTab:Button({
         })
     end
 })
-Tabs.ScriptsTab:Button({
-    Title = "📋 复制 BS 脚本源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://gitee.com/BS_script/script/raw/master/BS_Script.Lua"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "BS 脚本源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
--- 沙 脚本
 Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
 Tabs.ScriptsTab:Button({
     Title = "加载 沙 脚本",
@@ -268,24 +199,7 @@ Tabs.ScriptsTab:Button({
         })
     end
 })
-Tabs.ScriptsTab:Button({
-    Title = "📋 复制 沙 脚本源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "沙脚本源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
--- Kanl 破解版
 Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
 Tabs.ScriptsTab:Button({
     Title = "加载 Kanl 破解版",
@@ -301,24 +215,7 @@ Tabs.ScriptsTab:Button({
         })
     end
 })
-Tabs.ScriptsTab:Button({
-    Title = "📋 复制 Kanl 源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "Kanl 源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
--- For 脚本中心
 Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
 Tabs.ScriptsTab:Button({
     Title = "加载 For 脚本中心",
@@ -330,22 +227,6 @@ Tabs.ScriptsTab:Button({
         WindUI:Notify({
             Title = "For 脚本中心",
             Content = "脚本中心已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
-Tabs.ScriptsTab:Button({
-    Title = "📋 复制 For 脚本中心源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('getgenv().SCRIPT_KEY = ""\nloadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "For 脚本中心源码已复制到剪贴板！",
             Icon = "check-circle",
             Duration = 3,
         })
@@ -380,22 +261,6 @@ Tabs.TXTab:Button({
         })
     end
 })
-Tabs.TXTab:Button({
-    Title = "📋 复制 TX 翻译源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('TX = "TX Script"\nScript = "全自动翻译"\nloadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "TX 翻译源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
 -- ============================================================
 -- Run Race 标签页
@@ -418,22 +283,6 @@ Tabs.RunRaceTab:Button({
         WindUI:Notify({
             Title = "Run Race",
             Content = "Ruby Hub v1.0 脚本已执行！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
-Tabs.RunRaceTab:Button({
-    Title = "📋 复制 Run Race 源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "Run Race 源码已复制到剪贴板！",
             Icon = "check-circle",
             Duration = 3,
         })
@@ -466,22 +315,6 @@ Tabs.AimbotTab:Button({
         })
     end
 })
-Tabs.AimbotTab:Button({
-    Title = "📋 复制 ESP 透视源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "ESP 透视源码已复制到剪贴板！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
 
 -- ============================================================
 -- 通用功能标签页
@@ -504,22 +337,6 @@ Tabs.UniversalTab:Button({
         WindUI:Notify({
             Title = "飞行V3汉化",
             Content = "飞行脚本已加载！",
-            Icon = "check-circle",
-            Duration = 3,
-        })
-    end
-})
-Tabs.UniversalTab:Button({
-    Title = "📋 复制飞行V3源码",
-    Desc = "点击复制可执行的脚本代码",
-    Icon = "clipboard-copy",
-    Callback = function()
-        pcall(function()
-            setclipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))()')
-        end)
-        WindUI:Notify({
-            Title = "已复制",
-            Content = "飞行V3源码已复制到剪贴板！",
             Icon = "check-circle",
             Duration = 3,
         })
