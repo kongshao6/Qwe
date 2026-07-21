@@ -402,7 +402,7 @@ task.spawn(function()
         -- ⭐ 你的背景图
         local bg = Instance.new("ImageLabel")
         bg.Size = UDim2.new(1, 0, 1, 0)
-        bg.Image = "rbxassetid://1000032541"  -- ✅ 你上传的图片
+        bg.Image = "rbxassetid://7033118005"
         bg.ScaleType = Enum.ScaleType.Crop
         bg.ZIndex = 0
         bg.Parent = container
