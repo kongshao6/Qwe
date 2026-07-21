@@ -1,5 +1,5 @@
 -- 自定义卡密验证系统
-local correctKey = "ksnb"
+local correctKey = string.char(107, 115, 110, 98)  -- 简单混淆 "ksnb"
 local maxAttempts = 3
 local attempts = 0
 
@@ -338,9 +338,9 @@ end)
 repeat task.wait() until verified
 
 -- ============================================================
--- 加载 WindUI
+-- 加载 WindUI（锁定 1.6.66 版本）
 -- ============================================================
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/1.6.66/main.lua"))()
 
 local Window = WindUI:CreateWindow({
     Title = "KS SCRIPT",
@@ -384,26 +384,37 @@ local Tabs = {
 
 Window:SelectTab(1)
 
--- 给UI加背景图（蓝色科技风）
+-- ============================================================
+-- 给 WindUI 窗口加背景图片（使用你上传的图片）
+-- ============================================================
 task.spawn(function()
-    task.wait(0.5)
-    local gui = game:GetService("CoreGui"):FindFirstChild("WindUI") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("WindUI")
+    local gui = nil
+    for i = 1, 30 do
+        gui = game:GetService("CoreGui"):FindFirstChild("WindUI") or 
+              game.Players.LocalPlayer.PlayerGui:FindFirstChild("WindUI")
+        if gui then break end
+        task.wait(0.1)
+    end
+    
     if gui then
         local container = gui:FindFirstChild("Container") or gui:FindFirstChild("Frame") or gui
+        
+        -- ⭐ 你的背景图
         local bg = Instance.new("ImageLabel")
         bg.Size = UDim2.new(1, 0, 1, 0)
-        bg.Image = "rbxassetid://7033118005"
+        bg.Image = "rbxassetid://1000032541"  -- ✅ 你上传的图片
         bg.ScaleType = Enum.ScaleType.Crop
         bg.ZIndex = 0
         bg.Parent = container
         
-        local blur = Instance.new("Frame")
-        blur.Size = UDim2.new(1, 0, 1, 0)
-        blur.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        blur.BackgroundTransparency = 0.5
-        blur.BorderSizePixel = 0
-        blur.ZIndex = 1
-        blur.Parent = container
+        -- 半透明遮罩
+        local overlay = Instance.new("Frame")
+        overlay.Size = UDim2.new(1, 0, 1, 0)
+        overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        overlay.BackgroundTransparency = 0.45
+        overlay.BorderSizePixel = 0
+        overlay.ZIndex = 1
+        overlay.Parent = container
     end
 end)
 
