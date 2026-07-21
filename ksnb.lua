@@ -196,7 +196,6 @@ closeKeyBtn.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
 closeKeyBtn.BackgroundTransparency = 0
 closeKeyBtn.BorderSizePixel = 0
 closeKeyBtn.Parent = keyFrame
-
 local closeBtnCorner = Instance.new("UICorner")
 closeBtnCorner.CornerRadius = UDim.new(1, 0)
 closeBtnCorner.Parent = closeKeyBtn
@@ -392,12 +391,12 @@ Window:EditOpenButton({
 
 local Tabs = {
     NoticeTab    = Window:Tab({ Title = "通知",         Icon = "bell",            Desc = "脚本说明与公告" }),
+    UniversalTab = Window:Tab({ Title = "通用功能",      Icon = "wrench",          Desc = "实用功能合集" }),
     LemonTab     = Window:Tab({ Title = "柠檬",         Icon = "citrus",          Desc = "HoshiOnTop 脚本加载器" }),
-    ScriptsTab   = Window:Tab({ Title = "多种脚本整合",  Icon = "folder-code",     Desc = "各类脚本合集" }),
     TXTab        = Window:Tab({ Title = "TX翻译",       Icon = "languages",       Desc = "全自动翻译脚本" }),
     RunRaceTab   = Window:Tab({ Title = "Run Race",     Icon = "flag",            Desc = "Run Race 脚本加载器" }),
     AimbotTab    = Window:Tab({ Title = "自瞄一类",      Icon = "crosshair",       Desc = "ESP 透视脚本" }),
-    UniversalTab = Window:Tab({ Title = "通用功能",      Icon = "wrench",          Desc = "实用功能合集" }),
+    ScriptsTab   = Window:Tab({ Title = "多种脚本整合",  Icon = "folder-code",     Desc = "各类脚本合集" }),
 }
 
 Window:SelectTab(1)
@@ -408,7 +407,7 @@ local jumpEnabled = false; local jumpPower = 100
 local gravityEnabled = false; local gravityValue = 50
 local fovEnabled = false; local fovValue = 120
 local noclipEnabled = false; local noclipConn
-local spinEnabled = false; local spinConn
+local spinEnabled = false; local spinConn; local spinSpeed = 10
 local autoPickEnabled = false; local autoPickConn
 local savedPos = nil
 
@@ -429,38 +428,7 @@ Tabs.NoticeTab:Paragraph({ Title = "📝 脚本介绍", Desc = "此脚本为缝�
 Tabs.NoticeTab:Paragraph({ Title = "⚠️ 警告", Desc = "请勿倒卖本脚本！", Image = "triangle-alert", ImageSize = 34, Color = Color3.fromRGB(255, 255, 0) })
 Tabs.NoticeTab:Button({ Title = "👤 作者QQ: 3236904498", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard("3236904498") end) WindUI:Notify({ Title = "已复制", Content = "3236904498", Duration = 3 }) end })
 
--- 柠檬
-Tabs.LemonTab:Paragraph({ Title = "🍋 柠檬脚本", Desc = "需解卡密，不会加原作者dc", Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0) })
-Tabs.LemonTab:Button({ Title = "加载柠檬", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() end })
-
--- 脚本整合
-Tabs.ScriptsTab:Paragraph({ Title = "多种脚本整合", Desc = "各类脚本合集", Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255) })
-Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 YI", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
-Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 PI", Icon = "play", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
-Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 BS", Icon = "play", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
-Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
-Tabs.ScriptsTab:Button({ Title = "加载 沙", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
-Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
-Tabs.ScriptsTab:Button({ Title = "加载 Kanl", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
-Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
-Tabs.ScriptsTab:Button({ Title = "加载 For", Icon = "play", Callback = function() getgenv().SCRIPT_KEY = "" loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))() end })
-
--- TX翻译
-Tabs.TXTab:Paragraph({ Title = "🌐 TX 翻译", Desc = "全自动翻译脚本", Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130) })
-Tabs.TXTab:Button({ Title = "加载翻译", Icon = "play", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
-
--- Run Race
-Tabs.RunRaceTab:Paragraph({ Title = "🏃 Run Race", Desc = "Ruby Hub", Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
-Tabs.RunRaceTab:Button({ Title = "加载脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
-
--- 自瞄
-Tabs.AimbotTab:Paragraph({ Title = "🔍 ESP 透视", Desc = "V3.0 手机版", Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
-Tabs.AimbotTab:Button({ Title = "加载 ESP", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
-
--- 通用功能（全部 Toggle 用 task.spawn 包裹防止卡顿）
+-- 通用功能
 Tabs.UniversalTab:Paragraph({ Title = "🛠️ 通用功能", Desc = "开关控制+滑动调节", Image = "wrench", ImageSize = 34, Color = Color3.fromRGB(0, 255, 200) })
 
 Tabs.UniversalTab:Section({ Title = "✈️ 飞行" })
@@ -468,13 +436,13 @@ Tabs.UniversalTab:Button({ Title = "飞行V3汉化", Icon = "plane", Callback = 
 
 Tabs.UniversalTab:Section({ Title = "🏃 人物功能" })
 Tabs.UniversalTab:Toggle({ Title = "自定义速度", Default = false, Callback = function(v) task.spawn(function() walkEnabled = v applyAll() end) end })
-Tabs.UniversalTab:Slider({ Title = "速度值", Default = 50, Min = 16, Max = 200, Rounding = 0, Callback = function(v) task.spawn(function() walkSpeed = v applyAll() end) end })
+Tabs.UniversalTab:Slider({ Title = "速度值", Default = 50, Min = 16, Max = 200, Rounding = 0, Callback = function(v) walkSpeed = v applyAll() end })
 Tabs.UniversalTab:Toggle({ Title = "自定义跳跃", Default = false, Callback = function(v) task.spawn(function() jumpEnabled = v applyAll() end) end })
-Tabs.UniversalTab:Slider({ Title = "跳跃值", Default = 100, Min = 50, Max = 300, Rounding = 0, Callback = function(v) task.spawn(function() jumpPower = v applyAll() end) end })
+Tabs.UniversalTab:Slider({ Title = "跳跃值", Default = 100, Min = 50, Max = 300, Rounding = 0, Callback = function(v) jumpPower = v applyAll() end })
 Tabs.UniversalTab:Toggle({ Title = "自定义重力", Default = false, Callback = function(v) task.spawn(function() gravityEnabled = v applyAll() end) end })
-Tabs.UniversalTab:Slider({ Title = "重力值", Default = 50, Min = 10, Max = 500, Rounding = 1, Callback = function(v) task.spawn(function() gravityValue = v applyAll() end) end })
+Tabs.UniversalTab:Slider({ Title = "重力值", Default = 50, Min = 10, Max = 500, Rounding = 1, Callback = function(v) gravityValue = v applyAll() end })
 Tabs.UniversalTab:Toggle({ Title = "自定义视野", Default = false, Callback = function(v) task.spawn(function() fovEnabled = v applyAll() end) end })
-Tabs.UniversalTab:Slider({ Title = "FOV值", Default = 120, Min = 30, Max = 150, Rounding = 0, Callback = function(v) task.spawn(function() fovValue = v applyAll() end) end })
+Tabs.UniversalTab:Slider({ Title = "FOV值", Default = 120, Min = 30, Max = 150, Rounding = 0, Callback = function(v) fovValue = v applyAll() end })
 Tabs.UniversalTab:Toggle({ Title = "穿墙模式", Default = false, Callback = function(v) task.spawn(function()
     noclipEnabled = v
     if v then
@@ -490,11 +458,12 @@ Tabs.UniversalTab:Toggle({ Title = "旋转人物", Default = false, Callback = f
         spinConn = game:GetService("RunService").Heartbeat:Connect(function()
             local char = game.Players.LocalPlayer.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(10), 0)
+                char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(spinSpeed), 0)
             end
         end)
     else if spinConn then spinConn:Disconnect() end end
 end) end })
+Tabs.UniversalTab:Slider({ Title = "旋转速度", Default = 10, Min = 1, Max = 100, Rounding = 0, Callback = function(v) spinSpeed = v end })
 Tabs.UniversalTab:Toggle({ Title = "无敌模式", Default = false, Callback = function(v) task.spawn(function()
     local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
     if hum then
@@ -514,19 +483,13 @@ Tabs.UniversalTab:Slider({ Title = "时间调节", Default = 14, Min = 0, Max = 
 Tabs.UniversalTab:Section({ Title = "🎯 传送" })
 Tabs.UniversalTab:Button({ Title = "💾 保存位置", Icon = "save", Callback = function()
     local char = game.Players.LocalPlayer.Character
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        savedPos = char.HumanoidRootPart.CFrame
-        WindUI:Notify({ Title = "已保存", Content = "位置已保存！", Duration = 3 })
-    end
+    if char and char:FindFirstChild("HumanoidRootPart") then savedPos = char.HumanoidRootPart.CFrame end
 end })
 Tabs.UniversalTab:Button({ Title = "📌 传送到保存点", Icon = "map-pin", Callback = function()
     if savedPos then
         local char = game.Players.LocalPlayer.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            char.HumanoidRootPart.CFrame = savedPos
-            WindUI:Notify({ Title = "已传送", Content = "已传送到保存点！", Duration = 3 })
-        end
-    else WindUI:Notify({ Title = "错误", Content = "请先保存位置！", Duration = 2 }) end
+        if char and char:FindFirstChild("HumanoidRootPart") then char.HumanoidRootPart.CFrame = savedPos end
+    end
 end })
 Tabs.UniversalTab:Button({ Title = "👤 传送到随机玩家", Icon = "user", Callback = function()
     local players = {}
@@ -539,13 +502,20 @@ Tabs.UniversalTab:Button({ Title = "👤 传送到随机玩家", Icon = "user", 
             local char = game.Players.LocalPlayer.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
                 char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                WindUI:Notify({ Title = "已传送", Content = "传送到: " .. target.Name, Duration = 3 })
             end
         end
-    else WindUI:Notify({ Title = "错误", Content = "没有其他玩家！", Duration = 2 }) end
+    end
 end })
 
-Tabs.UniversalTab:Section({ Title = "🎒 自动拾取" })
+Tabs.UniversalTab:Section({ Title = "🎮 实用功能" })
+Tabs.UniversalTab:Toggle({ Title = "反挂机防踢", Default = false, Callback = function(v) task.spawn(function()
+    if v then
+        getgenv().AntiAfkConn = game:GetService("Players").LocalPlayer.Idled:Connect(function()
+            game:GetService("VirtualUser"):CaptureController()
+            game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+        end)
+    else if getgenv().AntiAfkConn then getgenv().AntiAfkConn:Disconnect() end end
+end) end })
 Tabs.UniversalTab:Toggle({ Title = "自动拾取", Default = false, Callback = function(v) task.spawn(function()
     autoPickEnabled = v
     if v then
@@ -554,20 +524,60 @@ Tabs.UniversalTab:Toggle({ Title = "自动拾取", Default = false, Callback = f
             if char and char:FindFirstChild("HumanoidRootPart") then
                 local root = char.HumanoidRootPart
                 for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Tool") then
-                        if (obj.Position - root.Position).Magnitude < 10 then
-                            firetouchinterest(root, obj, 0)
-                            firetouchinterest(root, obj, 1)
-                        end
+                    if obj:IsA("Tool") and (obj.Position - root.Position).Magnitude < 10 then
+                        firetouchinterest(root, obj, 0)
+                        firetouchinterest(root, obj, 1)
                     end
                 end
             end
         end)
     else if autoPickConn then autoPickConn:Disconnect() end end
 end) end })
+Tabs.UniversalTab:Button({ Title = "🖱️ 点击传送", Icon = "mouse-pointer", Callback = function()
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        mouse.Button1Down:Connect(function()
+            if mouse.Hit then
+                char.HumanoidRootPart.CFrame = CFrame.new(mouse.Hit.Position + Vector3.new(0, 5, 0))
+            end
+        end)
+    end
+end })
 
 Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
 Tabs.UniversalTab:Button({ Title = "重新加入", Icon = "refresh-cw", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
-Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) WindUI:Notify({ Title = "已复制", Content = game.JobId, Duration = 3 }) end })
+Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) end })
+
+-- 柠檬
+Tabs.LemonTab:Paragraph({ Title = "🍋 柠檬脚本", Desc = "需解卡密，不会加原作者dc", Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0) })
+Tabs.LemonTab:Button({ Title = "加载柠檬", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() end })
+
+-- TX翻译
+Tabs.TXTab:Paragraph({ Title = "🌐 TX 翻译", Desc = "全自动翻译脚本", Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130) })
+Tabs.TXTab:Button({ Title = "加载翻译", Icon = "play", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
+
+-- Run Race
+Tabs.RunRaceTab:Paragraph({ Title = "🏃 Run Race", Desc = "Ruby Hub", Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
+Tabs.RunRaceTab:Button({ Title = "加载脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
+
+-- 自瞄
+Tabs.AimbotTab:Paragraph({ Title = "🔍 ESP 透视", Desc = "V3.0 手机版", Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
+Tabs.AimbotTab:Button({ Title = "加载 ESP", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
+
+-- 脚本整合（最后）
+Tabs.ScriptsTab:Paragraph({ Title = "多种脚本整合", Desc = "各类脚本合集", Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255) })
+Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
+Tabs.ScriptsTab:Button({ Title = "加载 YI", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
+Tabs.ScriptsTab:Section({ Title = "PI 脚本" })
+Tabs.ScriptsTab:Button({ Title = "加载 PI", Icon = "play", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
+Tabs.ScriptsTab:Section({ Title = "BS 脚本" })
+Tabs.ScriptsTab:Button({ Title = "加载 BS", Icon = "play", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
+Tabs.ScriptsTab:Section({ Title = "沙 脚本" })
+Tabs.ScriptsTab:Button({ Title = "加载 沙", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
+Tabs.ScriptsTab:Section({ Title = "Kanl 破解版" })
+Tabs.ScriptsTab:Button({ Title = "加载 Kanl", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
+Tabs.ScriptsTab:Section({ Title = "For 脚本中心" })
+Tabs.ScriptsTab:Button({ Title = "加载 For", Icon = "play", Callback = function() getgenv().SCRIPT_KEY = "" loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))() end })
 
 Tabs.NoticeTab:Button({ Title = "🌈 彩虹主题", Icon = "palette", Callback = function() WindUI:Notify({ Title = "🌈 彩虹", Content = "UI已变彩虹色！", Duration = 3 }) end })
