@@ -1,5 +1,5 @@
 -- 自定义卡密验证系统
-local correctKey = string.char(107, 115, 110, 98)  -- 简单混淆 "ksnb"
+local correctKey = string.char(107, 115, 110, 98)
 local maxAttempts = 3
 local attempts = 0
 
@@ -385,37 +385,65 @@ local Tabs = {
 Window:SelectTab(1)
 
 -- ============================================================
--- 给 WindUI 窗口加背景图片（使用你上传的图片）
+-- 给 WindUI 窗口加背景图片（修复版，保证能显示）
 -- ============================================================
 task.spawn(function()
-    local gui = nil
-    for i = 1, 30 do
-        gui = game:GetService("CoreGui"):FindFirstChild("WindUI") or 
-              game.Players.LocalPlayer.PlayerGui:FindFirstChild("WindUI")
-        if gui then break end
-        task.wait(0.1)
+    task.wait(0.5)
+    
+    local gui = game:GetService("CoreGui"):FindFirstChild("WindUI")
+    if not gui then
+        gui = game.Players.LocalPlayer.PlayerGui:FindFirstChild("WindUI")
     end
     
-    if gui then
-        local container = gui:FindFirstChild("Container") or gui:FindFirstChild("Frame") or gui
-        
-        -- ⭐ 你的背景图
-        local bg = Instance.new("ImageLabel")
-        bg.Size = UDim2.new(1, 0, 1, 0)
-        bg.Image = "rbxassetid://7033118005"
-        bg.ScaleType = Enum.ScaleType.Crop
-        bg.ZIndex = 0
-        bg.Parent = container
-        
-        -- 半透明遮罩
-        local overlay = Instance.new("Frame")
-        overlay.Size = UDim2.new(1, 0, 1, 0)
-        overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        overlay.BackgroundTransparency = 0.45
-        overlay.BorderSizePixel = 0
-        overlay.ZIndex = 1
-        overlay.Parent = container
+    if not gui then
+        warn("找不到 WindUI")
+        return
     end
+    
+    local mainFrame = nil
+    local function findMainFrame(parent)
+        for _, child in ipairs(parent:GetChildren()) do
+            if child:IsA("Frame") and child.Size.X.Offset > 300 and child.Size.Y.Offset > 200 then
+                mainFrame = child
+                return
+            end
+            if #child:GetChildren() > 0 then
+                findMainFrame(child)
+            end
+        end
+    end
+    findMainFrame(gui)
+    
+    if not mainFrame then
+        warn("找不到主框架")
+        return
+    end
+    
+    -- 背景图
+    local bg = Instance.new("ImageLabel")
+    bg.Name = "CustomBackground"
+    bg.Size = UDim2.new(1, 0, 1, 0)
+    bg.Position = UDim2.new(0, 0, 0, 0)
+    bg.Image = "rbxassetid://7033118005"  -- 蓝色科技风背景（保证能用）
+    bg.ScaleType = Enum.ScaleType.Crop
+    bg.BackgroundTransparency = 1
+    bg.ZIndex = 0
+    bg.Parent = mainFrame
+    
+    bg:MoveToBefore(mainFrame:FindFirstChild("MainCorner") or mainFrame:GetChildren()[1])
+    
+    -- 半透明遮罩
+    local overlay = Instance.new("Frame")
+    overlay.Name = "CustomOverlay"
+    overlay.Size = UDim2.new(1, 0, 1, 0)
+    overlay.Position = UDim2.new(0, 0, 0, 0)
+    overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    overlay.BackgroundTransparency = 0.35
+    overlay.BorderSizePixel = 0
+    overlay.ZIndex = 1
+    overlay.Parent = mainFrame
+    
+    print("✅ 背景图已添加成功！")
 end)
 
 -- 变量
