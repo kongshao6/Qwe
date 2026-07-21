@@ -329,32 +329,25 @@ local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyl
 tweenIn:Play()
 
 local verified = false
-
 keyButton.MouseButton1Click:Connect(function()
     if verifyKey(keyInput.Text) then verified = true keyGui:Destroy() end
 end)
-
 keyInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then if verifyKey(keyInput.Text) then verified = true keyGui:Destroy() end end
 end)
-
 repeat task.wait() until verified
 
 -- ============================================================
--- 加载 Orion UI
+-- 加载 Quantum UI
 -- ============================================================
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({
+local Quantum = loadstring(game:HttpGet("https://raw.githubusercontent.com/QuantumLib/Quantum/main/source"))()
+local Window = Quantum:MakeWindow({
     Name = "KS SCRIPT",
-    HidePremium = false,
-    SaveConfig = false,
-    ConfigFolder = "ks script",
-    IntroEnabled = false,
+    Image = "rbxassetid://1784478161892",
+    Size = UDim2.new(0, 600, 0, 400),
 })
 
--- ============================================================
 -- 变量
--- ============================================================
 local walkEnabled = false
 local walkSpeed = 50
 local jumpEnabled = false
@@ -375,77 +368,58 @@ local function applyAll()
     end
     workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
 end
-
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char) task.wait(0.1) applyAll() end)
 
--- ============================================================
 -- 通知
--- ============================================================
-local NoticeTab = Window:MakeTab({ Name = "通知", Icon = "rbxassetid://123456" })
+local NoticeTab = Window:MakeTab({ Name = "通知", Icon = "bell" })
 NoticeTab:AddParagraph("📢 脚本公告", "欢迎使用 ks script！")
-NoticeTab:AddParagraph("📝 脚本介绍", "此脚本为缝合各种脚本\n倒卖sm")
+NoticeTab:AddParagraph("📝 脚本介绍", "此脚本为缝合各种脚本")
 NoticeTab:AddParagraph("⚠️ 警告", "请勿倒卖本脚本！")
-NoticeTab:AddButton({ Name = "👤 作者QQ: 3236904498 (点击复制)", Callback = function() pcall(function() setclipboard("3236904498") end) OrionLib:MakeNotification({ Name = "已复制", Content = "3236904498", Time = 3 }) end })
+NoticeTab:AddButton({ Name = "👤 作者QQ: 3236904498", Callback = function() pcall(function() setclipboard("3236904498") end) Quantum:Notification("已复制", "QQ: 3236904498") end })
 
--- ============================================================
 -- 柠檬
--- ============================================================
-local LemonTab = Window:MakeTab({ Name = "柠檬", Icon = "rbxassetid://123456" })
-LemonTab:AddParagraph("🍋 柠檬脚本", "需解卡密，不会加原作者dc群")
-LemonTab:AddButton({ Name = "加载柠檬脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() OrionLib:MakeNotification({ Name = "柠檬脚本", Content = "HoshiOnTop 已执行！", Time = 3 }) end })
+local LemonTab = Window:MakeTab({ Name = "柠檬", Icon = "citrus" })
+LemonTab:AddParagraph("🍋 柠檬脚本", "需解卡密，不会加原作者dc")
+LemonTab:AddButton({ Name = "加载柠檬脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() end })
 
--- ============================================================
--- 多种脚本整合
--- ============================================================
-local ScriptsTab = Window:MakeTab({ Name = "多种脚本整合", Icon = "rbxassetid://123456" })
-ScriptsTab:AddParagraph("多种脚本整合", "各类脚本合集")
-ScriptsTab:AddButton({ Name = "加载 YI 脚本", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
-ScriptsTab:AddButton({ Name = "加载 PI 脚本", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
-ScriptsTab:AddButton({ Name = "加载 BS 脚本", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
-ScriptsTab:AddButton({ Name = "加载 沙 脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
-ScriptsTab:AddButton({ Name = "加载 Kanl 破解版", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
-ScriptsTab:AddButton({ Name = "加载 For 脚本中心", Callback = function() getgenv().SCRIPT_KEY = "" loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))() end })
+-- 脚本整合
+local ScriptsTab = Window:MakeTab({ Name = "多种脚本整合", Icon = "folder-code" })
+ScriptsTab:AddButton({ Name = "YI 脚本", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
+ScriptsTab:AddButton({ Name = "PI 脚本", Callback = function() getgenv().XiaoPi = "皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))() end })
+ScriptsTab:AddButton({ Name = "BS 脚本", Callback = function() loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\103\105\116\101\101\46\99\111\109\47\66\83\95\115\99\114\105\112\116\47\115\99\114\105\112\116\47\114\97\119\47\109\97\115\116\101\114\47\66\83\95\83\99\114\105\112\116\46\76\117\97\117"))() end })
+ScriptsTab:AddButton({ Name = "沙 脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/114514lzkill/ShaHUB/refs/heads/main/ShaHUB"))() end })
+ScriptsTab:AddButton({ Name = "Kanl 破解版", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/eksan966/Federal/refs/heads/main/Kanl"))() end })
+ScriptsTab:AddButton({ Name = "For 脚本中心", Callback = function() getgenv().SCRIPT_KEY = "" loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/28f05f20579742b8db3901d189ca93ddecb4ff36815cee23d34bdff05ad7ae33/download"))() end })
 
--- ============================================================
 -- TX翻译
--- ============================================================
-local TXTab = Window:MakeTab({ Name = "TX翻译", Icon = "rbxassetid://123456" })
-TXTab:AddParagraph("🌐 TX 翻译", "全自动翻译脚本")
-TXTab:AddButton({ Name = "加载翻译", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
+local TXTab = Window:MakeTab({ Name = "TX翻译", Icon = "languages" })
+TXTab:AddButton({ Name = "加载 TX 翻译", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
 
--- ============================================================
 -- Run Race
--- ============================================================
-local RunRaceTab = Window:MakeTab({ Name = "Run Race", Icon = "rbxassetid://123456" })
-RunRaceTab:AddParagraph("🏃 Run Race", "Ruby Hub Run Race")
-RunRaceTab:AddButton({ Name = "加载脚本", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
+local RunRaceTab = Window:MakeTab({ Name = "Run Race", Icon = "flag" })
+RunRaceTab:AddButton({ Name = "加载 Run Race", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
 
--- ============================================================
 -- 自瞄一类
--- ============================================================
-local AimbotTab = Window:MakeTab({ Name = "自瞄一类", Icon = "rbxassetid://123456" })
-AimbotTab:AddParagraph("🔍 ESP 透视", "Roblox ESP V3.0 手机版")
-AimbotTab:AddButton({ Name = "加载 ESP", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
+local AimbotTab = Window:MakeTab({ Name = "自瞄一类", Icon = "crosshair" })
+AimbotTab:AddButton({ Name = "加载 ESP 透视", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
 
--- ============================================================
 -- 通用功能
--- ============================================================
-local UniversalTab = Window:MakeTab({ Name = "通用功能", Icon = "rbxassetid://123456" })
+local UniversalTab = Window:MakeTab({ Name = "通用功能", Icon = "wrench" })
 UniversalTab:AddParagraph("🛠️ 通用功能", "开关控制+滑动调节")
 
-UniversalTab:AddButton({ Name = "飞行V3汉化", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))() OrionLib:MakeNotification({ Name = "飞行V3", Content = "已加载！", Time = 3 }) end })
+UniversalTab:AddButton({ Name = "飞行V3汉化", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/kongshao6/Qwe/main/Ksfly.lua"))() end })
 
 UniversalTab:AddToggle({ Name = "自定义速度", Default = false, Callback = function(v) walkEnabled = v applyAll() end })
-UniversalTab:AddSlider({ Name = "速度值", Min = 16, Max = 200, Default = 50, Color = Color3.fromRGB(255,0,0), Callback = function(v) walkSpeed = v applyAll() end })
+UniversalTab:AddSlider({ Name = "速度值", Min = 16, Max = 200, Default = 50, Callback = function(v) walkSpeed = v applyAll() end })
 
 UniversalTab:AddToggle({ Name = "自定义跳跃", Default = false, Callback = function(v) jumpEnabled = v applyAll() end })
-UniversalTab:AddSlider({ Name = "跳跃值", Min = 50, Max = 300, Default = 100, Color = Color3.fromRGB(255,0,0), Callback = function(v) jumpPower = v applyAll() end })
+UniversalTab:AddSlider({ Name = "跳跃值", Min = 50, Max = 300, Default = 100, Callback = function(v) jumpPower = v applyAll() end })
 
 UniversalTab:AddToggle({ Name = "自定义重力", Default = false, Callback = function(v) gravityEnabled = v applyAll() end })
-UniversalTab:AddSlider({ Name = "重力值", Min = 10, Max = 500, Default = 50, Color = Color3.fromRGB(255,0,0), Callback = function(v) gravityValue = v applyAll() end })
+UniversalTab:AddSlider({ Name = "重力值", Min = 10, Max = 500, Default = 50, Callback = function(v) gravityValue = v applyAll() end })
 
 UniversalTab:AddToggle({ Name = "自定义视野", Default = false, Callback = function(v) fovEnabled = v applyAll() end })
-UniversalTab:AddSlider({ Name = "FOV值", Min = 30, Max = 150, Default = 120, Color = Color3.fromRGB(255,0,0), Callback = function(v) fovValue = v applyAll() end })
+UniversalTab:AddSlider({ Name = "FOV值", Min = 30, Max = 150, Default = 120, Callback = function(v) fovValue = v applyAll() end })
 
 UniversalTab:AddToggle({ Name = "穿墙模式", Default = false, Callback = function(v)
     noclipEnabled = v
@@ -454,9 +428,7 @@ UniversalTab:AddToggle({ Name = "穿墙模式", Default = false, Callback = func
             local char = game.Players.LocalPlayer.Character
             if char then for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide = false end end end
         end)
-    else
-        if noclipConn then noclipConn:Disconnect() end
-    end
+    else if noclipConn then noclipConn:Disconnect() end end
 end })
 
 UniversalTab:AddToggle({ Name = "夜视模式", Default = false, Callback = function(v)
@@ -465,9 +437,9 @@ UniversalTab:AddToggle({ Name = "夜视模式", Default = false, Callback = func
     else l.Brightness = 1 l.FogEnd = 10000 l.GlobalShadows = true end
 end })
 
-UniversalTab:AddSlider({ Name = "时间调节", Min = 0, Max = 24, Default = 14, Color = Color3.fromRGB(255,0,0), Callback = function(v) game:GetService("Lighting").ClockTime = v end })
+UniversalTab:AddSlider({ Name = "时间调节", Min = 0, Max = 24, Default = 14, Callback = function(v) game:GetService("Lighting").ClockTime = v end })
 
 UniversalTab:AddButton({ Name = "重新加入服务器", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
-UniversalTab:AddButton({ Name = "复制服务器ID", Callback = function() pcall(function() setclipboard(game.JobId) end) OrionLib:MakeNotification({ Name = "已复制", Content = game.JobId, Time = 3 }) end })
+UniversalTab:AddButton({ Name = "复制服务器ID", Callback = function() pcall(function() setclipboard(game.JobId) end) Quantum:Notification("已复制", game.JobId) end })
 
-OrionLib:Init()
+Quantum:Init()
