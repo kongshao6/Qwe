@@ -1,3 +1,158 @@
+-- 自定义卡密验证系统
+local correctKey = "ksnb"
+local maxAttempts = 3
+local attempts = 0
+
+local function kickPlayer()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    if LocalPlayer then
+        LocalPlayer:Kick("验证失败次数过多，已被踢出游戏")
+    end
+end
+
+local function showErrorPopup()
+    local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    
+    local errorGui = Instance.new("ScreenGui")
+    errorGui.Name = "ErrorPopup"
+    errorGui.ResetOnSpawn = false
+    errorGui.Parent = playerGui
+    
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 300, 0, 150)
+    frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    frame.BorderSizePixel = 0
+    frame.Parent = errorGui
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = frame
+    
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0, 40)
+    title.Position = UDim2.new(0, 0, 0, 10)
+    title.Text = "ks(??)"
+    title.TextColor3 = Color3.fromRGB(255, 50, 50)
+    title.TextSize = 28
+    title.Font = Enum.Font.SourceSansBold
+    title.BackgroundTransparency = 1
+    title.Parent = frame
+    
+    local desc = Instance.new("TextLabel")
+    desc.Size = UDim2.new(1, -20, 0, 30)
+    desc.Position = UDim2.new(0, 10, 0, 55)
+    desc.Text = "卡密错误！还剩 " .. (maxAttempts - attempts) .. " 次机会"
+    desc.TextColor3 = Color3.fromRGB(255, 255, 255)
+    desc.TextSize = 16
+    desc.Font = Enum.Font.SourceSans
+    desc.BackgroundTransparency = 1
+    desc.Parent = frame
+    
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 80, 0, 35)
+    closeBtn.Position = UDim2.new(0.5, -40, 0, 100)
+    closeBtn.Text = "确定"
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.TextSize = 18
+    closeBtn.Font = Enum.Font.SourceSansBold
+    closeBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+    closeBtn.Parent = frame
+    
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 8)
+    btnCorner.Parent = closeBtn
+    
+    closeBtn.MouseButton1Click:Connect(function()
+        errorGui:Destroy()
+        if attempts >= maxAttempts then
+            kickPlayer()
+        end
+    end)
+end
+
+local function verifyKey(input)
+    if input == correctKey then
+        return true
+    else
+        attempts = attempts + 1
+        showErrorPopup()
+        return false
+    end
+end
+
+-- 创建验证界面
+local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+local keyGui = Instance.new("ScreenGui")
+keyGui.Name = "KeySystem"
+keyGui.ResetOnSpawn = false
+keyGui.Parent = playerGui
+
+local keyFrame = Instance.new("Frame")
+keyFrame.Size = UDim2.new(0, 350, 0, 200)
+keyFrame.Position = UDim2.new(0.5, -175, 0.5, -100)
+keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+keyFrame.BorderSizePixel = 0
+keyFrame.Parent = keyGui
+
+local keyCorner = Instance.new("UICorner")
+keyCorner.CornerRadius = UDim.new(0, 12)
+keyCorner.Parent = keyFrame
+
+local keyTitle = Instance.new("TextLabel")
+keyTitle.Size = UDim2.new(1, 0, 0, 45)
+keyTitle.Position = UDim2.new(0, 0, 0, 15)
+keyTitle.Text = "🔐 请输入密钥"
+keyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyTitle.TextSize = 24
+keyTitle.Font = Enum.Font.SourceSansBold
+keyTitle.BackgroundTransparency = 1
+keyTitle.Parent = keyFrame
+
+local keyInput = Instance.new("TextBox")
+keyInput.Size = UDim2.new(0, 260, 0, 40)
+keyInput.Position = UDim2.new(0.5, -130, 0, 70)
+keyInput.PlaceholderText = "请输入卡密..."
+keyInput.Text = ""
+keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keyInput.BorderSizePixel = 0
+keyInput.Font = Enum.Font.SourceSans
+keyInput.TextSize = 18
+keyInput.ClearTextOnFocus = false
+keyInput.Parent = keyFrame
+
+local inputCorner = Instance.new("UICorner")
+inputCorner.CornerRadius = UDim.new(0, 8)
+inputCorner.Parent = keyInput
+
+local keyButton = Instance.new("TextButton")
+keyButton.Size = UDim2.new(0, 260, 0, 40)
+keyButton.Position = UDim2.new(0.5, -130, 0, 125)
+keyButton.Text = "验证"
+keyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyButton.TextSize = 20
+keyButton.Font = Enum.Font.SourceSansBold
+keyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+keyButton.Parent = keyFrame
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 8)
+btnCorner.Parent = keyButton
+
+local verified = false
+
+keyButton.MouseButton1Click:Connect(function()
+    if verifyKey(keyInput.Text) then
+        verified = true
+        keyGui:Destroy()
+    end
+end)
+
+-- 等待验证
+repeat task.wait() until verified
+
 -- 加载 WindUI 库
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
@@ -13,11 +168,6 @@ local Window = WindUI:CreateWindow({
     SideBarWidth = 200,
     HasOutline = true,
     AccentColor = Color3.fromRGB(255, 0, 0),
-    KeySystem = {
-        Key = { "ksnb" },
-        Note = "请输入密钥",
-        SaveKey = false,
-    },
 })
 
 Window:EditOpenButton({
