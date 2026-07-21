@@ -3,15 +3,23 @@ local correctKey = "ksnb"
 local maxAttempts = 3
 local attempts = 0
 
-local function kickPlayer()
+-- 用户名白名单
+local allowedUsers = {
+    "Roblox用户名1",
+    "Roblox用户名2",
+    "你的用户名",
+}
+
+local function kickPlayer(msg)
     local LocalPlayer = game:GetService("Players").LocalPlayer
     if LocalPlayer then
-        LocalPlayer:Kick("sb ksnb都不知道你用啥我的脚本")
+        LocalPlayer:Kick(msg)
     end
 end
 
-local function showErrorPopup()
+local function showErrorPopup(msg, autoKick)
     local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    local TweenService = game:GetService("TweenService")
     
     local errorGui = Instance.new("ScreenGui")
     errorGui.Name = "ErrorPopup"
@@ -19,54 +27,119 @@ local function showErrorPopup()
     errorGui.Parent = playerGui
     
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 300, 0, 120)
-    frame.Position = UDim2.new(0.5, -150, 0.5, -60)
-    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    frame.Size = UDim2.new(0, 320, 0, 160)
+    frame.Position = UDim2.new(0.5, -160, 0.5, -80)
+    frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    frame.BackgroundTransparency = 0.1
     frame.BorderSizePixel = 0
+    frame.AnchorPoint = Vector2.new(0.5, 0.5)
+    frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    frame.Size = UDim2.new(0, 0, 0, 0)
     frame.Parent = errorGui
     
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = frame
+    local mainCorner = Instance.new("UICorner")
+    mainCorner.CornerRadius = UDim.new(0, 12)
+    mainCorner.Parent = frame
+    
+    -- 彩虹边框
+    local rainbowBorder = Instance.new("Frame")
+    rainbowBorder.Size = UDim2.new(1, 4, 1, 4)
+    rainbowBorder.Position = UDim2.new(0, -2, 0, -2)
+    rainbowBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    rainbowBorder.BorderSizePixel = 0
+    rainbowBorder.Parent = frame
+    
+    local borderCorner = Instance.new("UICorner")
+    borderCorner.CornerRadius = UDim.new(0, 14)
+    borderCorner.Parent = rainbowBorder
+    
+    task.spawn(function()
+        local hue = 0
+        while errorGui and errorGui.Parent and rainbowBorder and rainbowBorder.Parent do
+            rainbowBorder.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
+            hue = (hue + 0.008) % 1
+            task.wait()
+        end
+    end)
+    
+    -- 图标
+    local iconLabel = Instance.new("TextLabel")
+    iconLabel.Size = UDim2.new(1, 0, 0, 35)
+    iconLabel.Position = UDim2.new(0, 0, 0, 12)
+    iconLabel.Text = "🚫"
+    iconLabel.TextSize = 30
+    iconLabel.BackgroundTransparency = 1
+    iconLabel.Parent = frame
     
     local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 30)
-    title.Position = UDim2.new(0, 0, 0, 15)
+    title.Size = UDim2.new(1, 0, 0, 25)
+    title.Position = UDim2.new(0, 0, 0, 45)
     title.Text = "ks(??)"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextSize = 24
+    title.TextSize = 22
     title.Font = Enum.Font.SourceSansBold
     title.BackgroundTransparency = 1
     title.Parent = frame
     
+    task.spawn(function()
+        local hue = 0
+        while errorGui and errorGui.Parent and title and title.Parent do
+            title.TextColor3 = Color3.fromHSV(hue, 1, 1)
+            hue = (hue + 0.01) % 1
+            task.wait()
+        end
+    end)
+    
     local desc = Instance.new("TextLabel")
-    desc.Size = UDim2.new(1, 0, 0, 20)
-    desc.Position = UDim2.new(0, 0, 0, 48)
-    desc.Text = "卡密错误！还剩 " .. (maxAttempts - attempts) .. " 次机会"
-    desc.TextColor3 = Color3.fromRGB(200, 200, 200)
+    desc.Size = UDim2.new(1, -30, 0, 40)
+    desc.Position = UDim2.new(0, 15, 0, 72)
+    desc.Text = msg
+    desc.TextColor3 = Color3.fromRGB(60, 60, 60)
     desc.TextSize = 14
     desc.Font = Enum.Font.SourceSans
     desc.BackgroundTransparency = 1
+    desc.TextWrapped = true
     desc.Parent = frame
     
     local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 80, 0, 28)
-    closeBtn.Position = UDim2.new(0.5, -40, 0, 80)
+    closeBtn.Size = UDim2.new(0, 260, 0, 35)
+    closeBtn.Position = UDim2.new(0.5, -130, 0, 115)
     closeBtn.Text = "确定"
     closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeBtn.TextSize = 15
+    closeBtn.TextSize = 16
     closeBtn.Font = Enum.Font.SourceSansBold
-    closeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     closeBtn.Parent = frame
     
     local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 6)
+    btnCorner.CornerRadius = UDim.new(0, 8)
     btnCorner.Parent = closeBtn
+    
+    local btnStroke = Instance.new("UIStroke")
+    btnStroke.Thickness = 2
+    btnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    btnStroke.Parent = closeBtn
+    
+    task.spawn(function()
+        local hue = 0
+        while errorGui and errorGui.Parent and btnStroke and btnStroke.Parent do
+            btnStroke.Color = Color3.fromHSV(hue, 1, 1)
+            closeBtn.BackgroundColor3 = Color3.fromHSV(hue, 0.8, 0.6)
+            hue = (hue + 0.015) % 1
+            task.wait()
+        end
+    end)
+    
+    -- 入场动画
+    local tweenIn = TweenService:Create(frame, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 320, 0, 160)})
+    tweenIn:Play()
     
     closeBtn.MouseButton1Click:Connect(function()
         errorGui:Destroy()
-        if attempts >= maxAttempts then
-            kickPlayer()
+        if autoKick then
+            pcall(function()
+                setclipboard("3236904498")
+            end)
+            kickPlayer(msg)
         end
     end)
 end
@@ -76,12 +149,22 @@ local function verifyKey(input)
         return true
     else
         attempts = attempts + 1
-        showErrorPopup()
+        showErrorPopup("卡密错误！还剩 " .. (maxAttempts - attempts) .. " 次机会", attempts >= maxAttempts)
         return false
     end
 end
 
--- 创建验证界面
+local function verifyUser()
+    local playerName = game:GetService("Players").LocalPlayer.Name
+    for _, name in ipairs(allowedUsers) do
+        if playerName:lower() == name:lower() then
+            return true
+        end
+    end
+    return false
+end
+
+-- 创建卡密验证界面
 local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
 
@@ -135,7 +218,7 @@ local mainCorner = Instance.new("UICorner")
 mainCorner.CornerRadius = UDim.new(0, 14)
 mainCorner.Parent = keyFrame
 
--- 彩虹渐变边框
+-- 彩虹边框
 local rainbowBorder = Instance.new("Frame")
 rainbowBorder.Size = UDim2.new(1, 4, 1, 4)
 rainbowBorder.Position = UDim2.new(0, -2, 0, -2)
@@ -156,7 +239,7 @@ task.spawn(function()
     end
 end)
 
--- KS SCRIPT 彩虹标题
+-- 标题
 local ksTitle = Instance.new("TextLabel")
 ksTitle.Size = UDim2.new(1, 0, 0, 40)
 ksTitle.Position = UDim2.new(0, 0, 0, 18)
@@ -309,6 +392,16 @@ keyInput.FocusLost:Connect(function(enterPressed)
 end)
 
 repeat task.wait() until verified
+
+-- 卡密通过后验证用户名
+if not verifyUser() then
+    pcall(function()
+        setclipboard("3236904498")
+    end)
+    showErrorPopup("⚠️ 用户名未授权！\n\n你的用户名不在白名单中\n作者QQ已复制到剪贴板：3236904498\n\n请联系作者将你的用户名加入白名单", true)
+    task.wait(3)
+    kickPlayer("用户名未授权，请联系作者QQ:3236904498")
+end
 
 -- 加载 WindUI 库
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
