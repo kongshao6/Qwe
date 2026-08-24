@@ -47,7 +47,6 @@ local function showErrorPopup(msg, autoKick)
     frame.AnchorPoint = Vector2.new(0.5, 0.5)
     frame.Position = UDim2.new(0.5, 0, 0.5, 0)
     frame.Size = UDim2.new(0, 0, 0, 0)
-    frame.ClipsDescendants = true
     frame.Parent = errorGui
     createCorner(frame, 20)
     
@@ -151,7 +150,6 @@ keyFrame.BorderSizePixel = 0
 keyFrame.AnchorPoint = Vector2.new(0, 0)
 keyFrame.Position = UDim2.new(0.5, -190, 0.5, -110)
 keyFrame.Size = UDim2.new(0, 380, 0, 220)
-keyFrame.ClipsDescendants = true
 keyFrame.Active = true
 keyFrame.ZIndex = 10
 keyFrame.Parent = keyGui
@@ -165,38 +163,12 @@ task.spawn(function()
     end
 end)
 
-local particles = {}
-for i = 1, 30 do
-    local particle = Instance.new("Frame")
-    particle.Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8))
-    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
-    particle.BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1)
-    particle.BorderSizePixel = 0
-    particle.BackgroundTransparency = 0.5
-    particle.ZIndex = 1
-    particle.Parent = keyGui
-    createCorner(particle, 999)
-    table.insert(particles, particle)
-    
-    task.spawn(function()
-        while keyGui and keyGui.Parent and particle and particle.Parent do
-            local tween = TweenService:Create(particle, TweenInfo.new(math.random(4, 8)), {
-                Position = UDim2.new(math.random(), 0, math.random(), 0),
-                BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1),
-                BackgroundTransparency = math.random(3, 6) / 10,
-            })
-            tween:Play()
-            tween.Completed:Wait()
-        end
-    end)
-end
-
 local dragArea = Instance.new("Frame")
 dragArea.Size = UDim2.new(1, 0, 0, 60)
 dragArea.Position = UDim2.new(0, 0, 0, 0)
 dragArea.BackgroundTransparency = 1
 dragArea.BorderSizePixel = 0
-dragArea.ZIndex = 11
+dragArea.ZIndex = 20
 dragArea.Parent = keyFrame
 
 local dragging = false
@@ -230,7 +202,7 @@ closeBtn.TextSize = 16
 closeBtn.Font = Enum.Font.SourceSansBold
 closeBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 closeBtn.BorderSizePixel = 0
-closeBtn.ZIndex = 11
+closeBtn.ZIndex = 20
 closeBtn.Parent = keyFrame
 createCorner(closeBtn, 999)
 
@@ -255,7 +227,7 @@ titleLabel.Text = "KS SCRIPT"
 titleLabel.TextSize = 32
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.BackgroundTransparency = 1
-titleLabel.ZIndex = 11
+titleLabel.ZIndex = 20
 titleLabel.Parent = keyFrame
 
 task.spawn(function()
@@ -273,7 +245,7 @@ subtitleLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 subtitleLabel.TextSize = 14
 subtitleLabel.Font = Enum.Font.SourceSans
 subtitleLabel.BackgroundTransparency = 1
-subtitleLabel.ZIndex = 11
+subtitleLabel.ZIndex = 20
 subtitleLabel.Parent = keyFrame
 
 local inputBg = Instance.new("Frame")
@@ -281,7 +253,7 @@ inputBg.Size = UDim2.new(0, 300, 0, 45)
 inputBg.Position = UDim2.new(0.5, -150, 0, 80)
 inputBg.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
 inputBg.BorderSizePixel = 0
-inputBg.ZIndex = 11
+inputBg.ZIndex = 20
 inputBg.Parent = keyFrame
 createCorner(inputBg, 10)
 
@@ -305,7 +277,7 @@ keyInput.BorderSizePixel = 0
 keyInput.Font = Enum.Font.SourceSans
 keyInput.TextSize = 16
 keyInput.ClearTextOnFocus = false
-keyInput.ZIndex = 11
+keyInput.ZIndex = 21
 keyInput.Parent = inputBg
 
 local verifyBtn = Instance.new("TextButton")
@@ -317,7 +289,7 @@ verifyBtn.TextSize = 18
 verifyBtn.Font = Enum.Font.SourceSansBold
 verifyBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 verifyBtn.BorderSizePixel = 0
-verifyBtn.ZIndex = 11
+verifyBtn.ZIndex = 20
 verifyBtn.Parent = keyFrame
 createCorner(verifyBtn, 10)
 
@@ -345,7 +317,7 @@ footerLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
 footerLabel.TextSize = 10
 footerLabel.Font = Enum.Font.SourceSans
 footerLabel.BackgroundTransparency = 1
-footerLabel.ZIndex = 11
+footerLabel.ZIndex = 20
 footerLabel.Parent = keyFrame
 
 local function showSuccessNotifications()
@@ -367,7 +339,6 @@ local function showSuccessNotifications()
         notifFrame.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 60)
         notifFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
         notifFrame.BorderSizePixel = 0
-        notifFrame.ClipsDescendants = true
         notifFrame.Parent = notifyGui
         createCorner(notifFrame, 12)
         
@@ -429,7 +400,6 @@ local function showLoadSuccess()
     successFrame.Position = UDim2.new(0, -290, 0, 10)
     successFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
     successFrame.BorderSizePixel = 0
-    successFrame.ClipsDescendants = true
     successFrame.Parent = successGui
     createCorner(successFrame, 12)
     
