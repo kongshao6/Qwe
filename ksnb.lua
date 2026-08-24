@@ -146,7 +146,6 @@ local function showErrorPopup(msg, autoKick)
     end)
 end
 
--- 验证函数（仅判断，不直接设置 isVerified）
 local function verifyKey(input)
     if input == correctKey then
         return true
@@ -162,14 +161,12 @@ local function verifyKey(input)
     end
 end
 
--- ========== 改进的启动消息显示（使用 CoreGui + 淡入） ==========
+-- ========== 启动消息显示（纯UI，不依赖Library） ==========
 local function showStartupMessages()
-    print("显示启动消息") -- 调试输出，可在F9控制台看到
     local gui = Instance.new("ScreenGui")
     gui.Name = "StartupMessages"
     gui.ResetOnSpawn = false
     gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    -- 使用 CoreGui 避免被游戏 UI 遮挡
     gui.Parent = game:GetService("CoreGui") or playerGui
 
     local messages = {
@@ -191,7 +188,7 @@ local function showStartupMessages()
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.BorderSizePixel = 0
         label.Parent = gui
-        -- 淡入效果
+        -- 淡入
         label.BackgroundTransparency = 1
         label.TextTransparency = 1
         TweenService:Create(label, TweenInfo.new(0.5), {
@@ -199,7 +196,6 @@ local function showStartupMessages()
             TextTransparency = 0
         }):Play()
     end
-    -- 5秒后自动消失
     task.delay(5, function()
         if gui and gui.Parent then
             gui:Destroy()
@@ -207,14 +203,14 @@ local function showStartupMessages()
     end)
 end
 
--- ========== 卡密界面（界面装饰） ==========
+-- ========== 卡密界面 ==========
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 keyGui.Parent = playerGui
 
--- 背景粒子
+-- 粒子
 local particles = {}
 for i = 1, 30 do
     local particle = Instance.new("Frame")
@@ -226,7 +222,6 @@ for i = 1, 30 do
     particle.Parent = keyGui
     createCorner(particle, 999)
     table.insert(particles, particle)
-    
     task.spawn(function()
         while keyGui and keyGui.Parent and particle and particle.Parent do
             local tween = TweenService:Create(particle, TweenInfo.new(math.random(4, 8)), {
@@ -300,7 +295,6 @@ titleLabel.TextSize = 32
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.BackgroundTransparency = 1
 titleLabel.Parent = keyFrame
-
 task.spawn(function()
     while keyGui and keyGui.Parent and titleLabel and titleLabel.Parent do
         titleLabel.TextColor3 = getRainbowColor(0.3)
@@ -389,34 +383,26 @@ footerLabel.Parent = keyFrame
 local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 380, 0, 225)})
 tweenIn:Play()
 
--- ========== 验证按钮回调（核心） ==========
+-- ========== 验证回调（不依赖Library） ==========
 local function onVerify()
     if verifyKey(keyInput.Text) then
-        print("验证成功，开始显示启动消息")
         verifyBtn.Text = "✅ 验证成功！"
         verifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
         
-        -- 1. 显示左上角提示词（淡入）
+        -- 显示左上角提示（纯UI）
         showStartupMessages()
         
-        -- 2. 同时用右上角通知作为后备
-        Library:Notify("欢迎使用 KS Script！", 3)
-        Library:Notify("作者QQ: 3236904498", 3)
-        task.delay(0.5, function() Library:Notify("ks祝您玩的开心", 4) end)
-        
-        -- 3. 等待几秒让玩家看到
+        -- 等待玩家看到提示
         task.wait(2.5)
         
-        -- 4. 关闭卡密窗口并设置验证完成标志
+        -- 关闭卡密窗口并设置验证完成
         local tweenOut = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
         tweenOut:Play()
         tweenOut.Completed:Connect(function()
             keyGui:Destroy()
             isVerified = true
-            print("验证完成，主脚本即将加载")
         end)
     else
-        -- 错误震动效果
         keyInput.Text = ""
         local originalPos = inputBg.Position
         for i = 1, 5 do
@@ -964,9 +950,9 @@ SaveManager:SetFolder("KSScriptConfig")
 SaveManager:BuildConfigSection(Tabs.Notice)
 ThemeManager:ApplyToTab(Tabs.Notice)
 
--- 最后再弹一条通知（确保可见）
+-- ========== 主脚本加载完成后显示最终通知 ==========
 task.spawn(function()
-    task.wait(1)
+    task.wait(1)  -- 等待界面稳定
     Library:Notify("ks祝您玩的开心 ❤️", 5)
 end)
 
