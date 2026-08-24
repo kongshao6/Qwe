@@ -410,6 +410,59 @@ local function showSuccessNotifications()
     notifyGui:Destroy()
 end
 
+local function showLoadSuccess()
+    local successGui = Instance.new("ScreenGui")
+    successGui.Name = "LoadSuccess"
+    successGui.ResetOnSpawn = false
+    successGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    successGui.Parent = playerGui
+    
+    local successFrame = Instance.new("Frame")
+    successFrame.Size = UDim2.new(0, 280, 0, 55)
+    successFrame.Position = UDim2.new(0, -290, 0, 10)
+    successFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    successFrame.BorderSizePixel = 0
+    successFrame.ClipsDescendants = true
+    successFrame.Parent = successGui
+    createCorner(successFrame, 12)
+    
+    local successStroke = createStroke(successFrame, 2, Color3.fromRGB(0, 255, 0))
+    
+    local successIcon = Instance.new("TextLabel")
+    successIcon.Size = UDim2.new(0, 40, 1, 0)
+    successIcon.Position = UDim2.new(0, 5, 0, 0)
+    successIcon.Text = "🎉"
+    successIcon.TextSize = 22
+    successIcon.BackgroundTransparency = 1
+    successIcon.Parent = successFrame
+    
+    local successText = Instance.new("TextLabel")
+    successText.Size = UDim2.new(1, -50, 1, 0)
+    successText.Position = UDim2.new(0, 45, 0, 0)
+    successText.Text = "KS 加载成功！祝您游玩开心！"
+    successText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    successText.TextSize = 14
+    successText.Font = Enum.Font.SourceSansBold
+    successText.BackgroundTransparency = 1
+    successText.TextXAlignment = Enum.TextXAlignment.Left
+    successText.Parent = successFrame
+    
+    local slideIn = TweenService:Create(successFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2.new(0, 10, 0, 10)
+    })
+    slideIn:Play()
+    
+    task.wait(2.5)
+    
+    local slideOut = TweenService:Create(successFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+        Position = UDim2.new(0, -290, 0, 10)
+    })
+    slideOut:Play()
+    slideOut.Completed:Connect(function()
+        successGui:Destroy()
+    end)
+end
+
 local function onVerify()
     if verifyKey(keyInput.Text) then
         verifyBtn.Text = "✅ 验证成功！"
@@ -421,8 +474,10 @@ local function onVerify()
             keyGui:Destroy()
             showSuccessNotifications()
             task.spawn(function()
-                task.wait(1)
+                task.wait(2)
                 loadMainScript()
+                task.wait(0.5)
+                showLoadSuccess()
             end)
         end)
     else
@@ -442,6 +497,8 @@ verifyBtn.MouseButton1Click:Connect(onVerify)
 keyInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then onVerify() end
 end)
+
+repeat task.wait() until isVerified
 
 function loadMainScript()
     local repo = 'https://raw.githubusercontent.com/KingScriptAE/No-sirve-nada./refs/heads/main/'
