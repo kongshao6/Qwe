@@ -1,6 +1,3 @@
--- ============================================================
--- 优化版卡密验证系统
--- ============================================================
 local correctKey = "ksnb"
 local isVerified = false
 local attempts = 0
@@ -31,47 +28,14 @@ local function createStroke(parent, thickness)
     return stroke
 end
 
--- ============================================================
--- 卡密验证界面
--- ============================================================
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 keyGui.Parent = playerGui
 
-local bgOverlay = Instance.new("Frame")
-bgOverlay.Size = UDim2.new(1, 0, 1, 0)
-bgOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-bgOverlay.BackgroundTransparency = 0.7
-bgOverlay.BorderSizePixel = 0
-bgOverlay.Parent = keyGui
-
--- 背景粒子
-for i = 1, 25 do
-    local particle = Instance.new("Frame")
-    particle.Size = UDim2.new(0, math.random(3, 7), 0, math.random(3, 7))
-    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
-    particle.BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1)
-    particle.BorderSizePixel = 0
-    particle.BackgroundTransparency = 0.5
-    particle.Parent = bgOverlay
-    createCorner(particle, 999)
-    
-    task.spawn(function()
-        while keyGui and keyGui.Parent and particle and particle.Parent do
-            local tween = TweenService:Create(particle, TweenInfo.new(math.random(4, 8)), {
-                Position = UDim2.new(math.random(), 0, math.random(), 0),
-                BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1),
-            })
-            tween:Play()
-            tween.Completed:Wait()
-        end
-    end)
-end
-
 local keyFrame = Instance.new("Frame")
-keyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+keyFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 keyFrame.BorderSizePixel = 0
 keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -80,13 +44,18 @@ keyFrame.ClipsDescendants = true
 keyFrame.Parent = keyGui
 createCorner(keyFrame, 18)
 
-local frameGradient = Instance.new("UIGradient")
-frameGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 40)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(18, 18, 25)),
-})
-frameGradient.Rotation = 135
-frameGradient.Parent = keyFrame
+local shadow = Instance.new("ImageLabel")
+shadow.Size = UDim2.new(1, 20, 1, 20)
+shadow.Position = UDim2.new(0, -10, 0, -10)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://6015897843"
+shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+shadow.ImageTransparency = 0.5
+shadow.ScaleType = Enum.ScaleType.Slice
+shadow.SliceCenter = Rect.new(10, 10, 118, 118)
+shadow.ZIndex = 0
+shadow.Parent = keyGui
+createCorner(shadow, 20)
 
 local frameStroke = createStroke(keyFrame, 3)
 task.spawn(function()
@@ -150,7 +119,7 @@ subtitleLabel.Parent = keyFrame
 local inputContainer = Instance.new("Frame")
 inputContainer.Size = UDim2.new(0, 300, 0, 42)
 inputContainer.Position = UDim2.new(0.5, -150, 0, 105)
-inputContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+inputContainer.BackgroundColor3 = Color3.fromRGB(240, 240, 245)
 inputContainer.BorderSizePixel = 0
 inputContainer.Parent = keyFrame
 createCorner(inputContainer, 10)
@@ -168,8 +137,8 @@ keyInput.Size = UDim2.new(1, -30, 1, 0)
 keyInput.Position = UDim2.new(0, 15, 0, 0)
 keyInput.PlaceholderText = "请输入卡密..."
 keyInput.Text = ""
-keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyInput.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+keyInput.TextColor3 = Color3.fromRGB(40, 40, 40)
+keyInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
 keyInput.BackgroundTransparency = 1
 keyInput.BorderSizePixel = 0
 keyInput.Font = Enum.Font.SourceSans
@@ -190,8 +159,8 @@ createCorner(verifyBtn, 10)
 
 local btnGradient = Instance.new("UIGradient")
 btnGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 60, 60)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 30, 30)),
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 40, 40)),
 })
 btnGradient.Parent = verifyBtn
 
@@ -216,7 +185,7 @@ local errorLabel = Instance.new("TextLabel")
 errorLabel.Size = UDim2.new(1, 0, 0, 20)
 errorLabel.Position = UDim2.new(0, 0, 0, 205)
 errorLabel.Text = ""
-errorLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+errorLabel.TextColor3 = Color3.fromRGB(255, 60, 60)
 errorLabel.TextSize = 12
 errorLabel.Font = Enum.Font.SourceSans
 errorLabel.BackgroundTransparency = 1
@@ -226,7 +195,7 @@ local footerLabel = Instance.new("TextLabel")
 footerLabel.Size = UDim2.new(1, 0, 0, 15)
 footerLabel.Position = UDim2.new(0, 0, 0, 228)
 footerLabel.Text = "KS Script © 2024"
-footerLabel.TextColor3 = Color3.fromRGB(80, 80, 80)
+footerLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
 footerLabel.TextSize = 10
 footerLabel.Font = Enum.Font.SourceSans
 footerLabel.BackgroundTransparency = 1
@@ -277,9 +246,9 @@ local function onVerify()
             end
             inputContainer.Position = originalPos
             
-            inputContainer.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
+            inputContainer.BackgroundColor3 = Color3.fromRGB(255, 200, 200)
             task.wait(0.2)
-            inputContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+            inputContainer.BackgroundColor3 = Color3.fromRGB(240, 240, 245)
         end
     end
 end
@@ -291,9 +260,6 @@ end)
 
 repeat task.wait() until isVerified
 
--- ============================================================
--- 加载UI库
--- ============================================================
 local repo = 'https://raw.githubusercontent.com/KingScriptAE/No-sirve-nada./refs/heads/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
@@ -302,9 +268,6 @@ local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 local Options = Library.Options
 local Toggles = Library.Toggles
 
--- ============================================================
--- 创建主窗口
--- ============================================================
 local Window = Library:CreateWindow({
     Title = "KS Script",
     Footer = "By ks script",
@@ -313,9 +276,6 @@ local Window = Library:CreateWindow({
     ShowCustomCursor = true,
 })
 
--- ============================================================
--- 创建标签页
--- ============================================================
 local Tabs = {
     Notice = Window:AddTab("通知", "info"),
     Universal = Window:AddTab("通用功能", "settings"),
@@ -328,30 +288,15 @@ local Tabs = {
     Scripts = Window:AddTab("脚本整合", "folder-code"),
 }
 
--- ============================================================
--- 绕过检测的速度修改
--- ============================================================
 local function safeSpeedChange(hum, speed)
     pcall(function()
-        -- 方法1：直接修改
         hum.WalkSpeed = speed
-        
-        -- 方法2：使用SetState绕过检测
         if hum.SetStateEnabled then
             hum:SetStateEnabled(Enum.HumanoidStateType.Running, true)
-        end
-        
-        -- 方法3：修改PhysicalProperties
-        local root = hum.Parent and hum.Parent:FindFirstChild("HumanoidRootPart")
-        if root then
-            -- 不修改PhysicalProperties避免被检测
         end
     end)
 end
 
--- ============================================================
--- 通知标签页
--- ============================================================
 local noticeGroup = Tabs.Notice:AddLeftGroupbox("脚本信息")
 noticeGroup:AddLabel('欢迎使用 KS Script！')
 noticeGroup:AddLabel('此脚本为缝合各种脚本', true)
@@ -364,9 +309,6 @@ noticeGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 通用功能标签页
--- ============================================================
 local leftGroup = Tabs.Universal:AddLeftGroupbox("人物功能")
 local rightGroup = Tabs.Universal:AddRightGroupbox("视觉功能")
 local teleportGroup = Tabs.Universal:AddLeftGroupbox("传送功能")
@@ -389,7 +331,6 @@ local savedPos = nil
 local function applyAll()
     local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
     if hum then
-        -- 使用安全修改方式
         safeSpeedChange(hum, walkEnabled and walkSpeed or 16)
         hum.JumpPower = jumpEnabled and jumpPower or 50
         hum.Gravity = gravityEnabled and gravityValue or 196.2
@@ -397,7 +338,6 @@ local function applyAll()
     workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
 end
 
--- 心跳循环持续应用速度（绕过检测）
 task.spawn(function()
     while task.wait(0.5) do
         if walkEnabled then
@@ -414,7 +354,6 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     applyAll()
 end)
 
--- 人物功能
 leftGroup:AddToggle('MyWalkToggle', {
     Text = '自定义速度',
     Default = false,
@@ -567,7 +506,6 @@ leftGroup:AddToggle('MyInfiniteJump', {
     end
 })
 
--- 视觉功能
 rightGroup:AddToggle('MyFovToggle', {
     Text = '自定义视野',
     Default = false,
@@ -679,7 +617,6 @@ rightGroup:AddToggle('MyESP', {
     end
 })
 
--- 传送功能
 teleportGroup:AddButton({
     Text = '💾 保存位置',
     Func = function()
@@ -722,9 +659,6 @@ teleportGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 圣地rp标签页
--- ============================================================
 local shengdiGroup = Tabs.ShenDi:AddLeftGroupbox("脚本列表")
 shengdiGroup:AddLabel('圣地rp专用脚本', true)
 shengdiGroup:AddButton({
@@ -749,9 +683,6 @@ shengdiGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 矿山标签页
--- ============================================================
 local mineGroup = Tabs.Mine:AddLeftGroupbox("矿山脚本")
 mineGroup:AddLabel('Mine-a-mountain 相关脚本', true)
 mineGroup:AddButton({
@@ -769,9 +700,6 @@ mineGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 柠檬标签页
--- ============================================================
 local lemonGroup = Tabs.Lemon:AddLeftGroupbox("柠檬脚本")
 lemonGroup:AddLabel('需解卡密，不会加原作者dc', true)
 lemonGroup:AddButton({
@@ -781,9 +709,6 @@ lemonGroup:AddButton({
     end,
 })
 
--- ============================================================
--- TX翻译标签页
--- ============================================================
 local txGroup = Tabs.TX:AddLeftGroupbox("TX翻译")
 txGroup:AddLabel('全自动翻译脚本', true)
 txGroup:AddButton({
@@ -795,9 +720,6 @@ txGroup:AddButton({
     end,
 })
 
--- ============================================================
--- Run Race标签页
--- ============================================================
 local runraceGroup = Tabs.RunRace:AddLeftGroupbox("Run Race")
 runraceGroup:AddLabel('Ruby Hub', true)
 runraceGroup:AddButton({
@@ -807,9 +729,6 @@ runraceGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 自瞄标签页
--- ============================================================
 local aimbotGroup = Tabs.Aimbot:AddLeftGroupbox("ESP透视")
 aimbotGroup:AddLabel('V3.0 手机版', true)
 aimbotGroup:AddButton({
@@ -819,9 +738,6 @@ aimbotGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 脚本整合标签页
--- ============================================================
 local scriptsGroup = Tabs.Scripts:AddLeftGroupbox("脚本列表")
 scriptsGroup:AddLabel('YI 脚本', true)
 scriptsGroup:AddButton({
@@ -847,9 +763,6 @@ scriptsGroup:AddButton({
     end,
 })
 
--- ============================================================
--- 设置
--- ============================================================
 local MenuGroup = Tabs.Notice:AddRightGroupbox('菜单')
 MenuGroup:AddButton('卸载脚本', function() Library:Unload() end)
 MenuGroup:AddLabel('菜单快捷键'):AddKeyPicker('MenuKeybind', { Default = 'RightShift', NoUI = true, Text = 'Menu keybind' })
