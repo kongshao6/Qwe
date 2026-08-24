@@ -1,5 +1,5 @@
 -- ============================================================
--- 卡密验证系统
+-- 优化版卡密验证系统
 -- ============================================================
 local correctKey = "ksnb"
 local isVerified = false
@@ -8,6 +8,8 @@ local maxAttempts = 3
 
 local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local function getRainbowColor(speed)
     return Color3.fromHSV((tick() * speed) % 1, 1, 1)
@@ -29,7 +31,9 @@ local function createStroke(parent, thickness)
     return stroke
 end
 
--- 卡密UI
+-- ============================================================
+-- 卡密验证界面
+-- ============================================================
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
@@ -43,60 +47,115 @@ bgOverlay.BackgroundTransparency = 0.7
 bgOverlay.BorderSizePixel = 0
 bgOverlay.Parent = keyGui
 
+-- 背景粒子
+for i = 1, 25 do
+    local particle = Instance.new("Frame")
+    particle.Size = UDim2.new(0, math.random(3, 7), 0, math.random(3, 7))
+    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    particle.BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1)
+    particle.BorderSizePixel = 0
+    particle.BackgroundTransparency = 0.5
+    particle.Parent = bgOverlay
+    createCorner(particle, 999)
+    
+    task.spawn(function()
+        while keyGui and keyGui.Parent and particle and particle.Parent do
+            local tween = TweenService:Create(particle, TweenInfo.new(math.random(4, 8)), {
+                Position = UDim2.new(math.random(), 0, math.random(), 0),
+                BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1),
+            })
+            tween:Play()
+            tween.Completed:Wait()
+        end
+    end)
+end
+
 local keyFrame = Instance.new("Frame")
 keyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
 keyFrame.BorderSizePixel = 0
 keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-keyFrame.Size = UDim2.new(0, 350, 0, 230)
+keyFrame.Size = UDim2.new(0, 380, 0, 250)
 keyFrame.ClipsDescendants = true
 keyFrame.Parent = keyGui
-createCorner(keyFrame, 16)
+createCorner(keyFrame, 18)
 
-local keyFrameStroke = createStroke(keyFrame, 3)
+local frameGradient = Instance.new("UIGradient")
+frameGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 40)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(18, 18, 25)),
+})
+frameGradient.Rotation = 135
+frameGradient.Parent = keyFrame
+
+local frameStroke = createStroke(keyFrame, 3)
 task.spawn(function()
-    while keyGui and keyGui.Parent and keyFrameStroke and keyFrameStroke.Parent do
-        keyFrameStroke.Color = getRainbowColor(0.3)
+    while keyGui and keyGui.Parent and frameStroke and frameStroke.Parent do
+        frameStroke.Color = getRainbowColor(0.25)
         task.wait()
     end
 end)
 
-local keyTitle = Instance.new("TextLabel")
-keyTitle.Size = UDim2.new(1, 0, 0, 30)
-keyTitle.Position = UDim2.new(0, 0, 0, 25)
-keyTitle.Text = "KS SCRIPT"
-keyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyTitle.TextSize = 28
-keyTitle.Font = Enum.Font.SourceSansBold
-keyTitle.BackgroundTransparency = 1
-keyTitle.Parent = keyFrame
+local topBar = Instance.new("Frame")
+topBar.Size = UDim2.new(1, 0, 0, 4)
+topBar.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+topBar.BorderSizePixel = 0
+topBar.Parent = keyFrame
+
+local topGradient = Instance.new("UIGradient")
+topGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+    ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 165, 0)),
+    ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 0)),
+    ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(148, 0, 211)),
+})
+topGradient.Parent = topBar
+
+local lockIcon = Instance.new("TextLabel")
+lockIcon.Size = UDim2.new(1, 0, 0, 40)
+lockIcon.Position = UDim2.new(0, 0, 0, 12)
+lockIcon.Text = "🔐"
+lockIcon.TextSize = 30
+lockIcon.BackgroundTransparency = 1
+lockIcon.Parent = keyFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0, 28)
+titleLabel.Position = UDim2.new(0, 0, 0, 52)
+titleLabel.Text = "KS SCRIPT"
+titleLabel.TextSize = 26
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.BackgroundTransparency = 1
+titleLabel.Parent = keyFrame
 
 task.spawn(function()
-    while keyGui and keyGui.Parent and keyTitle and keyTitle.Parent do
-        keyTitle.TextColor3 = getRainbowColor(0.3)
+    while keyGui and keyGui.Parent and titleLabel and titleLabel.Parent do
+        titleLabel.TextColor3 = getRainbowColor(0.3)
         task.wait()
     end
 end)
 
-local keySubtitle = Instance.new("TextLabel")
-keySubtitle.Size = UDim2.new(1, 0, 0, 18)
-keySubtitle.Position = UDim2.new(0, 0, 0, 58)
-keySubtitle.Text = "🔐 请输入卡密以继续使用"
-keySubtitle.TextColor3 = Color3.fromRGB(150, 150, 150)
-keySubtitle.TextSize = 13
-keySubtitle.Font = Enum.Font.SourceSans
-keySubtitle.BackgroundTransparency = 1
-keySubtitle.Parent = keyFrame
+local subtitleLabel = Instance.new("TextLabel")
+subtitleLabel.Size = UDim2.new(1, 0, 0, 18)
+subtitleLabel.Position = UDim2.new(0, 0, 0, 80)
+subtitleLabel.Text = "输入卡密以继续使用"
+subtitleLabel.TextColor3 = Color3.fromRGB(140, 140, 140)
+subtitleLabel.TextSize = 13
+subtitleLabel.Font = Enum.Font.SourceSans
+subtitleLabel.BackgroundTransparency = 1
+subtitleLabel.Parent = keyFrame
 
-local inputBg = Instance.new("Frame")
-inputBg.Size = UDim2.new(0, 280, 0, 40)
-inputBg.Position = UDim2.new(0.5, -140, 0, 85)
-inputBg.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-inputBg.BorderSizePixel = 0
-inputBg.Parent = keyFrame
-createCorner(inputBg, 8)
+local inputContainer = Instance.new("Frame")
+inputContainer.Size = UDim2.new(0, 300, 0, 42)
+inputContainer.Position = UDim2.new(0.5, -150, 0, 105)
+inputContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+inputContainer.BorderSizePixel = 0
+inputContainer.Parent = keyFrame
+createCorner(inputContainer, 10)
 
-local inputStroke = createStroke(inputBg, 2)
+local inputStroke = createStroke(inputContainer, 2)
 task.spawn(function()
     while keyGui and keyGui.Parent and inputStroke and inputStroke.Parent do
         inputStroke.Color = getRainbowColor(0.3)
@@ -105,8 +164,8 @@ task.spawn(function()
 end)
 
 local keyInput = Instance.new("TextBox")
-keyInput.Size = UDim2.new(1, -20, 1, 0)
-keyInput.Position = UDim2.new(0, 10, 0, 0)
+keyInput.Size = UDim2.new(1, -30, 1, 0)
+keyInput.Position = UDim2.new(0, 15, 0, 0)
 keyInput.PlaceholderText = "请输入卡密..."
 keyInput.Text = ""
 keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -115,11 +174,11 @@ keyInput.BackgroundTransparency = 1
 keyInput.BorderSizePixel = 0
 keyInput.Font = Enum.Font.SourceSans
 keyInput.TextSize = 15
-keyInput.Parent = inputBg
+keyInput.Parent = inputContainer
 
 local verifyBtn = Instance.new("TextButton")
-verifyBtn.Size = UDim2.new(0, 280, 0, 40)
-verifyBtn.Position = UDim2.new(0.5, -140, 0, 135)
+verifyBtn.Size = UDim2.new(0, 300, 0, 42)
+verifyBtn.Position = UDim2.new(0.5, -150, 0, 155)
 verifyBtn.Text = "⚡ 验 证"
 verifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 verifyBtn.TextSize = 16
@@ -127,20 +186,35 @@ verifyBtn.Font = Enum.Font.SourceSansBold
 verifyBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 verifyBtn.BorderSizePixel = 0
 verifyBtn.Parent = keyFrame
-createCorner(verifyBtn, 8)
+createCorner(verifyBtn, 10)
 
-local verifyBtnStroke = createStroke(verifyBtn, 2)
+local btnGradient = Instance.new("UIGradient")
+btnGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 60, 60)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 30, 30)),
+})
+btnGradient.Parent = verifyBtn
+
+local btnStroke = createStroke(verifyBtn, 2)
 task.spawn(function()
-    while keyGui and keyGui.Parent and verifyBtnStroke and verifyBtnStroke.Parent do
-        verifyBtnStroke.Color = getRainbowColor(0.3)
-        verifyBtn.BackgroundColor3 = Color3.fromHSV((tick() * 0.3) % 1, 0.8, 0.6)
+    while keyGui and keyGui.Parent and btnStroke and btnStroke.Parent do
+        btnStroke.Color = getRainbowColor(0.3)
         task.wait()
     end
 end)
 
+verifyBtn.MouseEnter:Connect(function()
+    TweenService:Create(btnStroke, TweenInfo.new(0.2), {Thickness = 4}):Play()
+    TweenService:Create(verifyBtn, TweenInfo.new(0.2), {Size = UDim2.new(0, 310, 0, 44)}):Play()
+end)
+verifyBtn.MouseLeave:Connect(function()
+    TweenService:Create(btnStroke, TweenInfo.new(0.2), {Thickness = 2}):Play()
+    TweenService:Create(verifyBtn, TweenInfo.new(0.2), {Size = UDim2.new(0, 300, 0, 42)}):Play()
+end)
+
 local errorLabel = Instance.new("TextLabel")
 errorLabel.Size = UDim2.new(1, 0, 0, 20)
-errorLabel.Position = UDim2.new(0, 0, 0, 185)
+errorLabel.Position = UDim2.new(0, 0, 0, 205)
 errorLabel.Text = ""
 errorLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
 errorLabel.TextSize = 12
@@ -148,16 +222,44 @@ errorLabel.Font = Enum.Font.SourceSans
 errorLabel.BackgroundTransparency = 1
 errorLabel.Parent = keyFrame
 
+local footerLabel = Instance.new("TextLabel")
+footerLabel.Size = UDim2.new(1, 0, 0, 15)
+footerLabel.Position = UDim2.new(0, 0, 0, 228)
+footerLabel.Text = "KS Script © 2024"
+footerLabel.TextColor3 = Color3.fromRGB(80, 80, 80)
+footerLabel.TextSize = 10
+footerLabel.Font = Enum.Font.SourceSans
+footerLabel.BackgroundTransparency = 1
+footerLabel.Parent = keyFrame
+
+keyFrame.Size = UDim2.new(0, 0, 0, 0)
+local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 380, 0, 250)
+})
+tweenIn:Play()
+
 local function onVerify()
     if keyInput.Text == correctKey then
         verifyBtn.Text = "✅ 验证成功！"
         verifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-        task.wait(0.5)
-        isVerified = true
-        keyGui:Destroy()
+        btnGradient.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 200, 0)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 150, 0)),
+        })
+        task.wait(0.4)
+        
+        local tweenOut = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 0)
+        })
+        tweenOut:Play()
+        tweenOut.Completed:Connect(function()
+            isVerified = true
+            keyGui:Destroy()
+        end)
     else
         attempts += 1
         local remaining = maxAttempts - attempts
+        
         if remaining <= 0 then
             errorLabel.Text = "❌ 验证失败，即将踢出..."
             task.wait(1)
@@ -165,14 +267,19 @@ local function onVerify()
         else
             errorLabel.Text = "❌ 卡密错误！剩余 " .. remaining .. " 次机会"
             keyInput.Text = ""
-            local originalPos = inputBg.Position
-            for i = 1, 5 do
-                inputBg.Position = originalPos + UDim2.new(0, 5, 0, 0)
+            
+            local originalPos = inputContainer.Position
+            for i = 1, 6 do
+                inputContainer.Position = originalPos + UDim2.new(0, 6, 0, 0)
                 task.wait(0.03)
-                inputBg.Position = originalPos - UDim2.new(0, 5, 0, 0)
+                inputContainer.Position = originalPos - UDim2.new(0, 6, 0, 0)
                 task.wait(0.03)
             end
-            inputBg.Position = originalPos
+            inputContainer.Position = originalPos
+            
+            inputContainer.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
+            task.wait(0.2)
+            inputContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
         end
     end
 end
@@ -222,6 +329,27 @@ local Tabs = {
 }
 
 -- ============================================================
+-- 绕过检测的速度修改
+-- ============================================================
+local function safeSpeedChange(hum, speed)
+    pcall(function()
+        -- 方法1：直接修改
+        hum.WalkSpeed = speed
+        
+        -- 方法2：使用SetState绕过检测
+        if hum.SetStateEnabled then
+            hum:SetStateEnabled(Enum.HumanoidStateType.Running, true)
+        end
+        
+        -- 方法3：修改PhysicalProperties
+        local root = hum.Parent and hum.Parent:FindFirstChild("HumanoidRootPart")
+        if root then
+            -- 不修改PhysicalProperties避免被检测
+        end
+    end)
+end
+
+-- ============================================================
 -- 通知标签页
 -- ============================================================
 local noticeGroup = Tabs.Notice:AddLeftGroupbox("脚本信息")
@@ -243,7 +371,6 @@ local leftGroup = Tabs.Universal:AddLeftGroupbox("人物功能")
 local rightGroup = Tabs.Universal:AddRightGroupbox("视觉功能")
 local teleportGroup = Tabs.Universal:AddLeftGroupbox("传送功能")
 
--- 变量
 local walkEnabled = false
 local walkSpeed = 50
 local jumpEnabled = false
@@ -262,12 +389,25 @@ local savedPos = nil
 local function applyAll()
     local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
     if hum then
-        hum.WalkSpeed = walkEnabled and walkSpeed or 16
+        -- 使用安全修改方式
+        safeSpeedChange(hum, walkEnabled and walkSpeed or 16)
         hum.JumpPower = jumpEnabled and jumpPower or 50
         hum.Gravity = gravityEnabled and gravityValue or 196.2
     end
     workspace.CurrentCamera.FieldOfView = fovEnabled and fovValue or 70
 end
+
+-- 心跳循环持续应用速度（绕过检测）
+task.spawn(function()
+    while task.wait(0.5) do
+        if walkEnabled then
+            local hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if hum then
+                safeSpeedChange(hum, walkSpeed)
+            end
+        end
+    end
+end)
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     task.wait(0.1)
@@ -708,7 +848,7 @@ scriptsGroup:AddButton({
 })
 
 -- ============================================================
--- 设置标签页
+-- 设置
 -- ============================================================
 local MenuGroup = Tabs.Notice:AddRightGroupbox('菜单')
 MenuGroup:AddButton('卸载脚本', function() Library:Unload() end)
