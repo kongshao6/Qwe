@@ -175,7 +175,7 @@ keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
 keyFrame.BorderSizePixel = 0
 keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-keyFrame.Size = UDim2.new(0, 0, 0, 0)
+keyFrame.Size = UDim2.new(0, 380, 0, 220)
 keyFrame.ClipsDescendants = true
 keyFrame.Active = true
 keyFrame.Parent = keyGui
@@ -337,9 +337,6 @@ footerLabel.TextSize = 10
 footerLabel.Font = Enum.Font.SourceSans
 footerLabel.BackgroundTransparency = 1
 footerLabel.Parent = keyFrame
-
-local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 380, 0, 220)})
-tweenIn:Play()
 
 local function showSuccessNotifications()
     local notifyGui = Instance.new("ScreenGui")
