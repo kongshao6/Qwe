@@ -1,3 +1,4 @@
+-- ======================== 卡密验证 + 启动提示 ========================
 local correctKey = "ksnb"
 local maxAttempts = 3
 local attempts = 0
@@ -145,10 +146,9 @@ local function showErrorPopup(msg, autoKick)
     end)
 end
 
--- ========== 修改点1：verifyKey 不再直接设置 isVerified ==========
+-- 验证函数（仅判断，不直接设置 isVerified）
 local function verifyKey(input)
     if input == correctKey then
-        -- isVerified 移到 onVerify 中设置
         return true
     else
         attempts += 1
@@ -162,13 +162,15 @@ local function verifyKey(input)
     end
 end
 
--- ========== 修改点2：新增启动消息显示函数 ==========
+-- ========== 改进的启动消息显示（使用 CoreGui + 淡入） ==========
 local function showStartupMessages()
+    print("显示启动消息") -- 调试输出，可在F9控制台看到
     local gui = Instance.new("ScreenGui")
     gui.Name = "StartupMessages"
     gui.ResetOnSpawn = false
     gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    gui.Parent = playerGui
+    -- 使用 CoreGui 避免被游戏 UI 遮挡
+    gui.Parent = game:GetService("CoreGui") or playerGui
 
     local messages = {
         "欢迎使用 KS Script！",
@@ -189,21 +191,30 @@ local function showStartupMessages()
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.BorderSizePixel = 0
         label.Parent = gui
-        -- 可选：添加淡入效果
+        -- 淡入效果
+        label.BackgroundTransparency = 1
+        label.TextTransparency = 1
+        TweenService:Create(label, TweenInfo.new(0.5), {
+            BackgroundTransparency = 0.6,
+            TextTransparency = 0
+        }):Play()
     end
     -- 5秒后自动消失
     task.delay(5, function()
-        gui:Destroy()
+        if gui and gui.Parent then
+            gui:Destroy()
+        end
     end)
 end
 
--- ========== 卡密界面（保持不变） ==========
+-- ========== 卡密界面（界面装饰） ==========
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 keyGui.Parent = playerGui
 
+-- 背景粒子
 local particles = {}
 for i = 1, 30 do
     local particle = Instance.new("Frame")
@@ -378,27 +389,34 @@ footerLabel.Parent = keyFrame
 local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 380, 0, 225)})
 tweenIn:Play()
 
--- ========== 修改点3：onVerify 中显示启动消息，延迟后设置 isVerified ==========
+-- ========== 验证按钮回调（核心） ==========
 local function onVerify()
     if verifyKey(keyInput.Text) then
+        print("验证成功，开始显示启动消息")
         verifyBtn.Text = "✅ 验证成功！"
         verifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
         
-        -- 显示启动消息（左上角）
+        -- 1. 显示左上角提示词（淡入）
         showStartupMessages()
         
-        -- 等待几秒，让玩家看到消息
+        -- 2. 同时用右上角通知作为后备
+        Library:Notify("欢迎使用 KS Script！", 3)
+        Library:Notify("作者QQ: 3236904498", 3)
+        task.delay(0.5, function() Library:Notify("ks祝您玩的开心", 4) end)
+        
+        -- 3. 等待几秒让玩家看到
         task.wait(2.5)
         
-        -- 执行卡密窗口关闭动画
+        -- 4. 关闭卡密窗口并设置验证完成标志
         local tweenOut = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
         tweenOut:Play()
         tweenOut.Completed:Connect(function()
             keyGui:Destroy()
-            -- 现在才设置验证通过，触发主脚本加载
             isVerified = true
+            print("验证完成，主脚本即将加载")
         end)
     else
+        -- 错误震动效果
         keyInput.Text = ""
         local originalPos = inputBg.Position
         for i = 1, 5 do
@@ -416,10 +434,11 @@ keyInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then onVerify() end
 end)
 
--- 等待验证通过（现在会在窗口关闭后变为 true）
+-- 等待验证通过
 repeat task.wait() until isVerified
 
--- ========== 主脚本加载（不变） ==========
+-- ======================== 主脚本加载 ========================
+print("开始加载主脚本...")
 local repo = 'https://raw.githubusercontent.com/KingScriptAE/No-sirve-nada./refs/heads/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
@@ -945,8 +964,10 @@ SaveManager:SetFolder("KSScriptConfig")
 SaveManager:BuildConfigSection(Tabs.Notice)
 ThemeManager:ApplyToTab(Tabs.Notice)
 
--- ========== 修改点4：脚本执行成功后，再弹出一条“ks祝您玩的开心” ==========
+-- 最后再弹一条通知（确保可见）
 task.spawn(function()
-    task.wait(1) -- 等待界面稳定
-    Library:Notify("ks祝您玩的开心", 5)
+    task.wait(1)
+    Library:Notify("ks祝您玩的开心 ❤️", 5)
 end)
+
+print("主脚本加载完成！")
