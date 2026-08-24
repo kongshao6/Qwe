@@ -22,7 +22,6 @@ local function createStroke(parent, thickness, color)
     local stroke = Instance.new("UIStroke")
     stroke.Thickness = thickness
     stroke.Color = color or Color3.fromRGB(255, 255, 255)
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     stroke.Parent = parent
     return stroke
 end
@@ -147,11 +146,10 @@ keyGui.Parent = playerGui
 local keyFrame = Instance.new("Frame")
 keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
 keyFrame.BorderSizePixel = 0
-keyFrame.AnchorPoint = Vector2.new(0, 0)
-keyFrame.Position = UDim2.new(0.5, -190, 0.5, -110)
+keyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+keyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 keyFrame.Size = UDim2.new(0, 380, 0, 220)
 keyFrame.Active = true
-keyFrame.ZIndex = 10
 keyFrame.Parent = keyGui
 createCorner(keyFrame, 20)
 
@@ -168,7 +166,6 @@ dragArea.Size = UDim2.new(1, 0, 0, 60)
 dragArea.Position = UDim2.new(0, 0, 0, 0)
 dragArea.BackgroundTransparency = 1
 dragArea.BorderSizePixel = 0
-dragArea.ZIndex = 20
 dragArea.Parent = keyFrame
 
 local dragging = false
@@ -202,7 +199,6 @@ closeBtn.TextSize = 16
 closeBtn.Font = Enum.Font.SourceSansBold
 closeBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 closeBtn.BorderSizePixel = 0
-closeBtn.ZIndex = 20
 closeBtn.Parent = keyFrame
 createCorner(closeBtn, 999)
 
@@ -227,7 +223,6 @@ titleLabel.Text = "KS SCRIPT"
 titleLabel.TextSize = 32
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.BackgroundTransparency = 1
-titleLabel.ZIndex = 20
 titleLabel.Parent = keyFrame
 
 task.spawn(function()
@@ -245,7 +240,6 @@ subtitleLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 subtitleLabel.TextSize = 14
 subtitleLabel.Font = Enum.Font.SourceSans
 subtitleLabel.BackgroundTransparency = 1
-subtitleLabel.ZIndex = 20
 subtitleLabel.Parent = keyFrame
 
 local inputBg = Instance.new("Frame")
@@ -253,7 +247,6 @@ inputBg.Size = UDim2.new(0, 300, 0, 45)
 inputBg.Position = UDim2.new(0.5, -150, 0, 80)
 inputBg.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
 inputBg.BorderSizePixel = 0
-inputBg.ZIndex = 20
 inputBg.Parent = keyFrame
 createCorner(inputBg, 10)
 
@@ -277,7 +270,6 @@ keyInput.BorderSizePixel = 0
 keyInput.Font = Enum.Font.SourceSans
 keyInput.TextSize = 16
 keyInput.ClearTextOnFocus = false
-keyInput.ZIndex = 21
 keyInput.Parent = inputBg
 
 local verifyBtn = Instance.new("TextButton")
@@ -289,7 +281,6 @@ verifyBtn.TextSize = 18
 verifyBtn.Font = Enum.Font.SourceSansBold
 verifyBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 verifyBtn.BorderSizePixel = 0
-verifyBtn.ZIndex = 20
 verifyBtn.Parent = keyFrame
 createCorner(verifyBtn, 10)
 
@@ -317,7 +308,6 @@ footerLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
 footerLabel.TextSize = 10
 footerLabel.Font = Enum.Font.SourceSans
 footerLabel.BackgroundTransparency = 1
-footerLabel.ZIndex = 20
 footerLabel.Parent = keyFrame
 
 local function showSuccessNotifications()
