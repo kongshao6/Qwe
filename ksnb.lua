@@ -1,7 +1,4 @@
--- ============================================================
--- 精美卡密验证系统
--- ============================================================
-local correctKey = "ksnb"  -- 固定卡密
+local correctKey = "ksnb"
 local maxAttempts = 3
 local attempts = 0
 local isVerified = false
@@ -9,7 +6,6 @@ local isVerified = false
 local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
 
--- 工具函数
 local function getRainbowColor(speed)
     return Color3.fromHSV((tick() * speed) % 1, 1, 1)
 end
@@ -45,9 +41,6 @@ local function createGradient(parent)
     return gradient
 end
 
--- ============================================================
--- 错误弹窗
--- ============================================================
 local function showErrorPopup(msg, autoKick)
     local errorGui = Instance.new("ScreenGui")
     errorGui.Name = "ErrorPopup"
@@ -55,7 +48,6 @@ local function showErrorPopup(msg, autoKick)
     errorGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     errorGui.Parent = playerGui
     
-    -- 背景遮罩
     local bgOverlay = Instance.new("Frame")
     bgOverlay.Size = UDim2.new(1, 0, 1, 0)
     bgOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -63,7 +55,6 @@ local function showErrorPopup(msg, autoKick)
     bgOverlay.BorderSizePixel = 0
     bgOverlay.Parent = errorGui
     
-    -- 主弹窗
     local frame = Instance.new("Frame")
     frame.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
     frame.BorderSizePixel = 0
@@ -74,7 +65,6 @@ local function showErrorPopup(msg, autoKick)
     frame.Parent = errorGui
     createCorner(frame, 20)
     
-    -- 彩虹边框
     local frameStroke = createStroke(frame, 3, Color3.fromRGB(255, 0, 0))
     task.spawn(function()
         while errorGui and errorGui.Parent and frameStroke and frameStroke.Parent do
@@ -83,7 +73,6 @@ local function showErrorPopup(msg, autoKick)
         end
     end)
     
-    -- 顶部渐变条
     local topBar = Instance.new("Frame")
     topBar.Size = UDim2.new(1, 0, 0, 5)
     topBar.Position = UDim2.new(0, 0, 0, 0)
@@ -92,7 +81,6 @@ local function showErrorPopup(msg, autoKick)
     topBar.Parent = frame
     createGradient(topBar)
     
-    -- 图标
     local iconLabel = Instance.new("TextLabel")
     iconLabel.Size = UDim2.new(1, 0, 0, 45)
     iconLabel.Position = UDim2.new(0, 0, 0, 15)
@@ -101,7 +89,6 @@ local function showErrorPopup(msg, autoKick)
     iconLabel.BackgroundTransparency = 1
     iconLabel.Parent = frame
     
-    -- 标题
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, 0, 0, 25)
     titleLabel.Position = UDim2.new(0, 0, 0, 60)
@@ -112,7 +99,6 @@ local function showErrorPopup(msg, autoKick)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Parent = frame
     
-    -- 描述
     local descLabel = Instance.new("TextLabel")
     descLabel.Size = UDim2.new(1, -30, 0, 40)
     descLabel.Position = UDim2.new(0, 15, 0, 88)
@@ -124,7 +110,6 @@ local function showErrorPopup(msg, autoKick)
     descLabel.TextWrapped = true
     descLabel.Parent = frame
     
-    -- 确定按钮
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 220, 0, 38)
     closeBtn.Position = UDim2.new(0.5, -110, 0, 130)
@@ -137,7 +122,6 @@ local function showErrorPopup(msg, autoKick)
     closeBtn.Parent = frame
     createCorner(closeBtn, 10)
     
-    -- 按钮悬停效果
     closeBtn.MouseEnter:Connect(function()
         TweenService:Create(closeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 100, 100)}):Play()
     end)
@@ -145,7 +129,6 @@ local function showErrorPopup(msg, autoKick)
         TweenService:Create(closeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 60, 60)}):Play()
     end)
     
-    -- 入场动画
     local tweenIn = TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 320, 0, 180)})
     tweenIn:Play()
     
@@ -162,9 +145,6 @@ local function showErrorPopup(msg, autoKick)
     end)
 end
 
--- ============================================================
--- 验证函数
--- ============================================================
 local function verifyKey(input)
     if input == correctKey then
         isVerified = true
@@ -181,16 +161,12 @@ local function verifyKey(input)
     end
 end
 
--- ============================================================
--- 卡密输入界面
--- ============================================================
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 keyGui.Parent = playerGui
 
--- 背景粒子
 local particles = {}
 for i = 1, 30 do
     local particle = Instance.new("Frame")
@@ -216,7 +192,6 @@ for i = 1, 30 do
     end)
 end
 
--- 主框架
 local keyFrame = Instance.new("Frame")
 keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
 keyFrame.BorderSizePixel = 0
@@ -227,7 +202,6 @@ keyFrame.ClipsDescendants = true
 keyFrame.Parent = keyGui
 createCorner(keyFrame, 20)
 
--- 彩虹边框
 local frameStroke = createStroke(keyFrame, 3, Color3.fromRGB(255, 0, 0))
 task.spawn(function()
     while keyGui and keyGui.Parent and frameStroke and frameStroke.Parent do
@@ -236,7 +210,6 @@ task.spawn(function()
     end
 end)
 
--- 顶部渐变条
 local topBar = Instance.new("Frame")
 topBar.Size = UDim2.new(1, 0, 0, 5)
 topBar.Position = UDim2.new(0, 0, 0, 0)
@@ -245,7 +218,6 @@ topBar.BorderSizePixel = 0
 topBar.Parent = keyFrame
 createGradient(topBar)
 
--- 关闭按钮
 local closeBtn = Instance.new("TextButton")
 closeBtn.Size = UDim2.new(0, 32, 0, 32)
 closeBtn.Position = UDim2.new(1, -38, 0, 8)
@@ -272,7 +244,6 @@ closeBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- 标题
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, 0, 0, 40)
 titleLabel.Position = UDim2.new(0, 0, 0, 20)
@@ -289,7 +260,6 @@ task.spawn(function()
     end
 end)
 
--- 副标题
 local subtitleLabel = Instance.new("TextLabel")
 subtitleLabel.Size = UDim2.new(1, 0, 0, 20)
 subtitleLabel.Position = UDim2.new(0, 0, 0, 58)
@@ -300,7 +270,6 @@ subtitleLabel.Font = Enum.Font.SourceSans
 subtitleLabel.BackgroundTransparency = 1
 subtitleLabel.Parent = keyFrame
 
--- 输入框背景
 local inputBg = Instance.new("Frame")
 inputBg.Size = UDim2.new(0, 300, 0, 45)
 inputBg.Position = UDim2.new(0.5, -150, 0, 85)
@@ -317,7 +286,6 @@ task.spawn(function()
     end
 end)
 
--- 输入框
 local keyInput = Instance.new("TextBox")
 keyInput.Size = UDim2.new(1, -30, 1, 0)
 keyInput.Position = UDim2.new(0, 15, 0, 0)
@@ -332,7 +300,6 @@ keyInput.TextSize = 16
 keyInput.ClearTextOnFocus = false
 keyInput.Parent = inputBg
 
--- 验证按钮
 local verifyBtn = Instance.new("TextButton")
 verifyBtn.Size = UDim2.new(0, 300, 0, 45)
 verifyBtn.Position = UDim2.new(0.5, -150, 0, 145)
@@ -361,7 +328,6 @@ verifyBtn.MouseLeave:Connect(function()
     TweenService:Create(btnStroke, TweenInfo.new(0.2), {Thickness = 2}):Play()
 end)
 
--- 底部信息
 local footerLabel = Instance.new("TextLabel")
 footerLabel.Size = UDim2.new(1, 0, 0, 15)
 footerLabel.Position = UDim2.new(0, 0, 0, 200)
@@ -372,14 +338,11 @@ footerLabel.Font = Enum.Font.SourceSans
 footerLabel.BackgroundTransparency = 1
 footerLabel.Parent = keyFrame
 
--- 入场动画
 local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 380, 0, 225)})
 tweenIn:Play()
 
--- 验证逻辑
 local function onVerify()
     if verifyKey(keyInput.Text) then
-        -- 验证成功动画
         verifyBtn.Text = "✅ 验证成功！"
         verifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
         task.wait(0.5)
@@ -389,7 +352,6 @@ local function onVerify()
             keyGui:Destroy()
         end)
     else
-        -- 验证失败抖动
         keyInput.Text = ""
         local originalPos = inputBg.Position
         for i = 1, 5 do
@@ -407,12 +369,8 @@ keyInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then onVerify() end
 end)
 
--- 等待验证完成
 repeat task.wait() until isVerified
 
--- ============================================================
--- 加载 WindUI（白色主题）
--- ============================================================
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
@@ -459,7 +417,6 @@ local Tabs = {
 
 Window:SelectTab(1)
 
--- ===== 变量 =====
 local walkEnabled = false; local walkSpeed = 50
 local jumpEnabled = false; local jumpPower = 100
 local gravityEnabled = false; local gravityValue = 50
@@ -480,13 +437,11 @@ local function applyAll()
 end
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char) task.wait(0.1) applyAll() end)
 
--- ===== 通知标签页 =====
 Tabs.NoticeTab:Paragraph({ Title = "📢 脚本公告", Desc = "欢迎使用 ks script！", Image = "bell", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
 Tabs.NoticeTab:Paragraph({ Title = "📝 脚本介绍", Desc = "此脚本为缝合各种脚本\n倒卖sm", Image = "info", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0) })
 Tabs.NoticeTab:Paragraph({ Title = "⚠️ 警告", Desc = "请勿倒卖本脚本！", Image = "triangle-alert", ImageSize = 34, Color = Color3.fromRGB(255, 255, 0) })
 Tabs.NoticeTab:Button({ Title = "👤 作者QQ: 3236904498", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard("3236904498") end) WindUI:Notify({ Title = "已复制", Content = "3236904498", Duration = 3 }) end })
 
--- ===== 通用功能 =====
 Tabs.UniversalTab:Paragraph({ Title = "🛠️ 通用功能", Desc = "开关控制+滑动调节", Image = "wrench", ImageSize = 34, Color = Color3.fromRGB(0, 255, 200) })
 
 Tabs.UniversalTab:Section({ Title = "✈️ 飞行" })
@@ -734,27 +689,26 @@ Tabs.UniversalTab:Section({ Title = "🌐 服务器" })
 Tabs.UniversalTab:Button({ Title = "重新加入", Icon = "refresh-cw", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer) end })
 Tabs.UniversalTab:Button({ Title = "复制服务器ID", Icon = "clipboard-copy", Callback = function() pcall(function() setclipboard(game.JobId) end) end })
 
--- ===== 圣地rp标签页 =====
 Tabs.ShenDiTab:Paragraph({ Title = "🏰 圣地rp脚本", Desc = "圣地rp专用脚本", Image = "map", ImageSize = 34, Color = Color3.fromRGB(255, 215, 0) })
-
 Tabs.ShenDiTab:Section({ Title = "📜 脚本列表" })
-
 Tabs.ShenDiTab:Button({ Title = "Ax脚本", Icon = "play", Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Tarmaster/AverlikHub/refs/heads/main/Loader"))()
-    WindUI:Notify({ Title = "Ax脚本", Content = "卡密: NEW_EVENTgag2", Duration = 5 })
+    WindUI:Notify({ Title = "Ax脚本", Content = "已加载！", Duration = 5 })
 end })
-
-Tabs.ShenDiTab:Button({ Title = "hux脚本", Icon = "play", Callback = function()
+Tabs.ShenDiTab:Button({ Title = "📋 Ax脚本卡密: NEW_EVENTgag2", Icon = "clipboard-copy", Callback = function()
+    pcall(function() setclipboard("NEW_EVENTgag2") end)
+    WindUI:Notify({ Title = "已复制", Content = "NEW_EVENTgag2", Duration = 3 })
+end })
+Tabs.ShenDiTab:Button({ Title = "auxhub", Icon = "play", Callback = function()
     loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/adff9b33e46197721a37f4d1ad509d418db5cfb1f4899c166f10781be92b5389/download"))()
-    WindUI:Notify({ Title = "hux脚本", Content = "需要卡密 (need key)", Duration = 5 })
+    WindUI:Notify({ Title = "auxhub", Content = "需要卡密，并且需要DC", Duration = 5 })
 end })
-
+Tabs.ShenDiTab:Paragraph({ Title = "💡 推荐", Desc = "作者亲测最好用的一个自动农场脚本，但是需要卡密", Image = "star", ImageSize = 34, Color = Color3.fromRGB(255, 215, 0) })
 Tabs.ShenDiTab:Button({ Title = "huxhub", Icon = "play", Callback = function()
     loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/4f070b7ced7a195b57ea0a533cd8831f6a29f42810254f7b931a670e03f39228/download"))()
-    WindUI:Notify({ Title = "huxhub", Content = "需要卡密 (need key) - 作者亲测最好用", Duration = 5 })
+    WindUI:Notify({ Title = "huxhub", Content = "需要卡密 (need key)", Duration = 5 })
 end })
 
--- ===== 矿山标签页 =====
 Tabs.MineTab:Paragraph({ Title = "⛏️ 矿山脚本", Desc = "Mine-a-mountain 相关脚本", Image = "pickaxe", ImageSize = 34, Color = Color3.fromRGB(255, 165, 0) })
 Tabs.MineTab:Section({ Title = "⛏️ 矿山脚本加载" })
 Tabs.MineTab:Button({ Title = "加载 Mine-a-mountain (脚本1)", Icon = "hammer", Callback = function() 
@@ -772,23 +726,18 @@ Tabs.MineTab:Button({ Title = "🔄 加载全部矿山脚本", Icon = "refresh-c
     WindUI:Notify({ Title = "全部加载", Content = "两个矿山脚本已加载！", Duration = 3 })
 end })
 
--- ===== 柠檬 =====
 Tabs.LemonTab:Paragraph({ Title = "🍋 柠檬脚本", Desc = "需解卡密，不会加原作者dc", Image = "citrus", ImageSize = 34, Color = Color3.fromRGB(0, 255, 0) })
 Tabs.LemonTab:Button({ Title = "加载柠檬", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))() end })
 
--- ===== TX翻译 =====
 Tabs.TXTab:Paragraph({ Title = "🌐 TX 翻译", Desc = "全自动翻译脚本", Image = "languages", ImageSize = 34, Color = Color3.fromRGB(75, 0, 130) })
 Tabs.TXTab:Button({ Title = "加载翻译", Icon = "play", Callback = function() TX = "TX Script" Script = "全自动翻译" loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/Auto-language"))() end })
 
--- ===== Run Race =====
 Tabs.RunRaceTab:Paragraph({ Title = "🏃 Run Race", Desc = "Ruby Hub", Image = "flag", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
 Tabs.RunRaceTab:Button({ Title = "加载脚本", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Deni210/raceclicker/main/Ruby%20Hub%20v1.0", true))() end })
 
--- ===== 自瞄 =====
 Tabs.AimbotTab:Paragraph({ Title = "🔍 ESP 透视", Desc = "V3.0 手机版", Image = "eye", ImageSize = 34, Color = Color3.fromRGB(255, 0, 0) })
 Tabs.AimbotTab:Button({ Title = "加载 ESP", Icon = "play", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/1215203698741/Roblox-ESP-Antibot-V3/refs/heads/main/V3.0phone.lua"))() end })
 
--- ===== 脚本整合 =====
 Tabs.ScriptsTab:Paragraph({ Title = "多种脚本整合", Desc = "各类脚本合集", Image = "folder-code", ImageSize = 34, Color = Color3.fromRGB(0, 0, 255) })
 Tabs.ScriptsTab:Section({ Title = "YI 脚本" })
 Tabs.ScriptsTab:Button({ Title = "加载 YI", Icon = "play", Callback = function() getgenv().YI_HUB = "YI_HUB群979312897" loadstring(game:HttpGet('https://raw.githubusercontent.com/YI-HUB-TEAM/YIscript/refs/heads/main/YI_HUB'))("") end })
