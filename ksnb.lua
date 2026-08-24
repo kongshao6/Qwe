@@ -145,9 +145,10 @@ local function showErrorPopup(msg, autoKick)
     end)
 end
 
+-- ========== 修改点1：verifyKey 不再直接设置 isVerified ==========
 local function verifyKey(input)
     if input == correctKey then
-        isVerified = true
+        -- isVerified 移到 onVerify 中设置
         return true
     else
         attempts += 1
@@ -161,6 +162,42 @@ local function verifyKey(input)
     end
 end
 
+-- ========== 修改点2：新增启动消息显示函数 ==========
+local function showStartupMessages()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "StartupMessages"
+    gui.ResetOnSpawn = false
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    gui.Parent = playerGui
+
+    local messages = {
+        "欢迎使用 KS Script！",
+        "作者QQ: 3236904498",
+        "请勿倒卖本脚本！",
+        "ks祝您玩的开心"
+    }
+    for i, msg in ipairs(messages) do
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(0, 300, 0, 30)
+        label.Position = UDim2.new(0, 10, 0, 10 + (i-1)*35)
+        label.Text = msg
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.TextSize = 20
+        label.Font = Enum.Font.SourceSansBold
+        label.BackgroundTransparency = 0.6
+        label.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.BorderSizePixel = 0
+        label.Parent = gui
+        -- 可选：添加淡入效果
+    end
+    -- 5秒后自动消失
+    task.delay(5, function()
+        gui:Destroy()
+    end)
+end
+
+-- ========== 卡密界面（保持不变） ==========
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
@@ -341,15 +378,25 @@ footerLabel.Parent = keyFrame
 local tweenIn = TweenService:Create(keyFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 380, 0, 225)})
 tweenIn:Play()
 
+-- ========== 修改点3：onVerify 中显示启动消息，延迟后设置 isVerified ==========
 local function onVerify()
     if verifyKey(keyInput.Text) then
         verifyBtn.Text = "✅ 验证成功！"
         verifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-        task.wait(0.5)
+        
+        -- 显示启动消息（左上角）
+        showStartupMessages()
+        
+        -- 等待几秒，让玩家看到消息
+        task.wait(2.5)
+        
+        -- 执行卡密窗口关闭动画
         local tweenOut = TweenService:Create(keyFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
         tweenOut:Play()
         tweenOut.Completed:Connect(function()
             keyGui:Destroy()
+            -- 现在才设置验证通过，触发主脚本加载
+            isVerified = true
         end)
     else
         keyInput.Text = ""
@@ -369,8 +416,10 @@ keyInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then onVerify() end
 end)
 
+-- 等待验证通过（现在会在窗口关闭后变为 true）
 repeat task.wait() until isVerified
 
+-- ========== 主脚本加载（不变） ==========
 local repo = 'https://raw.githubusercontent.com/KingScriptAE/No-sirve-nada./refs/heads/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
@@ -895,3 +944,9 @@ ThemeManager:SetFolder("KSScriptTheme")
 SaveManager:SetFolder("KSScriptConfig")
 SaveManager:BuildConfigSection(Tabs.Notice)
 ThemeManager:ApplyToTab(Tabs.Notice)
+
+-- ========== 修改点4：脚本执行成功后，再弹出一条“ks祝您玩的开心” ==========
+task.spawn(function()
+    task.wait(1) -- 等待界面稳定
+    Library:Notify("ks祝您玩的开心", 5)
+end)
